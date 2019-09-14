@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - games_services (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `.symlinks/flutter/ios`)
+  - games_services (from `.symlinks/plugins/games_services/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: ".symlinks/flutter/ios"
+  games_services:
+    :path: ".symlinks/plugins/games_services/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  games_services: c10dc4bcdecfcd77f58a59d123159b30b2b7a9d7
+
+PODFILE CHECKSUM: 10ae9c18d12c9ffc2275c9a159a3b1e281990db0
+
+COCOAPODS: 1.8.0.beta.2
