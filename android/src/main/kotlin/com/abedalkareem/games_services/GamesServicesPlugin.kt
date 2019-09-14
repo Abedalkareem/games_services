@@ -27,7 +27,9 @@ class GamesServicesPlugin(val activity: Activity) : MethodCallHandler {
     private fun initGoogleClientAndSignin() {
         googleSignInClient = GoogleSignIn.getClient(activity, GoogleSignInOptions.Builder(
                 GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build())
+    }
 
+    fun silentSignIn() {
         googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 achievementClient = Games.getAchievementsClient(activity, task.result!!)
@@ -36,6 +38,10 @@ class GamesServicesPlugin(val activity: Activity) : MethodCallHandler {
                 Log.e("Error", "signInError", task.exception)
             }
         }
+    }
+
+    fun signIn() {
+        activity.startActivityForResult(googleSignInClient?.signInIntent, 0)
     }
 
     fun showAchievements() {
@@ -76,6 +82,14 @@ class GamesServicesPlugin(val activity: Activity) : MethodCallHandler {
             }
             call.method == "showAchievements" -> {
                 showAchievements()
+                result.success(null)
+            }
+            call.method == "signIn" -> {
+                signIn()
+                result.success(null)
+            }
+            call.method == "silentSignIn" -> {
+                silentSignIn()
                 result.success(null)
             }
             else -> result.notImplemented()

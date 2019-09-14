@@ -22,4 +22,13 @@ class GamesServices {
   static void showLeaderboards() async {
     await _channel.invokeMethod("showLeaderboards");
   }
+
+  static void silentSignIn() async {
+    await _channel.invokeMethod("silentSignIn");
+  }
+
+  static void signIn() async {
+    await _channel.invokeMethod("signIn");
+  }
+
 }
