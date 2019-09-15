@@ -14,22 +14,18 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 
-class GamesServicesPlugin(val activity: Activity) : MethodCallHandler {
+class GamesServicesPlugin(private val activity: Activity) : MethodCallHandler {
 
+    //region Variables
     private var googleSignInClient: GoogleSignInClient? = null
     private var achievementClient: AchievementsClient? = null
     private var leaderboardsClient: LeaderboardsClient? = null
+    //endregion
 
-    init {
-        initGoogleClientAndSignin()
-    }
-
-    private fun initGoogleClientAndSignin() {
+    //region SignIn
+    private fun silentSignIn() {
         googleSignInClient = GoogleSignIn.getClient(activity, GoogleSignInOptions.Builder(
                 GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build())
-    }
-
-    fun silentSignIn() {
         googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 achievementClient = Games.getAchievementsClient(activity, task.result!!)
@@ -40,30 +36,38 @@ class GamesServicesPlugin(val activity: Activity) : MethodCallHandler {
         }
     }
 
-    fun signIn() {
+    private fun signIn() {
+        googleSignInClient = GoogleSignIn.getClient(activity, GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN).build())
         activity.startActivityForResult(googleSignInClient?.signInIntent, 0)
     }
+    //endregion
 
-    fun showAchievements() {
+    //region Achievements
+    private fun showAchievements() {
         achievementClient?.achievementsIntent?.addOnSuccessListener { intent ->
             activity.startActivityForResult(intent, 0)
         }
     }
 
-    fun showLeaderboards() {
+    private fun unlock(achievementID: String) {
+        achievementClient?.unlock(achievementID)
+    }
+    //endregion
+
+    //region Leaderboards
+    private fun showLeaderboards() {
         leaderboardsClient?.allLeaderboardsIntent?.addOnSuccessListener { intent ->
             activity.startActivityForResult(intent, 0)
         }
     }
 
-    fun submitScore(leaderboardID: String, score: Long) {
+    private fun submitScore(leaderboardID: String, score: Long) {
         leaderboardsClient?.submitScore(leaderboardID, score)
     }
+    //endregion
 
-    fun unlock(achievementID: String) {
-        achievementClient?.unlock(achievementID)
-    }
-
+    //region MethodCallHandler
     override fun onMethodCall(call: MethodCall, result: Result) {
         when {
             call.method == "unlock" -> {
@@ -102,5 +106,7 @@ class GamesServicesPlugin(val activity: Activity) : MethodCallHandler {
             val channel = MethodChannel(registrar.messenger(), "games_services")
             channel.setMethodCallHandler(GamesServicesPlugin(registrar.activity()))
         }
-    }
+    }ß
+    //endregion
+
 }
