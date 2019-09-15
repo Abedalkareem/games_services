@@ -12,15 +12,16 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
 
   // MARK: - Authenticate
 
-  func authenticateUser() {
+  func authenticateUser(result: @escaping FlutterResult) {
     let player = GKLocalPlayer.localPlayer()
     player.authenticateHandler = { vc, error in
       guard error == nil else {
-        print(error?.localizedDescription ?? "")
+        result(error?.localizedDescription ?? "")
         return
       }
       if let vc = vc {
         self.viewController.present(vc, animated: true, completion: nil)
+        result("success")
       }
     }
   }
@@ -35,15 +36,15 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     viewController.present(vc, animated: true, completion: nil)
   }
 
-  func report(score: Int64, leaderboardID: String) {
+  func report(score: Int64, leaderboardID: String, result: @escaping FlutterResult) {
     let reportedScore = GKScore(leaderboardIdentifier: leaderboardID)
     reportedScore.value = score
     GKScore.report([reportedScore]) { (error) in
       guard error == nil else {
-        print(error?.localizedDescription ?? "")
+        result(error?.localizedDescription ?? "")
         return
       }
-      print("The score submitted to the game center")
+      result("success")
     }
   }
 
@@ -56,12 +57,16 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     viewController.present(vc, animated: true, completion: nil)
   }
 
-  func report(achievementID: String, percentComplete: Double) {
+  func report(achievementID: String, percentComplete: Double, result: @escaping FlutterResult) {
     let achievement = GKAchievement(identifier: achievementID)
     achievement.percentComplete = percentComplete
     achievement.showsCompletionBanner = true
     GKAchievement.report([achievement]) { (error) in
-      print(error?.localizedDescription ?? "")
+      guard error == nil else {
+        result(error?.localizedDescription ?? "")
+        return
+      }
+      result("success")
     }
   }
 
@@ -73,22 +78,24 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     case "unlock":
       let achievementID = (arguments?["achievementID"] as? String) ?? ""
       let percentComplete = (arguments?["percentComplete"] as? Double) ?? 0.0
-      report(achievementID: achievementID, percentComplete: percentComplete)
+      report(achievementID: achievementID, percentComplete: percentComplete, result: result)
     case "submitScore":
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       let score = (arguments?["score"] as? Double) ?? 0.0
-      report(score: Int64(score), leaderboardID: leaderboardID)
+      report(score: Int64(score), leaderboardID: leaderboardID, result: result)
     case "showAchievements":
       showAchievements()
+      result("success")
     case "showLeaderboards":
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       showLeaderboardWith(identifier: leaderboardID)
+      result("success")
     case "signIn":
-      authenticateUser()
+      authenticateUser(result: result)
     default:
+      result("unimplemented")
       break
     }
-    result("iOS \(viewController)")
   }
 
   public static func register(with registrar: FlutterPluginRegistrar) {

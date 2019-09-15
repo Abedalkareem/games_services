@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:games_services/games_services.dart';
 
 void main() => runApp(MyApp());
@@ -12,45 +9,55 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    // Platform messages may fail, so we use a try/catch PlatformException.
-    try {
-      _platformVersion = await GamesServices.unlockxx();
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    // If the widget was removed from the tree while the asynchronous platform
-    // message was in flight, we want to discard the reply rather than calling
-    // setState to update our non-existent appearance.
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
-        ),
-      ),
+          appBar: AppBar(
+            title: const Text('Games Services plugin example app'),
+          ),
+          body: Center(
+            child: Column(
+              children: <Widget>[
+                RaisedButton(
+                  child: Text('signIn'),
+                  onPressed: () {
+                    GamesServices.signIn();
+                  },
+                ),
+                RaisedButton(
+                  child: Text('silentSignIn'),
+                  onPressed: () {
+                    GamesServices.silentSignIn();
+                  },
+                ),
+                RaisedButton(
+                  child: Text('Show Achievements'),
+                  onPressed: () {
+                    GamesServices.showAchievements();
+                  },
+                ),
+                RaisedButton(
+                  child: Text('Show Leaderboards'),
+                  onPressed: () {
+                    GamesServices.showLeaderboards(leaderboardID: '');
+                  },
+                ),
+                RaisedButton(
+                  child: Text('Submit Score'),
+                  onPressed: () {
+                    GamesServices.submitScore(leaderboardID: '', score: 1);
+                  },
+                ),
+                RaisedButton(
+                  child: Text('Unlock'),
+                  onPressed: () {
+                    GamesServices.unlock(achievementID: '', percentComplete: 0);
+                  },
+                ),
+              ],
+            ),
+          )),
     );
   }
 }

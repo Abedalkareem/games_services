@@ -23,47 +23,58 @@ class GamesServicesPlugin(private val activity: Activity) : MethodCallHandler {
     //endregion
 
     //region SignIn
-    private fun silentSignIn() {
+    private fun silentSignIn(result: Result) {
         googleSignInClient = GoogleSignIn.getClient(activity, GoogleSignInOptions.Builder(
                 GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build())
         googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 achievementClient = Games.getAchievementsClient(activity, task.result!!)
                 leaderboardsClient = Games.getLeaderboardsClient(activity, task.result!!)
+                result.success("success")
             } else {
                 Log.e("Error", "signInError", task.exception)
+                result.error("error", task.exception?.message ?: "", task.exception)
             }
         }
     }
 
-    private fun signIn() {
+    private fun signIn(result: Result) {
         googleSignInClient = GoogleSignIn.getClient(activity, GoogleSignInOptions.Builder(
                 GoogleSignInOptions.DEFAULT_SIGN_IN).build())
         activity.startActivityForResult(googleSignInClient?.signInIntent, 0)
+        result.success("success")
     }
     //endregion
 
     //region Achievements
-    private fun showAchievements() {
+    private fun showAchievements(result: Result) {
         achievementClient?.achievementsIntent?.addOnSuccessListener { intent ->
             activity.startActivityForResult(intent, 0)
+            result.success("success")
+        }?.addOnFailureListener {
+            result.error("error", "${it.message}", it)
         }
     }
 
-    private fun unlock(achievementID: String) {
+    private fun unlock(achievementID: String, result: Result) {
         achievementClient?.unlock(achievementID)
+        result.success("success")
     }
     //endregion
 
     //region Leaderboards
-    private fun showLeaderboards() {
+    private fun showLeaderboards(result: Result) {
         leaderboardsClient?.allLeaderboardsIntent?.addOnSuccessListener { intent ->
             activity.startActivityForResult(intent, 0)
+            result.success("success")
+        }?.addOnFailureListener {
+            result.error("error", "${it.message}", it)
         }
     }
 
-    private fun submitScore(leaderboardID: String, score: Long) {
+    private fun submitScore(leaderboardID: String, score: Long, result: Result) {
         leaderboardsClient?.submitScore(leaderboardID, score)
+        result.success("success")
     }
     //endregion
 
@@ -71,30 +82,24 @@ class GamesServicesPlugin(private val activity: Activity) : MethodCallHandler {
     override fun onMethodCall(call: MethodCall, result: Result) {
         when {
             call.method == "unlock" -> {
-                unlock(call.argument<String>("achievementID") ?: "")
-                result.success(null)
+                unlock(call.argument<String>("achievementID") ?: "", result)
             }
             call.method == "submitScore" -> {
                 val leaderboardID = call.argument<String>("leaderboardID") ?: ""
                 val score = call.argument<Long>("score") ?: 0
-                submitScore(leaderboardID, score)
-                result.success(null)
+                submitScore(leaderboardID, score, result)
             }
             call.method == "showLeaderboards" -> {
-                showLeaderboards()
-                result.success(null)
+                showLeaderboards(result)
             }
             call.method == "showAchievements" -> {
-                showAchievements()
-                result.success(null)
+                showAchievements(result)
             }
             call.method == "signIn" -> {
-                signIn()
-                result.success(null)
+                signIn(result)
             }
             call.method == "silentSignIn" -> {
-                silentSignIn()
-                result.success(null)
+                silentSignIn(result)
             }
             else -> result.notImplemented()
         }
@@ -106,7 +111,7 @@ class GamesServicesPlugin(private val activity: Activity) : MethodCallHandler {
             val channel = MethodChannel(registrar.messenger(), "games_services")
             channel.setMethodCallHandler(GamesServicesPlugin(registrar.activity()))
         }
-    }ß
+    }
     //endregion
 
 }
