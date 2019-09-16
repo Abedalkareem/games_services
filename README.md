@@ -29,7 +29,7 @@ To submit a score to specific leaderboard. <br>
 
 #### Unlock achievement:
 To unlock an achievement. <br>
-``` GamesServices.unlock(achievementID: '', percentComplete: 0); ``` <br>
+``` GamesServices.unlock(achievementID: 'achievement_id', percentComplete: 0); ``` <br>
 *note: You need to pass the achievement id for iOS in case of iOS and the achievement id for android in case of android.
 the ```percentComplete``` is required in case of iOS but not android.*
 
