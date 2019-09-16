@@ -8,7 +8,7 @@ To be added
 To be added
 
 ## Installing
-Add this to your package's pubspec.yaml file:
+Add this to your pubspec.yaml file:
 ```
 dependencies:
   games_services: any       # <-- Add this line
