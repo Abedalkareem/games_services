@@ -81,13 +81,13 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       report(achievementID: achievementID, percentComplete: percentComplete, result: result)
     case "submitScore":
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
-      let score = (arguments?["score"] as? Double) ?? 0.0
+      let score = (arguments?["value"] as? Int) ?? 0
       report(score: Int64(score), leaderboardID: leaderboardID, result: result)
     case "showAchievements":
       showAchievements()
       result("success")
     case "showLeaderboards":
-      let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
+      let leaderboardID = (arguments?["iOSLeaderboardID"] as? String) ?? ""
       showLeaderboardWith(identifier: leaderboardID)
       result("success")
     case "signIn":

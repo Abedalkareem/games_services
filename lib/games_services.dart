@@ -1,34 +1,57 @@
 import 'dart:async';
-import 'dart:ffi';
 
 import 'package:flutter/services.dart';
+import 'package:games_services/achievement.dart';
+import 'package:games_services/helpers.dart';
+import 'package:games_services/score.dart';
 
 class GamesServices {
-  static const MethodChannel _channel =
-      const MethodChannel('games_services');
+  static const MethodChannel _channel = const MethodChannel('games_services');
 
-  static Future<String> unlock({achievementID: String, percentComplete: Double}) async {
-    return await _channel.invokeMethod("unlock", [achievementID, percentComplete]);
+  /// Unlock an [achievement].
+  /// [Achievement] takes three parameters:
+  /// [androidID] the achievement id for android.
+  /// [iOSID] the achievement id for iOS.
+  /// [percentComplete] the completion percent of the achievement, this parameter is
+  /// optional in case of iOS.
+  static Future<String> unlock({achievement: Achievement}) async {
+    return await _channel.invokeMethod("unlock", {
+      "achievementID": achievement.id,
+      "percentComplete": achievement.percentComplete,
+    });
   }
 
-  static Future<String> submitScore({leaderboardID: String, score: int}) async {
-    return await _channel.invokeMethod("submitScore", [leaderboardID, score]);
+  /// Submit a [score] to specific leader board.
+  /// [Score] takes three parameters:
+  /// [androidLeaderboardID] the leader board id that you want to send the score for in case of android.
+  /// [iOSLeaderboardID] the leader board id that you want to send the score for in case of iOS.
+  /// [value] the score.
+  static Future<String> submitScore({score: Score}) async {
+    return await _channel.invokeMethod("submitScore", {
+      "leaderboardID": score.leaderboardID,
+      "value": score.value,
+    });
   }
 
+  /// It will open the achievements screen.
   static Future<String> showAchievements() async {
     return await _channel.invokeMethod("showAchievements");
   }
 
-  static Future<String> showLeaderboards({leaderboardID: String}) async {
-    return await _channel.invokeMethod("showLeaderboards", leaderboardID);
+  /// It will open the leaderboards screen.
+  static Future<String> showLeaderboards({iOSLeaderboardID = ""}) async {
+    return await _channel
+        .invokeMethod("showLeaderboards", {"iOSLeaderboardID": iOSLeaderboardID});
   }
 
-  static Future<String> silentSignIn() async {
-    return await _channel.invokeMethod("silentSignIn");
-  }
-
+  /// To sign in the user.
+  /// You need to call the sign in before making any action,
+  /// (like sending a score or unlocking an achievement).
   static Future<String> signIn() async {
-    return await _channel.invokeMethod("signIn");
+    if (Helpers.isPlatformAndroid) {
+      return await _channel.invokeMethod("silentSignIn");
+    } else {
+      return await _channel.invokeMethod("signIn");
+    }
   }
-
 }

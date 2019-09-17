@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:games_services/games_services.dart';
+import 'package:games_services/Achievement.dart';
+import 'package:games_services/Score.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,12 +28,6 @@ class _MyAppState extends State<MyApp> {
                   },
                 ),
                 RaisedButton(
-                  child: Text('silentSignIn'),
-                  onPressed: () {
-                    GamesServices.silentSignIn();
-                  },
-                ),
-                RaisedButton(
                   child: Text('Show Achievements'),
                   onPressed: () {
                     GamesServices.showAchievements();
@@ -40,19 +36,28 @@ class _MyAppState extends State<MyApp> {
                 RaisedButton(
                   child: Text('Show Leaderboards'),
                   onPressed: () {
-                    GamesServices.showLeaderboards(leaderboardID: '');
+                    //
+                    GamesServices.showLeaderboards(iOSLeaderboardID: 'ios_leaderboard_id');
                   },
                 ),
                 RaisedButton(
                   child: Text('Submit Score'),
                   onPressed: () {
-                    GamesServices.submitScore(leaderboardID: '', score: 1);
+                    GamesServices.submitScore(
+                        score: Score(
+                            androidLeaderboardID: 'android_leaderboard_id',
+                            iOSLeaderboardID: 'ios_leaderboard_id',
+                            value: 5));
                   },
                 ),
                 RaisedButton(
                   child: Text('Unlock'),
                   onPressed: () {
-                    GamesServices.unlock(achievementID: '', percentComplete: 0);
+                    GamesServices.unlock(
+                        achievement: Achievement(
+                            androidID: 'android_id',
+                            iOSID: 'ios_id',
+                            percentComplete: 1.0));
                   },
                 ),
               ],

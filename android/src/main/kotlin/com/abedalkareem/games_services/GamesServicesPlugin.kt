@@ -33,16 +33,9 @@ class GamesServicesPlugin(private val activity: Activity) : MethodCallHandler {
                 result.success("success")
             } else {
                 Log.e("Error", "signInError", task.exception)
-                result.error("error", task.exception?.message ?: "", task.exception)
+                result.error("error", task.exception?.message ?: "", null)
             }
         }
-    }
-
-    private fun signIn(result: Result) {
-        googleSignInClient = GoogleSignIn.getClient(activity, GoogleSignInOptions.Builder(
-                GoogleSignInOptions.DEFAULT_SIGN_IN).build())
-        activity.startActivityForResult(googleSignInClient?.signInIntent, 0)
-        result.success("success")
     }
     //endregion
 
@@ -52,7 +45,7 @@ class GamesServicesPlugin(private val activity: Activity) : MethodCallHandler {
             activity.startActivityForResult(intent, 0)
             result.success("success")
         }?.addOnFailureListener {
-            result.error("error", "${it.message}", it)
+            result.error("error", "${it.message}", null)
         }
     }
 
@@ -68,12 +61,12 @@ class GamesServicesPlugin(private val activity: Activity) : MethodCallHandler {
             activity.startActivityForResult(intent, 0)
             result.success("success")
         }?.addOnFailureListener {
-            result.error("error", "${it.message}", it)
+            result.error("error", "${it.message}", null)
         }
     }
 
-    private fun submitScore(leaderboardID: String, score: Long, result: Result) {
-        leaderboardsClient?.submitScore(leaderboardID, score)
+    private fun submitScore(leaderboardID: String, score: Int, result: Result) {
+        leaderboardsClient?.submitScore(leaderboardID, score.toLong())
         result.success("success")
     }
     //endregion
@@ -86,7 +79,7 @@ class GamesServicesPlugin(private val activity: Activity) : MethodCallHandler {
             }
             call.method == "submitScore" -> {
                 val leaderboardID = call.argument<String>("leaderboardID") ?: ""
-                val score = call.argument<Long>("score") ?: 0
+                val score = call.argument<Int>("value") ?: 0
                 submitScore(leaderboardID, score, result)
             }
             call.method == "showLeaderboards" -> {
@@ -94,9 +87,6 @@ class GamesServicesPlugin(private val activity: Activity) : MethodCallHandler {
             }
             call.method == "showAchievements" -> {
                 showAchievements(result)
-            }
-            call.method == "signIn" -> {
-                signIn(result)
             }
             call.method == "silentSignIn" -> {
                 silentSignIn(result)
