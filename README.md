@@ -7,7 +7,7 @@ A Flutter plugin to support game center and google play games services.
 #### Android
 <img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot4.png" width="200"/> <img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot5.png" width="200"/> <br>
 
-## Example
+## Usage
 #### Sign in:
 To sign in the user. You need to call the sign in before 
 making any action (like sending a score or unlocking an achievement). <br>
