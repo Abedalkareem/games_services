@@ -20,7 +20,7 @@ To show the achievements screen. <br>
 #### Show leaderboards:
 To show the leaderboards screen. <br>
 ``` GamesServices.showLeaderboards(iOSLeaderboardID: 'ios_leaderboard_id'); ``` <br>
-*note: You need to pass the leaderboard id for iOS, for android it's not required.*
+*Note: You need to pass the leaderboard id for iOS, for android it's not required.*
 
 #### Submit score:
 To submit a ```Score``` to specific leader board.<br>
@@ -35,6 +35,7 @@ GamesServices.submitScore(score: Score(androidLeaderboardID: 'android_leaderboar
                                        value: 5));
 ``` 
 <br>
+
 *note: You need to pass the leaderboard id for iOS in case of iOS and the leaderboard id for android in case of android.*
 
 #### Unlock achievement:
@@ -50,8 +51,9 @@ GamesServices.unlock(achievement: Achievement(androidID: 'android_id',
                                               percentComplete: 100)); 
 ``` 
 <br>
-*note: You need to pass the achievement id for iOS in case of iOS and the achievement id for android in case of android.
-the percentComplete is required in case of iOS but not android.*
+
+*Note: You need to pass the achievement id for iOS in case of iOS and the achievement id for android in case of android.
+the ```percentComplete``` is required in case of iOS but not android.*
 
 ## Installing
 Simply add the following line to your pubspec.yaml file:
