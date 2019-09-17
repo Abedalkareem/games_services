@@ -36,8 +36,8 @@ class _MyAppState extends State<MyApp> {
                 RaisedButton(
                   child: Text('Show Leaderboards'),
                   onPressed: () {
-                    //
-                    GamesServices.showLeaderboards(iOSLeaderboardID: 'ios_leaderboard_id');
+                    GamesServices.showLeaderboards(
+                        iOSLeaderboardID: 'ios_leaderboard_id');
                   },
                 ),
                 RaisedButton(
@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
                         achievement: Achievement(
                             androidID: 'android_id',
                             iOSID: 'ios_id',
-                            percentComplete: 1.0));
+                            percentComplete: 100));
                   },
                 ),
               ],
