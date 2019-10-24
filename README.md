@@ -1,4 +1,5 @@
-<img src="https://github.com/Abedalkareem/games_services/raw/master/logo.png" width="200"/>  
+<img src="https://github.com/Abedalkareem/games_services/raw/master/logo.png" width="200"/>
+
 A Flutter plugin to support game center and google play games services.  
 
 ## Screenshot  
