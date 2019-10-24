@@ -13,7 +13,7 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
   // MARK: - Authenticate
 
   func authenticateUser(result: @escaping FlutterResult) {
-    let player = GKLocalPlayer.localPlayer()
+    let player = GKLocalPlayer.local
     player.authenticateHandler = { vc, error in
       guard error == nil else {
         result(error?.localizedDescription ?? "")
