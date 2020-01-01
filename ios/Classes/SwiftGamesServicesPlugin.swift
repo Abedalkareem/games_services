@@ -21,6 +21,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       }
       if let vc = vc {
         self.viewController.present(vc, animated: true, completion: nil)
+      }
+      if player.isAuthenticated {
         result("success")
       }
     }
