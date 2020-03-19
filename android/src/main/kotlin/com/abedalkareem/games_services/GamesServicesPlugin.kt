@@ -20,7 +20,7 @@ import io.flutter.plugin.common.PluginRegistry.Registrar
 
 private const val CHANNEL_NAME = "games_services"
 
-class GamesServicesPlugin(private var activity: Activity?) : FlutterPlugin, MethodCallHandler, ActivityAware {
+class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     //region Variables
     private var googleSignInClient: GoogleSignInClient? = null
