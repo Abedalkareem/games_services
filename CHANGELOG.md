@@ -9,3 +9,7 @@ Upgrade to flutter 1.12
 
 # 0.2.4
 Upgrade to android x
+
+# 0.2.5
+Update gradle properties to fix appcenter build
+ 
