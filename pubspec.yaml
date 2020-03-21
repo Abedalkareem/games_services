@@ -1,6 +1,6 @@
 name: games_services
 description: A new Flutter plugin to support game center and google play games services.
-version: 0.2.5
+version: 0.2.6
 authors:
  - Abedalkareem Omreyh <abdelkarem.omareyeh@gmail.com>
 homepage: https://github.com/Abedalkareem/games_services
