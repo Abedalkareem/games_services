@@ -113,6 +113,12 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activity = binding.activity
+
+        // if channel was already created update it
+        if (channel != null) {
+            val handler = GamesServicesPlugin(binding.activity)
+            channel?.setMethodCallHandler(handler)
+        }
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
@@ -144,13 +150,6 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         }
     }
 
-    companion object {
-        @JvmStatic
-        fun registerWith(registrar: Registrar) {
-            val channel = MethodChannel(registrar.messenger(), CHANNEL_NAME)
-            channel.setMethodCallHandler(GamesServicesPlugin(registrar.activity()))
-        }
-    }
     //endregion
 
 }
