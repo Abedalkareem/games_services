@@ -44,6 +44,21 @@ class GamesServices {
         .invokeMethod("showLeaderboards", {"iOSLeaderboardID": iOSLeaderboardID});
   }
 
+
+
+  /// JRMARKHAM
+  /// Retrieve player info namely playerId and displayName
+  static Future<String> getPlayerId () async {
+    return await _channel.invokeMethod ("playerID");
+  }
+
+  static Future<String> getDisplayName () async {
+    return await _channel.invokeMethod ("displayName");
+  }
+
+
+
+
   /// To sign in the user.
   /// You need to call the sign in before making any action,
   /// (like sending a score or unlocking an achievement).
