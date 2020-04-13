@@ -110,9 +110,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
         result("playerID")
 
      case "displayName":
-   //   result("displayName")
-//          let displayName = player.isAuthenticated ? player.displayName : "error"
-          result(player.displayName)
+          let displayName = player.isAuthenticated ? player.displayName : "error"
+          result(displayName)
     default:
       result("unimplemented")
       break
