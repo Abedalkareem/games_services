@@ -3,6 +3,7 @@ package com.abedalkareem.games_services
 import android.app.Activity
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.games.AchievementsClient
@@ -185,10 +186,10 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
             }
             // JRMARKHAM
             // new method for player info
-            call.method == "playerID" -> {
+            "playerID" -> {
                 getPlayerID(result)
             }
-            call.method == "displayName" -> {
+            "displayName" -> {
                 getDisplayName(result)
             }
 
