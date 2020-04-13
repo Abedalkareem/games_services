@@ -12,8 +12,7 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
 
   // MARK: - Authenticate
 
-  func authenticateUser(result: @escaping FlutterResult) {
-    let player = GKLocalPlayer.local
+  func authenticateUser(player:GKLocalPlayer, result: @escaping FlutterResult) {
     player.authenticateHandler = { vc, error in
       guard error == nil else {
         result(error?.localizedDescription ?? "")
@@ -76,6 +75,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
   // MARK: - FlutterPlugin
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
+    // change player to a class property
+    let player = GKLocalPlayer.local
     let arguments = call.arguments as? [String: Any]
     switch call.method {
     case "unlock":
@@ -94,22 +95,20 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       showLeaderboardWith(identifier: leaderboardID)
       result("success")
     case "signIn":
-      authenticateUser(result: result)
-      case "playerID":
-              // playerID is split after 12.4 into gamePlayerID and teamPlayerID
-              if #available(iOS 12.4, *) {
-                  let gamePlayerID = player.isAuthenticated ? player.gamePlayerID :
-                  "error"
-                  result(gamePlayerID )
-              } else {
-                  let playerID = player.isAuthenticated ? player.playerID : "error"
-                  result(playerID)
-              }
-           case "displayName":
-               let displayName = player.isAuthenticated ? player.displayName : "error"
-               result(displayName)
-
-
+      authenticateUser(player: player, result: result)
+     case "playerID":
+        // playerID is split after 12.4 into gamePlayerID and teamPlayerID
+        if #available(iOS 12.4, *) {
+            let gamePlayerID = player.isAuthenticated ? player.gamePlayerID :
+            "error"
+            result(gamePlayerID )
+        } else {
+            let playerID = player.isAuthenticated ? player.playerID : "error"
+            result(playerID)
+        }
+     case "displayName":
+         let displayName = player.isAuthenticated ? player.displayName : "error"
+         result(displayName)
     default:
       result("unimplemented")
       break

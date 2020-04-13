@@ -24,6 +24,11 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
     //region Variables
     private var googleSignInClient: GoogleSignInClient? = null
+    // JRMARKHAM
+    // add account variable to collect player information
+    // add functionality to existing authenticaton code
+    private var account: GoogleSignInAccount? = null
+
     private var achievementClient: AchievementsClient? = null
     private var leaderboardsClient: LeaderboardsClient? = null
 
@@ -35,9 +40,17 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         val activity = activity ?: return
         googleSignInClient = GoogleSignIn.getClient(activity, GoogleSignInOptions.Builder(
                 GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build())
+
+        // JRMARKHAM
+        // set account from previous login
+        account = GoogleSignIn.getLastSignedInAccount(activity)
+
         googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
             val googleSignInAccount = task.result
             if (task.isSuccessful && googleSignInAccount != null) {
+                // JRMARKHAM
+                // set account from successful login
+                account = task.getResult()
                 achievementClient = Games.getAchievementsClient(activity, googleSignInAccount)
                 leaderboardsClient = Games.getLeaderboardsClient(activity, googleSignInAccount)
                 result.success("success")
@@ -81,6 +94,31 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     }
     //endregion
 
+    // JRMARKHAM
+    // player info method
+    //region playerID
+    private fun getPlayerID(result: Result) {
+        if(account == null){
+            result.error("error", "account not logged in.", null)
+            return
+        }
+        result.success(account!!.id)
+    }
+    //endregion
+
+    //region displayName
+    private fun getDisplayName(result: Result) {
+        if(account == null){
+            result.error("error", "account not logged in.", null)
+            return
+        }
+        result.success(account!!.displayName)
+    }
+    //endregion
+
+
+
+
     //region FlutterPlugin
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         setupChannel(binding.binaryMessenger)
@@ -120,6 +158,11 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     }
     //endregion
 
+
+
+
+
+
     //region MethodCallHandler
     override fun onMethodCall(call: MethodCall, result: Result) {
         when (call.method) {
@@ -140,6 +183,16 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
             "silentSignIn" -> {
                 silentSignIn(result)
             }
+            // JRMARKHAM
+            // new method for player info
+            call.method == "playerID" -> {
+                getPlayerID(result)
+            }
+            call.method == "displayName" -> {
+                getDisplayName(result)
+            }
+
+
             else -> result.notImplemented()
         }
     }
