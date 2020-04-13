@@ -6,6 +6,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="20384bcc-670b-4ee5-964c-d08c29b23ba5" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ios/Classes/SwiftGamesServicesPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/ios/Classes/SwiftGamesServicesPlugin.swift" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -57,6 +58,12 @@
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
@@ -72,7 +79,7 @@
       <updated>1568448449368</updated>
       <workItem from="1586809809298" duration="9000" />
       <workItem from="1586809827998" duration="33000" />
-      <workItem from="1586809890262" duration="1064000" />
+      <workItem from="1586809890262" duration="1833000" />
     </task>
     <servers />
   </component>
