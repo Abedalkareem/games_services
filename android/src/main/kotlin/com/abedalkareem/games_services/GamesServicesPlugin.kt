@@ -42,10 +42,6 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         googleSignInClient = GoogleSignIn.getClient(activity, GoogleSignInOptions.Builder(
                 GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build())
 
-        // JRMARKHAM
-        // set account from previous login
-        account = GoogleSignIn.getLastSignedInAccount(activity)
-
         googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
             account = task.result
             val googleSignInAccount = task.result
