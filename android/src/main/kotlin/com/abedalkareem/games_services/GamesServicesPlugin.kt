@@ -26,7 +26,8 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     private var googleSignInClient: GoogleSignInClient? = null
     private var achievementClient: AchievementsClient? = null
     private var leaderboardsClient: LeaderboardsClient? = null
-
+    private var playerID: String? = null
+    private var displayName: String? = null
     private var channel: MethodChannel? = null
     //endregion
 
@@ -40,6 +41,8 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
             if (task.isSuccessful && googleSignInAccount != null) {
                 achievementClient = Games.getAchievementsClient(activity, googleSignInAccount)
                 leaderboardsClient = Games.getLeaderboardsClient(activity, googleSignInAccount)
+                playerID = googleSignInAccount.id
+                displayName = googleSignInAccount.displayName
                 result.success("success")
             } else {
                 Log.e("Error", "signInError", task.exception)
@@ -80,6 +83,30 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         result.success("success")
     }
     //endregion
+
+
+    // JRMARKHAM
+    // player info method
+    //region playerID
+    private fun getPlayerID(result: Result) {
+        if (playerID == null) {
+            result.error("error", "account not logged in.", null)
+            return
+        }
+        result.success(playerID)
+    }
+    //endregion
+
+    //region displayName
+    private fun getDisplayName(result: Result) {
+        if (displayName == null) {
+            result.error("error", "account not logged in.", null)
+            return
+        }
+        result.success(displayName)
+    }
+    //endregion
+
 
     //region FlutterPlugin
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -140,6 +167,16 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
             "silentSignIn" -> {
                 silentSignIn(result)
             }
+
+            // JRMARKHAM
+            // new method for player info
+            "playerID" -> {
+                getPlayerID(result)
+            }
+            "displayName" -> {
+                getDisplayName(result)
+            }
+
             else -> result.notImplemented()
         }
     }
