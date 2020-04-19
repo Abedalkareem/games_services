@@ -46,8 +46,6 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
             if (task.isSuccessful && googleSignInAccount != null) {
                 achievementClient = Games.getAchievementsClient(activity, googleSignInAccount)
                 leaderboardsClient = Games.getLeaderboardsClient(activity, googleSignInAccount)
-                playerID = googleSignInAccount.id
-                displayName = googleSignInAccount.displayName
                 result.success("success")
             } else {
                 Log.e("Error", "signInError", task.exception)
