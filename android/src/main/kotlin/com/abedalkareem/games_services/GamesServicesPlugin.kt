@@ -28,8 +28,8 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     // JRMARKHAM
     // add account variable to collect player information
     // add functionality to existing authenticaton code
-    private var account: GoogleSignInAccount? = null
-
+    private var displayName: String? = null
+    private var playerID: String? = null
     private var achievementClient: AchievementsClient? = null
     private var leaderboardsClient: LeaderboardsClient? = null
 
@@ -44,9 +44,10 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
             val googleSignInAccount = task.result
             if (task.isSuccessful && googleSignInAccount != null) {
-                account = googleSignInAccount
                 achievementClient = Games.getAchievementsClient(activity, googleSignInAccount)
                 leaderboardsClient = Games.getLeaderboardsClient(activity, googleSignInAccount)
+                playerID = googleSignInAccount.id
+                displayName = googleSignInAccount.displayName
                 result.success("success")
             } else {
                 Log.e("Error", "signInError", task.exception)
@@ -92,21 +93,21 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     // player info method
     //region playerID
     private fun getPlayerID(result: Result) {
-        if(account == null){
+        if(playerID == null){
             result.error("error", "account not logged in.", null)
             return
         }
-        result.success(account!!.id)
+        result.success(playerID)
     }
     //endregion
 
     //region displayName
     private fun getDisplayName(result: Result) {
-        if(account == null){
+        if(displayName == null){
             result.error("error", "account not logged in.", null)
             return
         }
-        result.success(account!!.displayName)
+        result.success(displayName)
     }
     //endregion
 
