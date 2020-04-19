@@ -41,8 +41,13 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
             if (task.isSuccessful && googleSignInAccount != null) {
                 achievementClient = Games.getAchievementsClient(activity, googleSignInAccount)
                 leaderboardsClient = Games.getLeaderboardsClient(activity, googleSignInAccount)
-                playerID = googleSignInAccount.id
-                displayName = googleSignInAccount.displayName
+                // JRMARKHAM
+                // LOAD PLAYER DATA
+                val playersClient = Games.getPlayersClient(activity, googleSignInAccount)
+                playersClient.currentPlayer?.addOnSuccessListener { innerTask->
+                    playerID = innerTask.playerId
+                    displayName = innerTask.displayName
+                }
                 result.success("success")
             } else {
                 Log.e("Error", "signInError", task.exception)
@@ -81,29 +86,6 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     private fun submitScore(leaderboardID: String, score: Int, result: Result) {
         leaderboardsClient?.submitScore(leaderboardID, score.toLong())
         result.success("success")
-    }
-    //endregion
-
-
-    // JRMARKHAM
-    // player info method
-    //region playerID
-    private fun getPlayerID(result: Result) {
-        if (playerID == null) {
-            result.error("error", "account not logged in.", null)
-            return
-        }
-        result.success(playerID)
-    }
-    //endregion
-
-    //region displayName
-    private fun getDisplayName(result: Result) {
-        if (displayName == null) {
-            result.error("error", "account not logged in.", null)
-            return
-        }
-        result.success(displayName)
     }
     //endregion
 
@@ -171,10 +153,10 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
             // JRMARKHAM
             // new method for player info
             "playerID" -> {
-                getPlayerID(result)
+                result.success(playerID)
             }
             "displayName" -> {
-                getDisplayName(result)
+                result.success(displayName)
             }
 
             else -> result.notImplemented()
