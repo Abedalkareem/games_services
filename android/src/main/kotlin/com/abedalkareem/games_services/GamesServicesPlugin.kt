@@ -3,7 +3,6 @@ package com.abedalkareem.games_services
 import android.app.Activity
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.games.AchievementsClient
@@ -25,11 +24,6 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
     //region Variables
     private var googleSignInClient: GoogleSignInClient? = null
-    // JRMARKHAM
-    // add account variable to collect player information
-    // add functionality to existing authenticaton code
-    private var displayName: String? = null
-    private var playerID: String? = null
     private var achievementClient: AchievementsClient? = null
     private var leaderboardsClient: LeaderboardsClient? = null
 
@@ -86,31 +80,6 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         result.success("success")
     }
     //endregion
-
-    // JRMARKHAM
-    // player info method
-    //region playerID
-    private fun getPlayerID(result: Result) {
-        if(playerID == null){
-            result.error("error", "account not logged in.", null)
-            return
-        }
-        result.success(playerID)
-    }
-    //endregion
-
-    //region displayName
-    private fun getDisplayName(result: Result) {
-        if(displayName == null){
-            result.error("error", "account not logged in.", null)
-            return
-        }
-        result.success(displayName)
-    }
-    //endregion
-
-
-
 
     //region FlutterPlugin
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -171,16 +140,6 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
             "silentSignIn" -> {
                 silentSignIn(result)
             }
-            // JRMARKHAM
-            // new method for player info
-            "playerID" -> {
-                getPlayerID(result)
-            }
-            "displayName" -> {
-                getDisplayName(result)
-            }
-
-
             else -> result.notImplemented()
         }
     }
@@ -193,4 +152,5 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         }
     }
     //endregion
+
 }
