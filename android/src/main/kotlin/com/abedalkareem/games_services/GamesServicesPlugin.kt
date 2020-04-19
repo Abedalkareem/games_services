@@ -48,7 +48,8 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
         googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
             account = task.result
-            if (task.isSuccessful && account != null) {
+            val googleSignInAccount = task.result
+            if (task.isSuccessful && googleSignInAccount != null) {
                 achievementClient = Games.getAchievementsClient(activity, googleSignInAccount)
                 leaderboardsClient = Games.getLeaderboardsClient(activity, googleSignInAccount)
                 result.success("success")
