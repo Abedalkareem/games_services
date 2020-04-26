@@ -1,7 +1,6 @@
 import 'package:games_services/helpers.dart';
 
 class Achievement {
-
   String androidID;
   String iOSID;
   double percentComplete;
@@ -10,6 +9,5 @@ class Achievement {
     return Helpers.isPlatformAndroid ? androidID : iOSID;
   }
 
-  Achievement({this.androidID, this.iOSID, this.percentComplete=100});
-
+  Achievement({this.androidID, this.iOSID, this.percentComplete = 100});
 }

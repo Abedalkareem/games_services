@@ -1,7 +1,6 @@
 import 'package:games_services/helpers.dart';
 
 class Score {
-
   String androidLeaderboardID;
   String iOSLeaderboardID;
   int value;
@@ -11,5 +10,4 @@ class Score {
   }
 
   Score({this.iOSLeaderboardID, this.androidLeaderboardID, this.value});
-
 }

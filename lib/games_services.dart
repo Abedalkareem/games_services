@@ -1,9 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/services.dart';
-import 'package:games_services/achievement.dart';
+import 'package:games_services/models/achievement.dart';
 import 'package:games_services/helpers.dart';
-import 'package:games_services/score.dart';
+import 'package:games_services/models/score.dart';
 
 class GamesServices {
   static const MethodChannel _channel = const MethodChannel('games_services');
