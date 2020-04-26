@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:games_services/games_services.dart';
-import 'package:games_services/Achievement.dart';
-import 'package:games_services/Score.dart';
+import 'package:games_services/achievement.dart';
+import 'package:games_services/score.dart';
 
 void main() => runApp(MyApp());
 
