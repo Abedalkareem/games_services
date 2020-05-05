@@ -8,19 +8,32 @@ A Flutter plugin to support game center and google play games services.
 #### Android  
 <img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot4.png" width="200"/> <img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot5.png" width="200"/>  
 
+## Tutorials  
+
+[Written tutorial](https://bit.ly/2yv1C00)  
+
+Video tutorial
+*Will be added soon.*  
+
 ## Usage  
 #### Sign in:  
 To sign in the user. You need to call the sign in before  
 making any action (like sending a score or unlocking an achievement).  
-``` GamesServices.signIn(); ```  
+``` dart
+ GamesServices.signIn();
+```  
 
 #### Show achievements:
 To show the achievements screen.  
-``` GamesServices.showAchievements(); ```  
+``` dart
+GamesServices.showAchievements();
+```  
 
 #### Show leaderboards:
 To show the leaderboards screen.  
-``` GamesServices.showLeaderboards(iOSLeaderboardID: 'ios_leaderboard_id'); ```  
+``` dart
+ GamesServices.showLeaderboards(iOSLeaderboardID: 'ios_leaderboard_id');
+```  
 *Note: You need to pass the leaderboard id for iOS, for android it's not required.*  
 
 #### Submit score:  
@@ -30,7 +43,7 @@ To submit a ```Score``` to specific leader board.
 -```iOSLeaderboardID``` the leader board id that you want to send the score for in case of iOS.  
 -```value``` the score.  
 
-```
+``` dart
 GamesServices.submitScore(score: Score(androidLeaderboardID: 'android_leaderboard_id',
                                        iOSLeaderboardID: 'ios_leaderboard_id',
                                        value: 5));
@@ -45,7 +58,7 @@ The ```Achievement``` takes three parameters:
 -```iOSID``` the achievement id for iOS.  
 -```percentComplete``` the completion percent of the achievement, this parameter is optional in case of iOS.  
 
-```
+``` dart
 GamesServices.unlock(achievement: Achievement(androidID: 'android_id',
                                               iOSID: 'ios_id',
                                               percentComplete: 100)); 
@@ -57,7 +70,7 @@ the ```percentComplete``` is required in case of iOS but not android.*
 
 ## Installing  
 Simply add the following line to your pubspec.yaml file:  
-```
+``` yaml
 dependencies:
   games_services: any       # <-- Add this line
 ```
