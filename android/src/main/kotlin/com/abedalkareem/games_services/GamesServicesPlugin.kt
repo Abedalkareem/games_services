@@ -43,6 +43,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       val channel = MethodChannel(registrar.messenger(), CHANNEL_NAME)
       val plugin = GamesServicesPlugin(registrar.activity())
       channel.setMethodCallHandler(plugin)
+      registrar.addActivityResultListener(plugin)
     }
   }
 

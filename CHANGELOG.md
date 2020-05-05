@@ -24,3 +24,6 @@ Add registerWith(registrar:) back
 
 # 0.2.9
 Return an error if user not logged in and clicked on achievement or leaderboard.
+
+# 0.2.10
+Add addActivityResultListener for registrar
