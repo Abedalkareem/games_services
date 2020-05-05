@@ -23,41 +23,46 @@ class _MyAppState extends State<MyApp> {
               children: <Widget>[
                 RaisedButton(
                   child: Text('signIn'),
-                  onPressed: () {
-                    GamesServices.signIn();
+                  onPressed: () async {
+                    final result = await GamesServices.signIn();
+                    print(result);
                   },
                 ),
                 RaisedButton(
                   child: Text('Show Achievements'),
-                  onPressed: () {
-                    GamesServices.showAchievements();
+                  onPressed: () async {
+                    final result = await GamesServices.showAchievements();
+                    print(result);
                   },
                 ),
                 RaisedButton(
                   child: Text('Show Leaderboards'),
-                  onPressed: () {
-                    GamesServices.showLeaderboards(
+                  onPressed: () async {
+                    final result = await GamesServices.showLeaderboards(
                         iOSLeaderboardID: 'ios_leaderboard_id');
+                    print(result);
                   },
                 ),
                 RaisedButton(
                   child: Text('Submit Score'),
-                  onPressed: () {
-                    GamesServices.submitScore(
+                  onPressed: () async {
+                    final result = await GamesServices.submitScore(
                         score: Score(
                             androidLeaderboardID: 'android_leaderboard_id',
                             iOSLeaderboardID: 'ios_leaderboard_id',
                             value: 5));
+                    print(result);
                   },
                 ),
                 RaisedButton(
                   child: Text('Unlock'),
-                  onPressed: () {
-                    GamesServices.unlock(
+                  onPressed: () async {
+                    final result = await GamesServices.unlock(
                         achievement: Achievement(
                             androidID: 'android_id',
                             iOSID: 'ios_id',
                             percentComplete: 100));
+                    print(result);
                   },
                 ),
               ],

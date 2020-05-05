@@ -81,35 +81,52 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   }
   //endregion
 
-  //region Achievements
+  //region Achievements & Leaderboards
   private fun showAchievements(result: Result) {
-    achievementClient?.achievementsIntent?.addOnSuccessListener { intent ->
+    showLoginErrorIfNotLoggedIn(result)
+    achievementClient!!.achievementsIntent.addOnSuccessListener { intent ->
       activity?.startActivityForResult(intent, 0)
       result.success("success")
-    }?.addOnFailureListener {
+    }.addOnFailureListener {
       result.error("error", "${it.message}", null)
     }
   }
 
   private fun unlock(achievementID: String, result: Result) {
-    achievementClient?.unlock(achievementID)
-    result.success("success")
+    showLoginErrorIfNotLoggedIn(result)
+    achievementClient?.unlockImmediate(achievementID)
+            ?.addOnSuccessListener {
+              result.success("success")
+            }?.addOnFailureListener {
+              result.error("error", it.localizedMessage, null)
+            }
   }
-  //endregion
 
-  //region Leaderboards
   private fun showLeaderboards(result: Result) {
-    leaderboardsClient?.allLeaderboardsIntent?.addOnSuccessListener { intent ->
+    showLoginErrorIfNotLoggedIn(result)
+    leaderboardsClient!!.allLeaderboardsIntent.addOnSuccessListener { intent ->
       activity?.startActivityForResult(intent, 0)
       result.success("success")
-    }?.addOnFailureListener {
+    }.addOnFailureListener {
       result.error("error", "${it.message}", null)
     }
   }
 
   private fun submitScore(leaderboardID: String, score: Int, result: Result) {
-    leaderboardsClient?.submitScore(leaderboardID, score.toLong())
-    result.success("success")
+    showLoginErrorIfNotLoggedIn(result)
+    leaderboardsClient
+            ?.submitScoreImmediate(leaderboardID, score.toLong())
+            ?.addOnSuccessListener {
+              result.success("success")
+            }?.addOnFailureListener {
+              result.error("error", it.localizedMessage, null)
+            }
+  }
+
+  private fun showLoginErrorIfNotLoggedIn(result: Result) {
+    if (achievementClient == null || leaderboardsClient == null) {
+      result.error("error", "Please make sure to call signIn() first", null)
+    }
   }
   //endregion
 
