@@ -8,6 +8,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.games.AchievementsClient
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
+import android.widget.Toast;
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -30,20 +31,37 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     private var channel: MethodChannel? = null
     //endregion
 
+    private fun explicitSignIn() {
+        val activity = activity ?: return
+        val builder = GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
+        builder.requestEmail()
+        googleSignInClient = GoogleSignIn.getClient(activity, builder.build())
+        activity?.startActivityForResult(googleSignInClient?.signInIntent, 0);
+    }
+
     //region SignIn
     private fun silentSignIn(result: Result) {
         val activity = activity ?: return
-        googleSignInClient = GoogleSignIn.getClient(activity, GoogleSignInOptions.Builder(
-                GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).build())
+        val builder = GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN);
+        builder.requestEmail();
+        googleSignInClient = GoogleSignIn.getClient(activity, builder.build())
         googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
-            val googleSignInAccount = task.result
-            if (task.isSuccessful && googleSignInAccount != null) {
-                achievementClient = Games.getAchievementsClient(activity, googleSignInAccount)
-                leaderboardsClient = Games.getLeaderboardsClient(activity, googleSignInAccount)
-                result.success("success")
-            } else {
-                Log.e("Error", "signInError", task.exception)
-                result.error("error", task.exception?.message ?: "", null)
+            try {
+                val googleSignInAccount = task.result
+                if (task.isSuccessful && googleSignInAccount != null) {
+                    achievementClient = Games.getAchievementsClient(activity, googleSignInAccount)
+                    leaderboardsClient = Games.getLeaderboardsClient(activity, googleSignInAccount)
+                    result.success("success")
+                } else {
+                    Log.e("Error", "signInError", task.exception)
+                    result.error("error", task.exception?.message ?: "", null)
+                }
+            }catch(ex: Exception) {
+                explicitSignIn();
+                result.success("success");
+
             }
         }
     }
@@ -67,6 +85,9 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
     //region Leaderboards
     private fun showLeaderboards(result: Result) {
+        if (leaderboardsClient?.allLeaderboardsIntent == null) {
+            Toast.makeText(activity, "Please log to Google Play Games", Toast.LENGTH_LONG).show();
+        }
         leaderboardsClient?.allLeaderboardsIntent?.addOnSuccessListener { intent ->
             activity?.startActivityForResult(intent, 0)
             result.success("success")
@@ -113,6 +134,12 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activity = binding.activity
+
+        // if channel was already created update it
+        if (channel != null) {
+            val handler = GamesServicesPlugin(binding.activity)
+            channel?.setMethodCallHandler(handler)
+        }
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
@@ -144,13 +171,6 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         }
     }
 
-    companion object {
-        @JvmStatic
-        fun registerWith(registrar: Registrar) {
-            val channel = MethodChannel(registrar.messenger(), CHANNEL_NAME)
-            channel.setMethodCallHandler(GamesServicesPlugin(registrar.activity()))
-        }
-    }
     //endregion
 
 }
