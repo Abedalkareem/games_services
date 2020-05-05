@@ -3,7 +3,6 @@ package com.abedalkareem.games_services
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
-import android.widget.Toast
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -20,6 +19,7 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
+import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
 
 
@@ -37,18 +37,26 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   private var pendingOperation: PendingOperation? = null
   //endregion
 
+  companion object {
+    @JvmStatic
+    fun registerWith(registrar: PluginRegistry.Registrar) {
+      val channel = MethodChannel(registrar.messenger(), CHANNEL_NAME)
+      val plugin = GamesServicesPlugin(registrar.activity())
+      channel.setMethodCallHandler(plugin)
+    }
+  }
+
   //region SignIn
   private fun silentSignIn(result: Result) {
     val activity = activity ?: return
     val builder = GoogleSignInOptions.Builder(
             GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-    builder.requestEmail()
     googleSignInClient = GoogleSignIn.getClient(activity, builder.build())
     googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
-      val googleSignInAccount = task.result
       pendingOperation = PendingOperation(Methods.silentSignIn, result)
-      if (task.isSuccessful && googleSignInAccount != null) {
-        handleSignInResult(googleSignInAccount)
+      if (task.isSuccessful) {
+        val googleSignInAccount = task.result
+        handleSignInResult(googleSignInAccount!!)
       } else {
         Log.e("Error", "signInError", task.exception)
         Log.i("ExplicitSignIn", "Trying explicit sign in")
@@ -61,7 +69,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     val activity = activity ?: return
     val builder = GoogleSignInOptions.Builder(
             GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-    builder.requestEmail()
+            .requestEmail()
     googleSignInClient = GoogleSignIn.getClient(activity, builder.build())
     activity.startActivityForResult(googleSignInClient?.signInIntent, RC_SIGN_IN)
   }
@@ -91,9 +99,6 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
   //region Leaderboards
   private fun showLeaderboards(result: Result) {
-    if (leaderboardsClient?.allLeaderboardsIntent == null) {
-      Toast.makeText(activity, "Please log to Google Play Games", Toast.LENGTH_LONG).show()
-    }
     leaderboardsClient?.allLeaderboardsIntent?.addOnSuccessListener { intent ->
       activity?.startActivityForResult(intent, 0)
       result.success("success")
@@ -119,8 +124,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
   private fun setupChannel(messenger: BinaryMessenger) {
     channel = MethodChannel(messenger, CHANNEL_NAME)
-    val handler = GamesServicesPlugin(activity)
-    channel?.setMethodCallHandler(handler)
+    channel?.setMethodCallHandler(this)
   }
 
   private fun teardownChannel() {
@@ -153,6 +157,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   override fun onDetachedFromActivityForConfigChanges() {
     onDetachedFromActivity()
   }
+
   //endregion
 
   //region PendingOperation

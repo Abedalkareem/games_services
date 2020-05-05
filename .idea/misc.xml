@@ -3,4 +3,11 @@
   <component name="ProjectType">
     <option name="id" value="io.flutter" />
   </component>
+  <component name="SuppressABINotification">
+    <option name="modulesWithSuppressedNotConfigured">
+      <set>
+        <option value="games_services_android" />
+      </set>
+    </option>
+  </component>
 </project>

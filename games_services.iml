@@ -20,7 +20,6 @@
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/games_services/example/.dart_tool" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/games_services/example/.pub" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/games_services/example/build" />
-      <excludeFolder url="file://$MODULE_DIR$/example/ios/.symlinks/plugins/games_services/example/ios/Flutter/App.framework/flutter_assets/packages" />
       <excludeFolder url="file://$MODULE_DIR$/example/ios/Flutter/App.framework/flutter_assets/packages" />
     </content>
     <orderEntry type="sourceFolder" forTests="false" />
