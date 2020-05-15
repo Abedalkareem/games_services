@@ -2,6 +2,14 @@ import Flutter
 import UIKit
 import GameKit
 
+struct ErrorConstants {
+  static let submit_achievement_error :String = "SUBMIT_ACHIEVEMENT_ERROR"
+  static let submit_score_error :String = "SUBMIT_SCORE_ERROR"
+  static let view_achievement_error :String = "VIEW_ACHIEVEMENT_ERROR"
+  static let view_leaderboard_error :String = "VIEW_LEADERBOARD_ERROR"
+  static let login_error :String = "LOGIN_ERROR"
+}
+
 public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
 
   // MARK: - Properties
@@ -16,15 +24,22 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     let player = GKLocalPlayer.local
     player.authenticateHandler = { vc, error in
       guard error == nil else {
-        result(error?.localizedDescription ?? "")
+        result()
+        result(FlutterError.init(code: ErrorConstants.login_error, message: "Error: Authenticate Handler failed.", details: error?.localizedDescription ?? ""))
         return
       }
       if let vc = vc {
-        self.viewController.present(vc, animated: true, completion: nil)
+        self.viewController.present(vc, animated: true, completion: {
+          if player.isAuthenticated {
+            result()
+          } else {
+            result(FlutterError.init(code: ErrorConstants.login_error, message: "Error: User denied sign in.", details: nil))
+          }
+        })
       } else if player.isAuthenticated {
-        result("success")
+        result()
       } else {
-        result("error")
+        result(FlutterError.init(code: ErrorConstants.login_error, message: "Error: No view controller present, and not authenticated.", details: nil))
       }
     }
   }
@@ -44,10 +59,10 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     reportedScore.value = score
     GKScore.report([reportedScore]) { (error) in
       guard error == nil else {
-        result(error?.localizedDescription ?? "")
+        result(FlutterError.init(code: ErrorConstants.submit_score_error, message: "Error: Score report failed.", details: error?.localizedDescription ?? ""))
         return
       }
-      result("success")
+      result()
     }
   }
 
@@ -66,10 +81,10 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     achievement.showsCompletionBanner = true
     GKAchievement.report([achievement]) { (error) in
       guard error == nil else {
-        result(error?.localizedDescription ?? "")
+        result(FlutterError.init(code: ErrorConstants.submit_achievement_error, message: "Error: Achievement report failed.", details: error?.localizedDescription ?? ""))
         return
       }
-      result("success")
+      result()
     }
   }
 
@@ -88,15 +103,15 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       report(score: Int64(score), leaderboardID: leaderboardID, result: result)
     case "showAchievements":
       showAchievements()
-      result("success")
+      result()
     case "showLeaderboards":
       let leaderboardID = (arguments?["iOSLeaderboardID"] as? String) ?? ""
       showLeaderboardWith(identifier: leaderboardID)
-      result("success")
+      result()
     case "signIn":
       authenticateUser(result: result)
     default:
-      result("unimplemented")
+      result(FlutterMethodNotImplemented)
       break
     }
   }
