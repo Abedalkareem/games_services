@@ -32,6 +32,9 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   private var googleSignInClient: GoogleSignInClient? = null
   private var achievementClient: AchievementsClient? = null
   private var leaderboardsClient: LeaderboardsClient? = null
+  //JRMARKHAM ::: ADD PLAYER INFO VARS
+  private var playerID: String? = null
+  private var displayName: String? = null
   private var activityPluginBinding: ActivityPluginBinding? = null
   private var channel: MethodChannel? = null
   private var pendingOperation: PendingOperation? = null
@@ -78,6 +81,13 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   private fun handleSignInResult(googleSignInAccount: GoogleSignInAccount) {
     achievementClient = Games.getAchievementsClient(activity!!, googleSignInAccount)
     leaderboardsClient = Games.getLeaderboardsClient(activity!!, googleSignInAccount)
+    //JRMARKHAM ::: ASSIGN PLAYER DATA
+    val playersClient = Games.getPlayersClient(activity, googleSignInAccount)
+    playersClient.currentPlayer?.addOnSuccessListener { innerTask->
+      playerID = innerTask.playerId
+      displayName = innerTask.displayName
+    }
+
     finishPendingOperationWithSuccess()
   }
   //endregion
@@ -231,6 +241,17 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       Methods.showAchievements -> {
         showAchievements(result)
       }
+
+      // JRMARKHAM ::: new method for player info
+      Methods.playerID -> {
+        result.success(playerID)
+      }
+
+     Methods.displayName -> {
+        result.success(displayName)
+      }
+
+
       Methods.silentSignIn -> {
         silentSignIn(result)
       }
@@ -246,4 +267,7 @@ object Methods {
   const val showLeaderboards = "showLeaderboards"
   const val showAchievements = "showAchievements"
   const val silentSignIn = "silentSignIn"
+  const val playerID = "playerID"
+  const val displayName = "displayName"
+
 }

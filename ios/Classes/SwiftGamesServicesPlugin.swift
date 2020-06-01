@@ -12,8 +12,7 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
 
   // MARK: - Authenticate
 
-  func authenticateUser(result: @escaping FlutterResult) {
-    let player = GKLocalPlayer.local
+  func authenticateUser(player:GKLocalPlayer, result: @escaping FlutterResult) {
     player.authenticateHandler = { vc, error in
       guard error == nil else {
         result(error?.localizedDescription ?? "")
@@ -77,6 +76,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     let arguments = call.arguments as? [String: Any]
+    //JRMARKHAM ::: ADD PLAYER AS A REUSABLE PROP
+    let player = GKLocalPlayer.local
     switch call.method {
     case "unlock":
       let achievementID = (arguments?["achievementID"] as? String) ?? ""
@@ -94,7 +95,21 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       showLeaderboardWith(identifier: leaderboardID)
       result("success")
     case "signIn":
-      authenticateUser(result: result)
+      authenticateUser(player: player, result: result)
+    //JRMARKHAM :::  ADDING CALL FOR PLAYER ID AND DISPLAY NAME
+    case "playerID":
+        // playerID is split after 12.4 into gamePlayerID and teamPlayerID
+         if #available(iOS 12.4, *) {
+             let gamePlayerID = player.isAuthenticated ? player.gamePlayerID : "error"
+             result(gamePlayerID)
+         } else {
+             let playerID =  player.isAuthenticated ? player.playerID : "error"
+             result(playerID)
+         }
+
+     case "displayName":
+          let displayName = player.isAuthenticated ? player.displayName : "error"
+          result(displayName)
     default:
       result("unimplemented")
       break
