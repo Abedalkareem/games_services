@@ -101,15 +101,15 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
         // playerID is split after 12.4 into gamePlayerID and teamPlayerID
          if #available(iOS 12.4, *) {
              let gamePlayerID = player.isAuthenticated ? player.gamePlayerID
-             : ''
+             : ""
              result(gamePlayerID)
          } else {
-             let playerID =  player.isAuthenticated ? player.playerID : ''
+             let playerID =  player.isAuthenticated ? player.playerID : ""
              result(playerID)
          }
 
      case "displayName":
-          let displayName = player.isAuthenticated ? player.displayName : ''
+          let displayName = player.isAuthenticated ? player.displayName : ""
           result(displayName)
     default:
       result("unimplemented")
