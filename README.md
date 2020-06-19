@@ -15,6 +15,11 @@ A Flutter plugin to support game center and google play games services.
 Video tutorial
 *Will be added soon.*  
 
+## Apps  
+
+I used this plugin in my app [مونكي بانانا](https://play.google.com/store/apps/details?id=com.jostudio.monkeybanana)  
+
+
 ## Usage  
 #### Sign in:  
 To sign in the user. You need to call the sign in before  
