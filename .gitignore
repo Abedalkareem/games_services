@@ -105,3 +105,4 @@ ios/Runner.app.dSYM.zip
 ios/Runner.ipa
 
 .flutter-plugins-dependencies
+pubspec.lock
