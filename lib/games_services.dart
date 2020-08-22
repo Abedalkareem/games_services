@@ -1,7 +1,8 @@
 import 'dart:async';
+
 import 'package:flutter/services.dart';
-import 'package:games_services/models/achievement.dart';
 import 'package:games_services/helpers.dart';
+import 'package:games_services/models/achievement.dart';
 import 'package:games_services/models/score.dart';
 
 class GamesServices {
@@ -17,6 +18,18 @@ class GamesServices {
     return await _channel.invokeMethod("unlock", {
       "achievementID": achievement.id,
       "percentComplete": achievement.percentComplete,
+    });
+  }
+
+  /// Increment an [achievement].
+  /// [Achievement] takes three parameters:
+  /// [androidID] the achievement id for android.
+  /// [count] the increment count of the achievement, this parameter is
+  /// only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
+  static Future<String> increment({achievement: Achievement, count: int}) async {
+    return await _channel.invokeMethod("increment", {
+      "achievementID": achievement.id,
+      "count": count,
     });
   }
 
@@ -39,8 +52,7 @@ class GamesServices {
 
   /// It will open the leaderboards screen.
   static Future<String> showLeaderboards({iOSLeaderboardID = ""}) async {
-    return await _channel
-        .invokeMethod("showLeaderboards", {"iOSLeaderboardID": iOSLeaderboardID});
+    return await _channel.invokeMethod("showLeaderboards", {"iOSLeaderboardID": iOSLeaderboardID});
   }
 
   /// To sign in the user.

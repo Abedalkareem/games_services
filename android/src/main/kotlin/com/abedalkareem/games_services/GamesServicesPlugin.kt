@@ -103,6 +103,16 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
             }
   }
 
+  private fun increment(achievementID: String, count: Int, result: Result) {
+    showLoginErrorIfNotLoggedIn(result)
+    achievementClient?.incrementImmediate(achievementID, count)
+            ?.addOnSuccessListener {
+              result.success("success")
+            }?.addOnFailureListener {
+              result.error("error", it.localizedMessage, null)
+            }
+  }
+
   private fun showLeaderboards(result: Result) {
     showLoginErrorIfNotLoggedIn(result)
     leaderboardsClient!!.allLeaderboardsIntent.addOnSuccessListener { intent ->
@@ -220,6 +230,10 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       Methods.unlock -> {
         unlock(call.argument<String>("achievementID") ?: "", result)
       }
+      Methods.increment -> {
+        increment(call.argument<String>("achievementID") ?: "", call.argument<Int>("count")
+                ?: 1, result)
+      }
       Methods.submitScore -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
         val score = call.argument<Int>("value") ?: 0
@@ -242,6 +256,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
 object Methods {
   const val unlock = "unlock"
+  const val increment = "increment"
   const val submitScore = "submitScore"
   const val showLeaderboards = "showLeaderboards"
   const val showAchievements = "showAchievements"
