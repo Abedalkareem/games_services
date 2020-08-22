@@ -17,6 +17,6 @@ A new Flutter plugin to support game center and google play games services.
   s.dependency 'Flutter'
   s.swift_version = '5.0'
 
-  s.ios.deployment_target = '9.0'
+  s.ios.deployment_target = '11.0'
 end
 
