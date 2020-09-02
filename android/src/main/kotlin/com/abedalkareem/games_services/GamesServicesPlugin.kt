@@ -198,13 +198,13 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
     if (requestCode == RC_SIGN_IN) {
       val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
-      val signInAccount = result.signInAccount
-      if (result.isSuccess && signInAccount != null) {
+      val signInAccount = result?.signInAccount
+      if (result?.isSuccess == true && signInAccount != null) {
         handleSignInResult(signInAccount)
       } else {
-        var message = result.status.statusMessage ?: ""
+        var message = result?.status?.statusMessage ?: ""
         if (message.isEmpty()) {
-          message = "Something went wrong " + result.status
+          message = "Something went wrong " + result?.status
         }
         finishPendingOperationWithError(message)
       }
