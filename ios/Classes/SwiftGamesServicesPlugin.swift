@@ -7,7 +7,7 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
   // MARK: - Properties
 
   var viewController: UIViewController {
-    return UIApplication.shared.keyWindow!.rootViewController!
+    return UIApplication.shared.windows.first!.rootViewController!
   }
 
   // MARK: - Authenticate

@@ -95,12 +95,11 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
   private fun unlock(achievementID: String, result: Result) {
     showLoginErrorIfNotLoggedIn(result)
-    achievementClient?.unlockImmediate(achievementID)
-            ?.addOnSuccessListener {
-              result.success("success")
-            }?.addOnFailureListener {
-              result.error("error", it.localizedMessage, null)
-            }
+    achievementClient?.unlockImmediate(achievementID)?.addOnSuccessListener {
+      result.success("success")
+    }?.addOnFailureListener {
+      result.error("error", it.localizedMessage, null)
+    }
   }
 
   private fun showLeaderboards(result: Result) {
@@ -115,13 +114,11 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
   private fun submitScore(leaderboardID: String, score: Int, result: Result) {
     showLoginErrorIfNotLoggedIn(result)
-    leaderboardsClient
-            ?.submitScoreImmediate(leaderboardID, score.toLong())
-            ?.addOnSuccessListener {
-              result.success("success")
-            }?.addOnFailureListener {
-              result.error("error", it.localizedMessage, null)
-            }
+    leaderboardsClient?.submitScoreImmediate(leaderboardID, score.toLong())?.addOnSuccessListener {
+      result.success("success")
+    }?.addOnFailureListener {
+      result.error("error", it.localizedMessage, null)
+    }
   }
 
   private fun showLoginErrorIfNotLoggedIn(result: Result) {
