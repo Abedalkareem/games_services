@@ -17,7 +17,7 @@ Video tutorial
 
 ## Apps  
 
-I used this plugin in my app [Android](https://play.google.com/store/apps/details?id=com.jostudio.monkeybanana) [iOS](https://apps.apple.com/gm/app/id1514479049)  
+I used this plugin in my app [Android](https://play.google.com/store/apps/details?id=com.jostudio.monkeybanana) && [iOS](https://apps.apple.com/gm/app/id1514479049)  
 
 ## Usage  
 #### Sign in:  
