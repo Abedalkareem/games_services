@@ -30,3 +30,6 @@ Add addActivityResultListener for registrar
 
 # 0.3.1
 Show the android popups
+
+# 0.3.2
+Add the read me.
