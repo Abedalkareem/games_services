@@ -3,6 +3,7 @@ package com.abedalkareem.games_services
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import android.view.Gravity
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -75,8 +76,15 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   }
 
   private fun handleSignInResult(googleSignInAccount: GoogleSignInAccount) {
-    achievementClient = Games.getAchievementsClient(activity!!, googleSignInAccount)
-    leaderboardsClient = Games.getLeaderboardsClient(activity!!, googleSignInAccount)
+    val activity = this.activity!!
+    achievementClient = Games.getAchievementsClient(activity, googleSignInAccount)
+    leaderboardsClient = Games.getLeaderboardsClient(activity, googleSignInAccount)
+
+    // Set the popups view.
+    val gamesClient = Games.getGamesClient(activity, GoogleSignIn.getLastSignedInAccount(activity)!!)
+    gamesClient.setViewForPopups(activity.findViewById(android.R.id.content))
+    gamesClient.setGravityForPopups(Gravity.TOP or Gravity.CENTER_HORIZONTAL)
+
     finishPendingOperationWithSuccess()
   }
   //endregion
