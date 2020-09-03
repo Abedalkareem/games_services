@@ -22,7 +22,6 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
 
-
 private const val CHANNEL_NAME = "games_services"
 private const val RC_SIGN_IN = 9000
 

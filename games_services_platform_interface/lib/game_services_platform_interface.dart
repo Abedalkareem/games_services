@@ -46,19 +46,19 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   }
 
   /// It will open the achievements screen.
-  static Future<String> showAchievements() async {
+  Future<String> showAchievements() async {
     throw UnimplementedError("not implemented.");
   }
 
   /// It will open the leaderboards screen.
-  static Future<String> showLeaderboards({iOSLeaderboardID = ""}) async {
+  Future<String> showLeaderboards({iOSLeaderboardID = ""}) async {
     throw UnimplementedError("not implemented.");
   }
 
   /// To sign in the user.
   /// You need to call the sign in before making any action,
   /// (like sending a score or unlocking an achievement).
-  static Future<String> signIn() async {
+  Future<String> signIn() async {
     throw UnimplementedError("not implemented.");
   }
 }

@@ -5,7 +5,7 @@ import 'package:games_services_platform_interface/models/achievement.dart';
 import 'package:games_services_platform_interface/models/score.dart';
 import 'game_services_platform_interface.dart';
 
-const MethodChannel _channel = const MethodChannel('games_services_platform_interface');
+const MethodChannel _channel = const MethodChannel("games_services");
 
 class MethodChannelGamesServices extends GamesServicesPlatform {
   Future<String> unlock({achievement: Achievement}) async {

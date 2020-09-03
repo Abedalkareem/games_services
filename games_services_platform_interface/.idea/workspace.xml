@@ -2,11 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6052bd6d-7de0-4ca5-b442-cbf11e56f4db" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../games_services/android/src/main/kotlin/com/abedalkareem/games_services/GamesServicesPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/android/src/main/kotlin/com/abedalkareem/games_services/GamesServicesPlugin.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/example/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/example/android/app/src/main/kotlin/com/abedalkareem/games_services_example/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/android/app/src/main/kotlin/com/abedalkareem/games_services_example/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/lib/games_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/lib/games_services.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/game_services_platform_interface.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/game_services_platform_interface.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/method_channel_games_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/method_channel_games_services.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/games_services_interface_test.dart" beforeDir="false" afterPath="$PROJECT_DIR$/test/games_services_interface_test.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,10 +65,11 @@
       <screen x="0" y="25" width="1680" height="956" />
     </state>
     <state x="578" y="254" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/1680.25.1920.1055/0.25.1680.956@0.25.1680.956" timestamp="1599116605497" />
-    <state x="510" y="331" key="com.intellij.ide.util.TipDialog" timestamp="1599117236991">
-      <screen x="0" y="25" width="1680" height="954" />
+    <state x="510" y="332" key="com.intellij.ide.util.TipDialog" timestamp="1599119499480">
+      <screen x="0" y="25" width="1680" height="956" />
     </state>
     <state x="510" y="331" key="com.intellij.ide.util.TipDialog/1680.25.1920.1055/0.25.1680.954@0.25.1680.954" timestamp="1599117236991" />
+    <state x="510" y="332" key="com.intellij.ide.util.TipDialog/1680.25.1920.1055/0.25.1680.956@0.25.1680.956" timestamp="1599119499480" />
     <state x="492" y="259" width="696" height="486" key="find.popup" timestamp="1599118628566">
       <screen x="0" y="25" width="1680" height="954" />
     </state>
