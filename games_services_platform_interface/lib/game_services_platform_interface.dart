@@ -32,7 +32,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// [iOSID] the achievement id for iOS.
   /// [percentComplete] the completion percent of the achievement, this parameter is
   /// optional in case of iOS.
-  static Future<String> unlock({achievement: Achievement}) async {
+  Future<String> unlock({achievement: Achievement}) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -41,7 +41,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// [androidLeaderboardID] the leader board id that you want to send the score for in case of android.
   /// [iOSLeaderboardID] the leader board id that you want to send the score for in case of iOS.
   /// [value] the score.
-  static Future<String> submitScore({score: Score}) async {
+  Future<String> submitScore({score: Score}) async {
     throw UnimplementedError("not implemented.");
   }
 
