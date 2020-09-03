@@ -28,5 +28,5 @@ Return an error if user not logged in and clicked on achievement or leaderboard.
 # 0.2.10
 Add addActivityResultListener for registrar
 
-# 0.3.0
-Add addActivityResultListener for registrar
+# 0.3.1
+Show the android popups

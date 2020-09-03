@@ -6,7 +6,6 @@ export 'package:games_services_platform_interface/models/achievement.dart';
 export 'package:games_services_platform_interface/models/score.dart';
 
 class GamesServices {
-
   /// Unlock an [achievement].
   /// [Achievement] takes three parameters:
   /// [androidID] the achievement id for android.
@@ -14,7 +13,8 @@ class GamesServices {
   /// [percentComplete] the completion percent of the achievement, this parameter is
   /// optional in case of iOS.
   static Future<String> unlock({achievement: Achievement}) async {
-    return await GamesServicesPlatform.instance.unlock(achievement: achievement);
+    return await GamesServicesPlatform.instance
+        .unlock(achievement: achievement);
   }
 
   /// Submit a [score] to specific leader board.
@@ -33,7 +33,8 @@ class GamesServices {
 
   /// It will open the leaderboards screen.
   static Future<String> showLeaderboards({iOSLeaderboardID = ""}) async {
-    return await GamesServicesPlatform.instance.showLeaderboards(iOSLeaderboardID: iOSLeaderboardID);
+    return await GamesServicesPlatform.instance
+        .showLeaderboards(iOSLeaderboardID: iOSLeaderboardID);
   }
 
   /// To sign in the user.
