@@ -9,3 +9,7 @@
 ## 1.0.2
 
 - Remove the static keyword for showAchievements, showLeaderboards and signIn.
+
+## 1.0.5
+
+- Change the method channel.
