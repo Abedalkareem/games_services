@@ -10,6 +10,7 @@
       <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/game_services_platform_interface.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/game_services_platform_interface.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/method_channel_games_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/method_channel_games_services.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/models/achievement.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/models/achievement.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,6 +37,7 @@
   <component name="PropertiesComponent">
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="dart.settings" />
     <property name="show.migrate.to.gradle.popup" value="false" />
   </component>
   <component name="RecentsManager">
@@ -61,6 +63,10 @@
       <screen x="0" y="25" width="1680" height="956" />
     </state>
     <state x="578" y="254" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/1680.25.1920.1055/0.25.1680.956@0.25.1680.956" timestamp="1599116605497" />
+    <state x="341" y="138" key="SettingsEditor" timestamp="1599301144313">
+      <screen x="0" y="25" width="1680" height="956" />
+    </state>
+    <state x="341" y="138" key="SettingsEditor/0.25.1680.956@0.25.1680.956" timestamp="1599301144313" />
     <state x="510" y="332" key="com.intellij.ide.util.TipDialog" timestamp="1599119499480">
       <screen x="0" y="25" width="1680" height="956" />
     </state>

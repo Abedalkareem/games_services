@@ -24,10 +24,10 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     });
   }
 
-  Future<String> increment({achievement: Achievement, int steps}) async {
+  Future<String> increment({achievement: Achievement}) async {
     return await _channel.invokeMethod("increment", {
       "achievementID": achievement.id,
-      "steps": steps,
+      "steps": achievement.steps,
     });
   }
 

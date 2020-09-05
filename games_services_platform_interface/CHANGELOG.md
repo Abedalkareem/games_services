@@ -14,6 +14,6 @@
 
 - Change the method channel.
 
-## 1.0.6
+## 1.0.7
 
 - Add increment method by @tommybuonomo
