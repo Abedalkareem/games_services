@@ -26,6 +26,15 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     _instance = instance;
   }
 
+  /// Increment an [achievement].
+  /// [Achievement] takes three parameters:
+  /// [androidID] the achievement id for android.
+  /// [count] the increment count of the achievement, this parameter is
+  /// only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
+  Future<String> increment({achievement: Achievement, int count}) async {
+    throw UnimplementedError("not implemented.");
+  }
+
   /// Unlock an [achievement].
   /// [Achievement] takes three parameters:
   /// [androidID] the achievement id for android.
