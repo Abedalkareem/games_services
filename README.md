@@ -17,7 +17,10 @@ Video tutorial
 
 ## Apps  
 
-I used this plugin in my app [Android](https://play.google.com/store/apps/details?id=com.jostudio.monkeybanana) && [iOS](https://apps.apple.com/gm/app/id1514479049)  
+Monkey Banana [Android](https://play.google.com/store/apps/details?id=com.jostudio.monkeybanana) && [iOS](https://apps.apple.com/gm/app/id1514479049) by me  
+[Nonogram Colors](https://play.google.com/store/apps/details?id=com.tbuonomo.nonogramcolordot) by @tommybuonomo  
+[Ripple Effect Puzzle](https://play.google.com/store/apps/details?id=com.tbuonomo.rippleeffectpuzzle) by @tommybuonomo  
+
 
 ## Usage  
 #### Sign in:  
