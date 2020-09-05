@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="6052bd6d-7de0-4ca5-b442-cbf11e56f4db" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../games_services/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/pubspec.yaml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="$PROJECT_DIR$/.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1gzTe6x8vk4RPuJ80tQDoPVEUk3" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="dart.analysis.tool.window.force.activate" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib" />
+    </key>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="6052bd6d-7de0-4ca5-b442-cbf11e56f4db" name="Default Changelist" comment="" />
+      <created>1599116513641</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1599116513641</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="578" y="254" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1599116605497">
+      <screen x="0" y="25" width="1680" height="956" />
+    </state>
+    <state x="578" y="254" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/1680.25.1920.1055/0.25.1680.956@0.25.1680.956" timestamp="1599116605497" />
+    <state x="510" y="332" key="com.intellij.ide.util.TipDialog" timestamp="1599119499480">
+      <screen x="0" y="25" width="1680" height="956" />
+    </state>
+    <state x="510" y="331" key="com.intellij.ide.util.TipDialog/1680.25.1920.1055/0.25.1680.954@0.25.1680.954" timestamp="1599117236991" />
+    <state x="510" y="332" key="com.intellij.ide.util.TipDialog/1680.25.1920.1055/0.25.1680.956@0.25.1680.956" timestamp="1599119499480" />
+    <state x="492" y="259" width="696" height="486" key="find.popup" timestamp="1599118628566">
+      <screen x="0" y="25" width="1680" height="954" />
+    </state>
+    <state x="492" y="259" width="696" height="486" key="find.popup/1680.25.1920.1055/0.25.1680.954@0.25.1680.954" timestamp="1599118628566" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="Dart">
+          <url>file://$PROJECT_DIR$/lib/method_channel_games_services.dart</url>
+          <line>11</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

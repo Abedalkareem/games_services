@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/android/games_services_interface_android.iml" filepath="$PROJECT_DIR$/android/games_services_interface_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/example/android/games_services_interface_example_android.iml" filepath="$PROJECT_DIR$/example/android/games_services_interface_example_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/games_services_platform_interface.iml" filepath="$PROJECT_DIR$/games_services_platform_interface.iml" />
+    </modules>
+  </component>
+</project>
