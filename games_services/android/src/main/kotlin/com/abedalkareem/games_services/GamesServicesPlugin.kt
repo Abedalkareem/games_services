@@ -235,8 +235,9 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         unlock(call.argument<String>("achievementID") ?: "", result)
       }
       Methods.increment -> {
-        increment(call.argument<String>("achievementID") ?: "", call.argument<Int>("count")
-                ?: 1, result)
+        val achievementID = call.argument<String>("achievementID") ?: ""
+        val steps = call.argument<Int>("steps") ?: 1
+        increment(achievementID, steps, result)
       }
       Methods.submitScore -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""

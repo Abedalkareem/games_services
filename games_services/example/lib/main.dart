@@ -63,6 +63,16 @@ class _MyAppState extends State<MyApp> {
                     print(result);
                   },
                 ),
+                RaisedButton(
+                  child: Text('Increment'),
+                  onPressed: () async {
+                    final result = await GamesServices.increment(
+                        achievement: Achievement(
+                            androidID: 'android_id',
+                            steps: 50));
+                    print(result);
+                  },
+                ),
               ],
             ),
           )),

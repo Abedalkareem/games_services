@@ -19,12 +19,13 @@ class GamesServices {
   }
 
   /// Increment an [achievement].
-  /// [Achievement] takes three parameters:
+  /// [Achievement] takes two parameters:
   /// [androidID] the achievement id for android.
-  /// [count] the increment count of the achievement, this parameter is
-  /// only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
-  static Future<String> increment({achievement: Achievement, int count}) async {
-    return await GamesServicesPlatform.instance.increment(achievement: achievement, count: count);
+  /// [steps] If the achievement is of the incremental type
+  /// you can use this method to increment the steps.
+  /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
+  static Future<String> increment({achievement: Achievement}) async {
+    return await GamesServicesPlatform.instance.increment(achievement: achievement);
   }
 
   /// Submit a [score] to specific leader board.

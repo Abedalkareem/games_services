@@ -33,3 +33,6 @@ Show the android popups
 
 # 0.3.2
 Add the read me.
+
+## 0.3.3
+Add increment method by @tommybuonomo
