@@ -13,3 +13,7 @@
 ## 1.0.5
 
 - Change the method channel.
+
+## 1.0.6
+
+- Add increment method by @tommybuonomo
