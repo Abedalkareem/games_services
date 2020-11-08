@@ -72,6 +72,34 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       result("success")
     }
   }
+  
+  // MARK: - AccessPoint
+
+  func showAccessPoint(location: String) {
+    if #available(iOS 14.0, *) {
+      var gkLocation: GKAccessPoint.Location = .topLeading
+      switch location {
+      case "topLeading":
+        gkLocation = .topLeading
+      case "topTrailing":
+        gkLocation = .topTrailing
+      case "bottomLeading":
+        gkLocation = .bottomLeading
+      case "bottomTrailing":
+        gkLocation = .bottomTrailing
+      default:
+        break
+      }
+      GKAccessPoint.shared.location = gkLocation
+      GKAccessPoint.shared.isActive = true
+    }
+  }
+  
+  func hideAccessPoint() {
+    if #available(iOS 14.0, *) {
+      GKAccessPoint.shared.isActive = false
+    }
+  }
 
   // MARK: - FlutterPlugin
 
@@ -95,6 +123,11 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       result("success")
     case "signIn":
       authenticateUser(result: result)
+    case "hideAccessPoint":
+      hideAccessPoint()
+    case "showAccessPoint":
+      let location = (arguments?["location"] as? String) ?? ""
+      showAccessPoint(location: location)
     default:
       result("unimplemented")
       break

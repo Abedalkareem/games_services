@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:games_services_platform_interface/helpers.dart';
+import 'package:games_services_platform_interface/models/access_point_location.dart';
 import 'package:games_services_platform_interface/models/achievement.dart';
 import 'package:games_services_platform_interface/models/score.dart';
-
 import 'game_services_platform_interface.dart';
 
 const MethodChannel _channel = const MethodChannel("games_services");
@@ -45,5 +45,13 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     } else {
       return await _channel.invokeMethod("signIn");
     }
+  }
+
+  Future<String> showAccessPoint(AccessPointLocation location) async {
+    return await _channel.invokeMethod("showAccessPoint", {"location": location.toString().split(".").last});
+  }
+
+  Future<String> hideAccessPoint() async {
+    return await _channel.invokeMethod("hideAccessPoint");
   }
 }

@@ -1,10 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter/services.dart';
 import 'package:games_services_platform_interface/method_channel_games_services.dart';
 import 'package:games_services_platform_interface/models/achievement.dart';
 import 'package:games_services_platform_interface/models/score.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+
+import 'models/access_point_location.dart';
 
 abstract class GamesServicesPlatform extends PlatformInterface {
   /// Constructs a GamesServicesPlatform.
@@ -69,6 +70,16 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// You need to call the sign in before making any action,
   /// (like sending a score or unlocking an achievement).
   Future<String> signIn() async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Show the iOS Access Point.
+  Future<String> showAccessPoint(AccessPointLocation location) async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Hide the iOS Access Point.
+  Future<String> hideAccessPoint() async {
     throw UnimplementedError("not implemented.");
   }
 }

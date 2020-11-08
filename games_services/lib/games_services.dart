@@ -1,9 +1,9 @@
 import 'dart:async';
 
 import 'package:games_services_platform_interface/game_services_platform_interface.dart';
+import 'package:games_services_platform_interface/models/access_point_location.dart';
 import 'package:games_services_platform_interface/models/achievement.dart';
 import 'package:games_services_platform_interface/models/score.dart';
-
 export 'package:games_services_platform_interface/models/achievement.dart';
 export 'package:games_services_platform_interface/models/score.dart';
 
@@ -52,5 +52,15 @@ class GamesServices {
   /// (like sending a score or unlocking an achievement).
   static Future<String> signIn() async {
     return await GamesServicesPlatform.instance.signIn();
+  }
+
+  /// Show the iOS Access Point.
+  Future<String> showAccessPoint(AccessPointLocation location) async {
+    return await GamesServicesPlatform.instance.showAccessPoint(location);
+  }
+
+  /// Hide the iOS Access Point.
+  Future<String> hideAccessPoint() async {
+    return await GamesServicesPlatform.instance.hideAccessPoint();
   }
 }

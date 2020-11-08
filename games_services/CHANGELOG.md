@@ -36,3 +36,7 @@ Add the read me.
 
 ## 0.3.3
 Add increment method by @tommybuonomo
+
+## 1.0.0
+
+- Add the iOS Access point

@@ -17,3 +17,7 @@
 ## 1.0.7
 
 - Add increment method by @tommybuonomo
+
+## 1.0.9
+
+- Add the iOS Access point
