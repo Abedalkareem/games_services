@@ -19,21 +19,21 @@ class _MyAppState extends State<MyApp> {
           body: Center(
             child: Column(
               children: <Widget>[
-                RaisedButton(
+                ElevatedButton(
                   child: Text('signIn'),
                   onPressed: () async {
                     final result = await GamesServices.signIn();
                     print(result);
                   },
                 ),
-                RaisedButton(
+                ElevatedButton(
                   child: Text('Show Achievements'),
                   onPressed: () async {
                     final result = await GamesServices.showAchievements();
                     print(result);
                   },
                 ),
-                RaisedButton(
+                ElevatedButton(
                   child: Text('Show Leaderboards'),
                   onPressed: () async {
                     final result = await GamesServices.showLeaderboards(
@@ -41,7 +41,7 @@ class _MyAppState extends State<MyApp> {
                     print(result);
                   },
                 ),
-                RaisedButton(
+                ElevatedButton(
                   child: Text('Submit Score'),
                   onPressed: () async {
                     final result = await GamesServices.submitScore(
@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
                     print(result);
                   },
                 ),
-                RaisedButton(
+                ElevatedButton(
                   child: Text('Unlock'),
                   onPressed: () async {
                     final result = await GamesServices.unlock(
@@ -63,13 +63,12 @@ class _MyAppState extends State<MyApp> {
                     print(result);
                   },
                 ),
-                RaisedButton(
+                ElevatedButton(
                   child: Text('Increment'),
                   onPressed: () async {
                     final result = await GamesServices.increment(
-                        achievement: Achievement(
-                            androidID: 'android_id',
-                            steps: 50));
+                        achievement:
+                            Achievement(androidID: 'android_id', steps: 50));
                     print(result);
                   },
                 ),
