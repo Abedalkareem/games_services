@@ -33,7 +33,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// [steps] If the achievement is of the incremental type
   /// you can use this method to increment the steps.
   /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
-  Future<String> increment({achievement: Achievement}) async {
+  Future<String?> increment({achievement: Achievement}) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -43,7 +43,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// [iOSID] the achievement id for iOS.
   /// [percentComplete] the completion percent of the achievement, this parameter is
   /// optional in case of iOS.
-  Future<String> unlock({achievement: Achievement}) async {
+  Future<String?> unlock({achievement: Achievement}) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -52,34 +52,34 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// [androidLeaderboardID] the leader board id that you want to send the score for in case of android.
   /// [iOSLeaderboardID] the leader board id that you want to send the score for in case of iOS.
   /// [value] the score.
-  Future<String> submitScore({score: Score}) async {
+  Future<String?> submitScore({score: Score}) async {
     throw UnimplementedError("not implemented.");
   }
 
   /// It will open the achievements screen.
-  Future<String> showAchievements() async {
+  Future<String?> showAchievements() async {
     throw UnimplementedError("not implemented.");
   }
 
   /// It will open the leaderboards screen.
-  Future<String> showLeaderboards({iOSLeaderboardID = ""}) async {
+  Future<String?> showLeaderboards({iOSLeaderboardID = ""}) async {
     throw UnimplementedError("not implemented.");
   }
 
   /// To sign in the user.
   /// You need to call the sign in before making any action,
   /// (like sending a score or unlocking an achievement).
-  Future<String> signIn() async {
+  Future<String?> signIn() async {
     throw UnimplementedError("not implemented.");
   }
 
   /// Show the iOS Access Point.
-  Future<String> showAccessPoint(AccessPointLocation location) async {
+  Future<String?> showAccessPoint(AccessPointLocation location) async {
     throw UnimplementedError("not implemented.");
   }
 
   /// Hide the iOS Access Point.
-  Future<String> hideAccessPoint() async {
+  Future<String?> hideAccessPoint() async {
     throw UnimplementedError("not implemented.");
   }
 }
