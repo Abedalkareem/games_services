@@ -13,8 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  games_services_platform_interface:
-    path: ../games_services_platform_interface
+  games_services_platform_interface: ^2.0.0-nullsafety.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
