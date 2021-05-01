@@ -3,23 +3,29 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="6052bd6d-7de0-4ca5-b442-cbf11e56f4db" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/models/access_point_location.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../games_services/.idea/games_services.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/.idea/games_services.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../games_services/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../games_services/example/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/.flutter-plugins-dependencies" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../games_services/example/android/app/src/main/kotlin/com/abedalkareem/games_services_example/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/android/app/src/main/kotlin/com/abedalkareem/games_services_example/MainActivity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../games_services/ios/Classes/SwiftGamesServicesPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/ios/Classes/SwiftGamesServicesPlugin.swift" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../games_services/lib/games_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/lib/games_services.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../games_services/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../games_services/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lib/game_services_platform_interface.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/game_services_platform_interface.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/method_channel_games_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/method_channel_games_services.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +71,9 @@
       <updated>1599116513641</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="578" y="254" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1599116605497">
