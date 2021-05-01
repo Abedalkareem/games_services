@@ -55,12 +55,12 @@ class GamesServices {
   }
 
   /// Show the iOS Access Point.
-  Future<String?> showAccessPoint(AccessPointLocation location) async {
+  static Future<String?> showAccessPoint(AccessPointLocation location) async {
     return await GamesServicesPlatform.instance.showAccessPoint(location);
   }
 
   /// Hide the iOS Access Point.
-  Future<String?> hideAccessPoint() async {
+  static Future<String?> hideAccessPoint() async {
     return await GamesServicesPlatform.instance.hideAccessPoint();
   }
 }

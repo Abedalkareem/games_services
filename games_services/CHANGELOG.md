@@ -1,3 +1,6 @@
+## 2.0.0-nullsafety.2
+- fix AccessPoint issues
+
 ## 2.0.0-nullsafety.1
 - 💪 Running with sound null safety 💪
 
