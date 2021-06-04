@@ -3,11 +3,11 @@ on:
     pull_request:
       branches:
         - develop
-        - main
+        - master
     push:
       branches:
         - develop
-        - main
+        - master
 
 defaults:
   run:
