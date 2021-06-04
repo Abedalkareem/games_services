@@ -1,3 +1,7 @@
+## 2.0.0
+- Migrated `jcenter` to `mavenCentral` See: [Gradle announcement](https://blog.gradle.org/jcenter-shutdown)
+- Removed `android.enableR8=true`
+
 ## 2.0.0-nullsafety.3
 - Make access_point_location accessible
 
