@@ -1,5 +1,4 @@
-## 2.0.0-nullsafety.1
-
+## 2.0.0
 - 💪 Running with sound null safety 💪
 
 ## 1.0.9
