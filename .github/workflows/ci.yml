@@ -30,7 +30,7 @@ jobs:
       - run: flutter build appbundle
 
   # Works on emulator and real device.
-  #No idea why not here.
+  # No idea why not here.
   # build_ios:
   #   name: Build iOS
   #   runs-on: macos-latest

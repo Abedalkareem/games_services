@@ -1,6 +1,6 @@
 ## 2.0.0
 - Migrated `jcenter` to `mavenCentral` See: [Gradle announcement](https://blog.gradle.org/jcenter-shutdown)
-- Removed `android.enableR8=true`
+- Removed `android.enableR8`
 - `jdk7` to `jdk8`
 - Bumped up versions
 
