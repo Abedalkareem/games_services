@@ -259,7 +259,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       }
       Methods.showLeaderboards -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
-        if (leaderboardID != "") showLeaderboard(leaderboardID, result)
+        if (leaderboardID != "") showLeaderboard(getIdFromResources(leaderboardID), result)
         else showLeaderboards(result)
       }
       Methods.showAchievements -> {
