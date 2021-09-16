@@ -1,6 +1,7 @@
 package com.abedalkareem.games_services
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.Gravity
@@ -35,6 +36,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   private var activityPluginBinding: ActivityPluginBinding? = null
   private var channel: MethodChannel? = null
   private var pendingOperation: PendingOperation? = null
+  private lateinit var context: Context
   //endregion
 
   companion object {
@@ -148,6 +150,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   //region FlutterPlugin
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
     setupChannel(binding.binaryMessenger)
+    context = binding.applicationContext
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
@@ -232,15 +235,15 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   override fun onMethodCall(call: MethodCall, result: Result) {
     when (call.method) {
       Methods.unlock -> {
-        unlock(call.argument<String>("achievementID") ?: "", result)
+        unlock(getIdFromResources(call.argument<String>("achievementID") ?: ""), result)
       }
       Methods.increment -> {
-        val achievementID = call.argument<String>("achievementID") ?: ""
+        val achievementID = getIdFromResources(call.argument<String>("achievementID") ?: "")
         val steps = call.argument<Int>("steps") ?: 1
         increment(achievementID, steps, result)
       }
       Methods.submitScore -> {
-        val leaderboardID = call.argument<String>("leaderboardID") ?: ""
+        val leaderboardID = getIdFromResources(call.argument<String>("leaderboardID") ?: "")
         val score = call.argument<Int>("value") ?: 0
         submitScore(leaderboardID, score, result)
       }
@@ -255,6 +258,14 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       }
       else -> result.notImplemented()
     }
+  }
+
+  private fun getIdFromResources(name: String): String {
+    val resourceId = context.getResources().getIdentifier(name, "string", context.getPackageName())
+    if (resourceId == 0) {
+      throw IllegalArgumentException("${name} is not defined in app resources.")
+    }
+    return context.getString(resourceId)
   }
   //endregion
 }
