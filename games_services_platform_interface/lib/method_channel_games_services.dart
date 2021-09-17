@@ -35,11 +35,9 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     return await _channel.invokeMethod("showAchievements");
   }
 
-  Future<String?> showLeaderboards(
-      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+  Future<String?> showLeaderboards({iOSLeaderboardID = ""}) async {
     return await _channel.invokeMethod("showLeaderboards", {
-      "leaderboardID":
-          Helpers.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+      "iOSLeaderboardID": iOSLeaderboardID,
     });
   }
 
