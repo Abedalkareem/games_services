@@ -90,7 +90,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   //endregion
 
   //region SignOut
-  private fun signOut() {
+  private fun signOut(result: Result) {
     googleSignInClient?.signOut()?.addOnCompleteListener { task ->
       if (task.isSuccessful) {
         result.success("success")
