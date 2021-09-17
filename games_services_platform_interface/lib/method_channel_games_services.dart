@@ -49,6 +49,10 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     }
   }
 
+  Future<String?> signOut() async {
+    return await _channel.invokeMethod("signOut");
+  }
+
   Future<String?> showAccessPoint(AccessPointLocation location) async {
     return await _channel.invokeMethod(
         "showAccessPoint", {"location": location.toString().split(".").last});

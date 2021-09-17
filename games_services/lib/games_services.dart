@@ -58,6 +58,13 @@ class GamesServices {
     return await GamesServicesPlatform.instance.signIn();
   }
 
+  // To sign the user out of Goole Play Services.
+  // After calling, you can no longer make any actions
+  // on the user's account.
+  static Future<String?> signOut() async {
+    return await GamesServicesPlatform.instance.signOut();
+  }
+
   /// Show the iOS Access Point.
   static Future<String?> showAccessPoint(AccessPointLocation location) async {
     return await GamesServicesPlatform.instance.showAccessPoint(location);

@@ -73,6 +73,13 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
+  // To sign the user out of Goole Play Services.
+  // After calling, you can no longer make any actions
+  // on the user's account.
+  Future<String?> signOut() async {
+    throw UnimplementedError("not implemented.");
+  }
+
   /// Show the iOS Access Point.
   Future<String?> showAccessPoint(AccessPointLocation location) async {
     throw UnimplementedError("not implemented.");

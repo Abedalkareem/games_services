@@ -89,6 +89,18 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   }
   //endregion
 
+  //region SignOut
+  private fun signOut() {
+    googleSignInClient?.signOut()?.addOnCompleteListener { task ->
+      if (task.isSuccessful) {
+        result.success("success")
+      } else {
+        result.error("error", "${task.exception}", null)
+      }
+    }
+  }
+  //endregion
+
   //region Achievements & Leaderboards
   private fun showAchievements(result: Result) {
     showLoginErrorIfNotLoggedIn(result)
@@ -253,6 +265,9 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       Methods.silentSignIn -> {
         silentSignIn(result)
       }
+      Methods.signOut -> {
+        signOut(result)
+      }
       else -> result.notImplemented()
     }
   }
@@ -266,4 +281,5 @@ object Methods {
   const val showLeaderboards = "showLeaderboards"
   const val showAchievements = "showAchievements"
   const val silentSignIn = "silentSignIn"
+  const val signOut = "signOut"
 }
