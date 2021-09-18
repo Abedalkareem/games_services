@@ -89,6 +89,13 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   }
   //endregion
 
+  //region isSignedIn
+  private val isSignedIn: Boolean get() {
+    val activity = activity ?: return false
+    return GoogleSignIn.getLastSignedInAccount(activity)
+  }
+  //endregion
+
   //region SignOut
   private fun signOut(result: Result) {
     googleSignInClient?.signOut()?.addOnCompleteListener { task ->
@@ -265,6 +272,9 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       Methods.silentSignIn -> {
         silentSignIn(result)
       }
+      Methods.isSignedIn -> {
+        result.success(isSignedIn)
+      }
       Methods.signOut -> {
         signOut(result)
       }
@@ -281,5 +291,6 @@ object Methods {
   const val showLeaderboards = "showLeaderboards"
   const val showAchievements = "showAchievements"
   const val silentSignIn = "silentSignIn"
+  const val isSignedIn = "isSignedIn"
   const val signOut = "signOut"
 }
