@@ -118,7 +118,7 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       showAchievements()
       result("success")
     case "showLeaderboards":
-      let leaderboardID = (arguments?["iOSLeaderboardID"] as? String) ?? ""
+      let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       showLeaderboardWith(identifier: leaderboardID)
       result("success")
     case "signIn":

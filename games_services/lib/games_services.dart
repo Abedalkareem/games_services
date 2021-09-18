@@ -6,6 +6,7 @@ import 'package:games_services_platform_interface/models/achievement.dart';
 import 'package:games_services_platform_interface/models/score.dart';
 export 'package:games_services_platform_interface/models/achievement.dart';
 export 'package:games_services_platform_interface/models/score.dart';
+export 'package:games_services_platform_interface/models/access_point_location.dart';
 
 class GamesServices {
   /// Unlock an [achievement].
@@ -15,7 +16,8 @@ class GamesServices {
   /// [percentComplete] the completion percent of the achievement, this parameter is
   /// optional in case of iOS.
   static Future<String?> unlock({achievement: Achievement}) async {
-    return await GamesServicesPlatform.instance.unlock(achievement: achievement);
+    return await GamesServicesPlatform.instance
+        .unlock(achievement: achievement);
   }
 
   /// Increment an [achievement].
@@ -25,7 +27,8 @@ class GamesServices {
   /// you can use this method to increment the steps.
   /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
   static Future<String?> increment({achievement: Achievement}) async {
-    return await GamesServicesPlatform.instance.increment(achievement: achievement);
+    return await GamesServicesPlatform.instance
+        .increment(achievement: achievement);
   }
 
   /// Submit a [score] to specific leader board.
@@ -43,8 +46,12 @@ class GamesServices {
   }
 
   /// It will open the leaderboards screen.
-  static Future<String?> showLeaderboards({iOSLeaderboardID = ""}) async {
-    return await GamesServicesPlatform.instance.showLeaderboards(iOSLeaderboardID: iOSLeaderboardID);
+  static Future<String?> showLeaderboards(
+      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+    return await GamesServicesPlatform.instance.showLeaderboards(
+      iOSLeaderboardID: iOSLeaderboardID,
+      androidLeaderboardID: androidLeaderboardID,
+    );
   }
 
   /// To sign in the user.
@@ -55,12 +62,12 @@ class GamesServices {
   }
 
   /// Show the iOS Access Point.
-  Future<String?> showAccessPoint(AccessPointLocation location) async {
+  static Future<String?> showAccessPoint(AccessPointLocation location) async {
     return await GamesServicesPlatform.instance.showAccessPoint(location);
   }
 
   /// Hide the iOS Access Point.
-  Future<String?> hideAccessPoint() async {
+  static Future<String?> hideAccessPoint() async {
     return await GamesServicesPlatform.instance.hideAccessPoint();
   }
 }
