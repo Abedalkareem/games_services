@@ -92,7 +92,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   //region isSignedIn
   private val isSignedIn: Boolean get() {
     val activity = activity ?: return false
-    return GoogleSignIn.getLastSignedInAccount(activity)
+    return GoogleSignIn.getLastSignedInAccount(activity) != null
   }
   //endregion
 
