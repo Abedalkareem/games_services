@@ -89,6 +89,25 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   }
   //endregion
 
+  //region isSignedIn
+  private val isSignedIn: Boolean get() {
+    val activity = activity ?: return false
+    return GoogleSignIn.getLastSignedInAccount(activity) != null
+  }
+  //endregion
+
+  //region SignOut
+  private fun signOut(result: Result) {
+    googleSignInClient?.signOut()?.addOnCompleteListener { task ->
+      if (task.isSuccessful) {
+        result.success("success")
+      } else {
+        result.error("error", "${task.exception}", null)
+      }
+    }
+  }
+  //endregion
+
   //region Achievements & Leaderboards
   private fun showAchievements(result: Result) {
     showLoginErrorIfNotLoggedIn(result)
@@ -122,16 +141,6 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   private fun showLeaderboards(result: Result) {
     showLoginErrorIfNotLoggedIn(result)
     leaderboardsClient!!.allLeaderboardsIntent.addOnSuccessListener { intent ->
-      activity?.startActivityForResult(intent, 0)
-      result.success("success")
-    }.addOnFailureListener {
-      result.error("error", "${it.message}", null)
-    }
-  }
-
-  private fun showLeaderboard(leaderboardID: String, result: Result) {
-    showLoginErrorIfNotLoggedIn(result)
-    leaderboardsClient!!.getLeaderboardIntent(leaderboardID).addOnSuccessListener { intent ->
       activity?.startActivityForResult(intent, 0)
       result.success("success")
     }.addOnFailureListener {
@@ -255,15 +264,19 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         submitScore(leaderboardID, score, result)
       }
       Methods.showLeaderboards -> {
-        val leaderboardID = call.argument<String>("leaderboardID") ?: ""
-        if (leaderboardID != "") showLeaderboard(leaderboardID, result)
-        else showLeaderboards(result)
+        showLeaderboards(result)
       }
       Methods.showAchievements -> {
         showAchievements(result)
       }
       Methods.silentSignIn -> {
         silentSignIn(result)
+      }
+      Methods.isSignedIn -> {
+        result.success(isSignedIn)
+      }
+      Methods.signOut -> {
+        signOut(result)
       }
       else -> result.notImplemented()
     }
@@ -278,4 +291,6 @@ object Methods {
   const val showLeaderboards = "showLeaderboards"
   const val showAchievements = "showAchievements"
   const val silentSignIn = "silentSignIn"
+  const val isSignedIn = "isSignedIn"
+  const val signOut = "signOut"
 }

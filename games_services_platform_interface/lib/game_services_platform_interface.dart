@@ -62,8 +62,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   }
 
   /// It will open the leaderboards screen.
-  Future<String?> showLeaderboards(
-      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+  Future<String?> showLeaderboards({iOSLeaderboardID = ""}) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -71,6 +70,17 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// You need to call the sign in before making any action,
   /// (like sending a score or unlocking an achievement).
   Future<String?> signIn() async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Check to see if the user is currently signed into
+  /// Game Center or Google Play Services
+  Future<bool?> get isSignedIn => throw UnimplementedError("not implemented.");
+
+  /// To sign the user out of Goole Play Services.
+  /// After calling, you can no longer make any actions
+  /// on the user's account.
+  Future<String?> signOut() async {
     throw UnimplementedError("not implemented.");
   }
 

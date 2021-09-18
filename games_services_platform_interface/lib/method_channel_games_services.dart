@@ -35,11 +35,9 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     return await _channel.invokeMethod("showAchievements");
   }
 
-  Future<String?> showLeaderboards(
-      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+  Future<String?> showLeaderboards({iOSLeaderboardID = ""}) async {
     return await _channel.invokeMethod("showLeaderboards", {
-      "leaderboardID":
-          Helpers.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+      "iOSLeaderboardID": iOSLeaderboardID,
     });
   }
 
@@ -49,6 +47,12 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     } else {
       return await _channel.invokeMethod("signIn");
     }
+  }
+
+  Future<bool?> get isSignedIn => _channel.invokeMethod("isSignedIn");
+
+  Future<String?> signOut() async {
+    return await _channel.invokeMethod("signOut");
   }
 
   Future<String?> showAccessPoint(AccessPointLocation location) async {

@@ -23,9 +23,9 @@ packages:
   games_services_platform_interface:
     dependency: "direct main"
     description:
-      name: games_services_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "../games_services_platform_interface"
+      relative: true
+    source: path
     version: "2.0.0-nullsafety.1"
   meta:
     dependency: transitive
@@ -33,7 +33,7 @@ packages:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0"
+    version: "1.7.0"
   plugin_platform_interface:
     dependency: transitive
     description:
@@ -61,5 +61,5 @@ packages:
     source: hosted
     version: "2.1.0"
 sdks:
-  dart: ">=2.12.0-0 <3.0.0"
+  dart: ">=2.12.0 <3.0.0"
   flutter: ">=1.22.0"

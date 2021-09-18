@@ -46,12 +46,9 @@ class GamesServices {
   }
 
   /// It will open the leaderboards screen.
-  static Future<String?> showLeaderboards(
-      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
-    return await GamesServicesPlatform.instance.showLeaderboards(
-      iOSLeaderboardID: iOSLeaderboardID,
-      androidLeaderboardID: androidLeaderboardID,
-    );
+  static Future<String?> showLeaderboards({iOSLeaderboardID = ""}) async {
+    return await GamesServicesPlatform.instance
+        .showLeaderboards(iOSLeaderboardID: iOSLeaderboardID);
   }
 
   /// To sign in the user.
@@ -59,6 +56,18 @@ class GamesServices {
   /// (like sending a score or unlocking an achievement).
   static Future<String?> signIn() async {
     return await GamesServicesPlatform.instance.signIn();
+  }
+
+  /// Check to see if the user is currently signed into
+  /// Game Center or Google Play Services
+  static Future<bool> get isSignedIn async =>
+      await GamesServicesPlatform.instance.isSignedIn ?? false;
+
+  /// To sign the user out of Goole Play Services.
+  /// After calling, you can no longer make any actions
+  /// on the user's account.
+  static Future<String?> signOut() async {
+    return await GamesServicesPlatform.instance.signOut();
   }
 
   /// Show the iOS Access Point.
