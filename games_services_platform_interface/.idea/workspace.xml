@@ -23,8 +23,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6052bd6d-7de0-4ca5-b442-cbf11e56f4db" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +58,7 @@
       <recent name="$PROJECT_DIR$/lib" />
     </key>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -73,24 +74,5 @@
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="oldMeFiltersMigrated" value="true" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="578" y="254" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1599116605497">
-      <screen x="0" y="25" width="1680" height="956" />
-    </state>
-    <state x="578" y="254" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/1680.25.1920.1055/0.25.1680.956@0.25.1680.956" timestamp="1599116605497" />
-    <state x="341" y="138" key="SettingsEditor" timestamp="1599301144313">
-      <screen x="0" y="25" width="1680" height="956" />
-    </state>
-    <state x="341" y="138" key="SettingsEditor/0.25.1680.956@0.25.1680.956" timestamp="1599301144313" />
-    <state x="510" y="332" key="com.intellij.ide.util.TipDialog" timestamp="1599119499480">
-      <screen x="0" y="25" width="1680" height="956" />
-    </state>
-    <state x="510" y="331" key="com.intellij.ide.util.TipDialog/1680.25.1920.1055/0.25.1680.954@0.25.1680.954" timestamp="1599117236991" />
-    <state x="510" y="332" key="com.intellij.ide.util.TipDialog/1680.25.1920.1055/0.25.1680.956@0.25.1680.956" timestamp="1599119499480" />
-    <state x="492" y="259" width="696" height="486" key="find.popup" timestamp="1599118628566">
-      <screen x="0" y="25" width="1680" height="954" />
-    </state>
-    <state x="492" y="259" width="696" height="486" key="find.popup/1680.25.1920.1055/0.25.1680.954@0.25.1680.954" timestamp="1599118628566" />
   </component>
 </project>
