@@ -28,6 +28,7 @@ private const val RC_SIGN_IN = 9000
 
 class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugin, MethodCallHandler, ActivityAware, ActivityResultListener {
 
+
   //region Variables
   private var googleSignInClient: GoogleSignInClient? = null
   private var achievementClient: AchievementsClient? = null
@@ -138,13 +139,24 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
             }
   }
 
-  private fun showLeaderboards(result: Result) {
+  private fun showLeaderboards(leaderboardID: String, result: Result) {
     showLoginErrorIfNotLoggedIn(result)
-    leaderboardsClient!!.allLeaderboardsIntent.addOnSuccessListener { intent ->
+    val onSuccessListener: ((Intent) -> Unit) = { intent ->
       activity?.startActivityForResult(intent, 0)
       result.success("success")
-    }.addOnFailureListener {
+    }
+    val onFailureListener: ((Exception) -> Unit) = {
       result.error("error", "${it.message}", null)
+    }
+    if (leaderboardID.isEmpty()) {
+      leaderboardsClient?.allLeaderboardsIntent
+        ?.addOnSuccessListener(onSuccessListener)
+        ?.addOnFailureListener(onFailureListener)
+    } else {
+      leaderboardsClient
+        ?.getLeaderboardIntent(leaderboardID)
+        ?.addOnSuccessListener(onSuccessListener)
+        ?.addOnFailureListener(onFailureListener)
     }
   }
 
@@ -264,7 +276,8 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         submitScore(leaderboardID, score, result)
       }
       Methods.showLeaderboards -> {
-        showLeaderboards(result)
+        val leaderboardID = call.argument<String>("leaderboardID") ?: ""
+        showLeaderboards(leaderboardID, result)
       }
       Methods.showAchievements -> {
         showAchievements(result)

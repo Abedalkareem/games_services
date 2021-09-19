@@ -23,8 +23,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6052bd6d-7de0-4ca5-b442-cbf11e56f4db" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../games_services/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/android/src/main/kotlin/com/abedalkareem/games_services/GamesServicesPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/android/src/main/kotlin/com/abedalkareem/games_services/GamesServicesPlugin.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/example/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/.flutter-plugins-dependencies" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/example/ios/Flutter/AppFrameworkInfo.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/ios/Flutter/AppFrameworkInfo.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/example/ios/Flutter/Flutter.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/ios/Flutter/Flutter.podspec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/ios/Classes/SwiftGamesServicesPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/ios/Classes/SwiftGamesServicesPlugin.swift" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/lib/games_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/lib/games_services.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/pubspec.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/game_services_platform_interface.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/game_services_platform_interface.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/method_channel_games_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/method_channel_games_services.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,6 +61,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />

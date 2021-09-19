@@ -10,6 +10,10 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     return UIApplication.shared.windows.first!.rootViewController!
   }
 
+  private var isAuthenticated: Bool {
+    get { return GKLocalPlayer.local.isAuthenticated }
+  }
+
   // MARK: - Authenticate
 
   func authenticateUser(result: @escaping FlutterResult) {
@@ -27,12 +31,6 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
         result("error")
       }
     }
-  }
-
-  // MARK: - isAuthenticated
-
-  private var isAuthenticated: Bool {
-    get { return GKLocalPlayer.local.isAuthenticated }
   }
 
   // MARK: - Leaderboard
@@ -124,7 +122,7 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       showAchievements()
       result("success")
     case "showLeaderboards":
-      let leaderboardID = (arguments?["iOSLeaderboardID"] as? String) ?? ""
+      let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       showLeaderboardWith(identifier: leaderboardID)
       result("success")
     case "signIn":

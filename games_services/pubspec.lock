@@ -23,10 +23,10 @@ packages:
   games_services_platform_interface:
     dependency: "direct main"
     description:
-      path: "../games_services_platform_interface"
-      relative: true
-    source: path
-    version: "2.0.0-nullsafety.1"
+      name: games_services_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.1"
   meta:
     dependency: transitive
     description:
@@ -40,7 +40,7 @@ packages:
       name: plugin_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "2.0.1"
   sky_engine:
     dependency: transitive
     description: flutter
