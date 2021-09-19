@@ -77,7 +77,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// Game Center or Google Play Services
   Future<bool?> get isSignedIn => throw UnimplementedError("not implemented.");
 
-  /// To sign the user out of Goole Play Services.
+  /// To sign the user out of Google Play Services.
   /// After calling, you can no longer make any actions
   /// on the user's account.
   Future<String?> signOut() async {
