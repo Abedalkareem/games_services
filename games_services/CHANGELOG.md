@@ -1,3 +1,6 @@
+## 2.0.1
+- Fix showing a leader board with id on android.
+
 ## 2.0.0
 - Migrated `jcenter` to `mavenCentral` See: [Gradle announcement](https://blog.gradle.org/jcenter-shutdown)
 - Removed `android.enableR8`

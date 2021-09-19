@@ -9,7 +9,6 @@ build/
 .flutter-plugins
 # Miscellaneous
 *.class
-*.lock
 *.log
 *.pyc
 *.swp
@@ -104,5 +103,4 @@ ios/fastlane/README.md
 ios/Runner.app.dSYM.zip
 ios/Runner.ipa
 
-.flutter-plugins-dependencies
 pubspec.lock
