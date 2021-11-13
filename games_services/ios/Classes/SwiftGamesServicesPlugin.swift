@@ -55,6 +55,21 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     }
   }
 
+  func loadCurrentPlayerScore(leaderboardID: String, result: @escaping FlutterResult) {
+    let leaderboard = GKLeaderboard(players: [localPlayer])
+    leaderboard.identifier = leaderboardID
+    leaderboard.timeScope = .allTime
+    leaderboard.loadScores(completionHandler: {
+        (scores, error) in
+
+        let bestScore = scores?.first?.value
+
+        if bestScore != nil {
+           result(bestScore)
+        }
+    })
+  }
+
   // MARK: - Achievements
 
   func showAchievements() {
@@ -125,6 +140,9 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       showLeaderboardWith(identifier: leaderboardID)
       result("success")
+    case "loadCurrentPlayerScore":
+      let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
+      loadCurrentPlayerScore(leaderboardID: leaderboardID, result: result)
     case "signIn":
       authenticateUser(result: result)
     case "isSignedIn":

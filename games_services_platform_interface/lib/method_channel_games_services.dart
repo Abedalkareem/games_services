@@ -41,6 +41,12 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     });
   }
 
+  Future<int?> loadCurrentPlayerScore({iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+    return await _channel.invokeMethod("loadCurrentPlayerScore", {
+      "leaderboardID": Helpers.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
+    });
+  }
+
   Future<String?> signIn() async {
     if (Helpers.isPlatformAndroid) {
       return await _channel.invokeMethod("silentSignIn");

@@ -40,6 +40,13 @@ class GamesServices {
     return await GamesServicesPlatform.instance.submitScore(score: score);
   }
 
+  /// Get top score of the current player for a specified leaderboard
+  static Future<int?> loadCurrentPlayerScore({iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+    return await GamesServicesPlatform.instance
+        .loadCurrentPlayerScore(iOSLeaderboardID: iOSLeaderboardID,
+        androidLeaderboardID: androidLeaderboardID);
+  }
+
   /// It will open the achievements screen.
   static Future<String?> showAchievements() async {
     return await GamesServicesPlatform.instance.showAchievements();

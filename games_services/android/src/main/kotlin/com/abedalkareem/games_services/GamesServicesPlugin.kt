@@ -12,6 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.games.AchievementsClient
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
+import com.google.android.gms.games.leaderboard.LeaderboardVariant
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -169,6 +170,21 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     }
   }
 
+  private fun loadCurrentPlayerScore(leaderboardID: String, result: Result) {
+    showLoginErrorIfNotLoggedIn(result)
+    leaderboardsClient?.loadCurrentPlayerLeaderboardScore(leaderboardID,
+      LeaderboardVariant.TIME_SPAN_ALL_TIME, LeaderboardVariant.COLLECTION_PUBLIC)?.addOnSuccessListener {
+      val rawScore = it?.get()?.rawScore
+      if (rawScore != null) {
+        result.success(rawScore)
+      } else {
+        result.error("error","No Score",null)
+      }
+    }?.addOnFailureListener {
+      result.error("error", it.localizedMessage, null)
+    }
+  }
+
   private fun showLoginErrorIfNotLoggedIn(result: Result) {
     if (achievementClient == null || leaderboardsClient == null) {
       result.error("error", "Please make sure to call signIn() first", null)
@@ -275,6 +291,10 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         val score = call.argument<Int>("value") ?: 0
         submitScore(leaderboardID, score, result)
       }
+      Methods.loadCurrentPlayerScore -> {
+        val leaderboardID = call.argument<String>("leaderboardID") ?: ""
+        loadCurrentPlayerScore(leaderboardID, result)
+      }
       Methods.showLeaderboards -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
         showLeaderboards(leaderboardID, result)
@@ -301,6 +321,7 @@ object Methods {
   const val unlock = "unlock"
   const val increment = "increment"
   const val submitScore = "submitScore"
+  const val loadCurrentPlayerScore = "loadCurrentPlayerScore"
   const val showLeaderboards = "showLeaderboards"
   const val showAchievements = "showAchievements"
   const val silentSignIn = "silentSignIn"
