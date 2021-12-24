@@ -57,8 +57,8 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
       pendingOperation = PendingOperation(Methods.silentSignIn, result)
       if (task.isSuccessful) {
-        val googleSignInAccount = task.result
-        handleSignInResult(googleSignInAccount!!)
+        val googleSignInAccount = task.result ?: return@addOnCompleteListener
+        handleSignInResult(googleSignInAccount)
       } else {
         Log.e("Error", "signInError", task.exception)
         Log.i("ExplicitSignIn", "Trying explicit sign in")
@@ -77,12 +77,13 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   }
 
   private fun handleSignInResult(googleSignInAccount: GoogleSignInAccount) {
-    val activity = this.activity!!
+    val activity = this.activity ?: return
     achievementClient = Games.getAchievementsClient(activity, googleSignInAccount)
     leaderboardsClient = Games.getLeaderboardsClient(activity, googleSignInAccount)
 
     // Set the popups view.
-    val gamesClient = Games.getGamesClient(activity, GoogleSignIn.getLastSignedInAccount(activity)!!)
+    val lastSignedInAccount = GoogleSignIn.getLastSignedInAccount(activity) ?: return
+    val gamesClient = Games.getGamesClient(activity, lastSignedInAccount)
     gamesClient.setViewForPopups(activity.findViewById(android.R.id.content))
     gamesClient.setGravityForPopups(Gravity.TOP or Gravity.CENTER_HORIZONTAL)
 
@@ -112,10 +113,10 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   //region Achievements & Leaderboards
   private fun showAchievements(result: Result) {
     showLoginErrorIfNotLoggedIn(result)
-    achievementClient!!.achievementsIntent.addOnSuccessListener { intent ->
+    achievementClient?.achievementsIntent?.addOnSuccessListener { intent ->
       activity?.startActivityForResult(intent, 0)
       result.success("success")
-    }.addOnFailureListener {
+    }?.addOnFailureListener {
       result.error("error", "${it.message}", null)
     }
   }
@@ -227,14 +228,14 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   private class PendingOperation constructor(val method: String, val result: Result)
 
   private fun finishPendingOperationWithSuccess() {
-    Log.i(pendingOperation!!.method, "success")
-    pendingOperation!!.result.success("success")
+    Log.i(pendingOperation?.method, "success")
+    pendingOperation?.result?.success("success")
     pendingOperation = null
   }
 
   private fun finishPendingOperationWithError(errorMessage: String) {
-    Log.i(pendingOperation!!.method, "error")
-    pendingOperation!!.result.error("error", errorMessage, null)
+    Log.i(pendingOperation?.method, "error")
+    pendingOperation?.result?.error("error", errorMessage, null)
     pendingOperation = null
   }
   //endregion
