@@ -243,7 +243,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   //region ActivityResultListener
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
     if (requestCode == RC_SIGN_IN) {
-      val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+      val result = data?.let { Auth.GoogleSignInApi.getSignInResultFromIntent(it) }
       val signInAccount = result?.signInAccount
       if (result?.isSuccess == true && signInAccount != null) {
         handleSignInResult(signInAccount)
