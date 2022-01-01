@@ -1,3 +1,6 @@
+## 2.0.2
+- Fix android crash cused by pendingOperation.
+
 ## 2.0.1
 - Fix showing a leader board with id on android.
 
