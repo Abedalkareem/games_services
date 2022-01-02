@@ -1,0 +1,22 @@
+PODS:
+  - FlutterMacOS (1.0.0)
+  - games_services (0.0.1):
+    - FlutterMacOS
+
+DEPENDENCIES:
+  - FlutterMacOS (from `Flutter/ephemeral`)
+  - games_services (from `Flutter/ephemeral/.symlinks/plugins/games_services/macos`)
+
+EXTERNAL SOURCES:
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+  games_services:
+    :path: Flutter/ephemeral/.symlinks/plugins/games_services/macos
+
+SPEC CHECKSUMS:
+  FlutterMacOS: 57701585bf7de1b3fc2bb61f6378d73bbdea8424
+  games_services: eb1f60c78e6b358d8e0c7bd0f8c8c7303f8971da
+
+PODFILE CHECKSUM: 930001046a460e2eabc5bd6ba4e1e8c29018d186
+
+COCOAPODS: 1.11.2
