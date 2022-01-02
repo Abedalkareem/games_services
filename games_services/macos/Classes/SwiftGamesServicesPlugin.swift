@@ -24,7 +24,7 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
         return
       }
       if let vc = vc {
-        self.viewController.presentAsModalWindow(vc)
+        self.viewController.presentAsSheet(vc)
       } else if player.isAuthenticated {
         result("success")
       } else {
