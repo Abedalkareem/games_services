@@ -36,7 +36,7 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
   // MARK: - Leaderboard
 
   func showLeaderboardWith(identifier: String) {
-    let vc = GKGameCenterViewController(state: .dashboard)
+    let vc = GKGameCenterViewController(state: .leaderboards)
     vc.gameCenterDelegate = self
     // 'viewState' was deprecated in macOS 11.0: Use -initWithState: instead
     //  vc.viewState = .achievements
