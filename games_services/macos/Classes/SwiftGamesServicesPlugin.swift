@@ -36,10 +36,12 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
   // MARK: - Leaderboard
 
   func showLeaderboardWith(identifier: String) {
-    let vc = GKGameCenterViewController()
+    let vc = GKGameCenterViewController(state: .dashboard)
     vc.gameCenterDelegate = self
-    vc.viewState = .achievements
-    vc.leaderboardIdentifier = identifier
+    // 'viewState' was deprecated in macOS 11.0: Use -initWithState: instead
+    //  vc.viewState = .achievements
+    // 'leaderboardIdentifier' was deprecated in macOS 11.0: Use -initWithLeaderboard: instead
+    // vc.leaderboardIdentifier = identifier
     self.viewController.presentAsSheet(vc)
   }
 
@@ -58,9 +60,10 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
   // MARK: - Achievements
 
   func showAchievements() {
-    let vc = GKGameCenterViewController()
+    let vc = GKGameCenterViewController(state: .achievements)
     vc.gameCenterDelegate = self
-    vc.viewState = .achievements
+    // 'viewState' was deprecated in macOS 11.0: Use -initWithState: instead
+    // vc.viewState = .achievements
     self.viewController.presentAsSheet(vc)
   }
 
