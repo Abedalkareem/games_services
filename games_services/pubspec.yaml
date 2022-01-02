@@ -23,3 +23,5 @@ flutter:
         pluginClass: GamesServicesPlugin
       ios:
         pluginClass: GamesServicesPlugin
+      macos:
+        pluginClass: GamesServicesPlugin
