@@ -1,3 +1,4 @@
+[![pub package](https://img.shields.io/pub/v/games_services.svg)](https://pub.dartlang.org/packages/games_services) 
 <img src="https://github.com/Abedalkareem/games_services/raw/master/logo.png" width="200"/>
 
 A Flutter plugin to support game center and google play games services.  
@@ -17,7 +18,11 @@ Video tutorial
 
 ## Apps  
 
-I used this plugin in my app [Android](https://play.google.com/store/apps/details?id=com.jostudio.monkeybanana) && [iOS](https://apps.apple.com/gm/app/id1514479049)  
+Monkey Banana [Android](https://play.google.com/store/apps/details?id=com.jostudio.monkeybanana) & [iOS](https://apps.apple.com/gm/app/id1514479049) by Abedalkareem.  
+[Nonogram Colors](https://play.google.com/store/apps/details?id=com.tbuonomo.nonogramcolordot) by @tommybuonomo.
+[Ripple Effect Puzzle](https://play.google.com/store/apps/details?id=com.tbuonomo.rippleeffectpuzzle) by @tommybuonomo.
+Lights: A Memory Game [Android](https://play.google.com/store/apps/details?id=us.leephillips.lights) & [iOS](https://apps.apple.com/us/app/lights-a-memory-game/id1580230611) by @theLee3.
+
 
 ## Usage  
 #### Sign in:  

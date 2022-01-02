@@ -1,3 +1,6 @@
+## 2.0.3
+- Added support for macOS.
+
 ## 2.0.2
 - Fix android crash cused by pendingOperation.
 
