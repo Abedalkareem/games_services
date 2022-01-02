@@ -1,4 +1,5 @@
-[![pub package](https://img.shields.io/pub/v/games_services.svg)](https://pub.dartlang.org/packages/games_services) 
+[![pub package](https://img.shields.io/pub/v/games_services.svg)](https://pub.dartlang.org/packages/games_services)
+
 <img src="https://github.com/Abedalkareem/games_services/raw/master/logo.png" width="200"/>
 
 A Flutter plugin to support game center and google play games services.  
