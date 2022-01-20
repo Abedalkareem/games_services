@@ -1,6 +1,6 @@
 name: games_services
 description: A new Flutter plugin to support game center and google play games services.
-version: 2.0.2
+version: 2.0.3
 homepage: https://github.com/Abedalkareem/games_services
 repository: https://github.com/Abedalkareem/games_services
 issue_tracker: https://github.com/Abedalkareem/games_services/issues
@@ -13,8 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  games_services_platform_interface: ^2.0.1
-
+  games_services_platform_interface: ">=2.0.1 <3.0.0"
+  
 flutter:
   plugin:
     platforms:
@@ -22,4 +22,6 @@ flutter:
         package: com.abedalkareem.games_services
         pluginClass: GamesServicesPlugin
       ios:
+        pluginClass: GamesServicesPlugin
+      macos:
         pluginClass: GamesServicesPlugin
