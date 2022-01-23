@@ -123,11 +123,8 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
   private fun unlock(achievementID: String, result: Result) {
     showLoginErrorIfNotLoggedIn(result)
-    achievementClient?.unlockImmediate(achievementID)?.addOnSuccessListener {
-      result.success("success")
-    }?.addOnFailureListener {
-      result.error("error", it.localizedMessage, null)
-    }
+    achievementClient?.unlock(achievementID)
+    result.success("success")
   }
 
   private fun increment(achievementID: String, count: Int, result: Result) {
