@@ -1,3 +1,6 @@
+## 2.0.4
+- Fix the crash play service library. @impure @gyuri-fluttech @jonafeucht
+
 ## 2.0.3
 - Added support for macOS.
 
