@@ -62,7 +62,8 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   }
 
   /// It will open the leaderboards screen.
-  Future<String?> showLeaderboards({iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+  Future<String?> showLeaderboards(
+      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -91,6 +92,12 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Hide the iOS Access Point.
   Future<String?> hideAccessPoint() async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Get the player id.
+  /// On iOS the player id is unique for your game but not other games.
+  Future<String?> getPlayerID() async {
     throw UnimplementedError("not implemented.");
   }
 }

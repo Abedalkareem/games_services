@@ -1,7 +1,7 @@
 name: games_services_platform_interface
 description: A common platform interface for the games_services plugin.
 homepage: https://github.com/Abedalkareem/games_services
-version: 2.0.1
+version: 2.0.5
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
