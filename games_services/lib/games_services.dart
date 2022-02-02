@@ -81,4 +81,10 @@ class GamesServices {
   static Future<String?> hideAccessPoint() async {
     return await GamesServicesPlatform.instance.hideAccessPoint();
   }
+
+  /// Get the player id.
+  /// On iOS the player id is unique for your game but not other games.
+  static Future<String?> getPlayerID() async {
+    return await GamesServicesPlatform.instance.getPlayerID();
+  }
 }

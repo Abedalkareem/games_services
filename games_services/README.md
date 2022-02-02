@@ -20,9 +20,9 @@ Video tutorial
 ## Apps  
 
 Monkey Banana [Android](https://play.google.com/store/apps/details?id=com.jostudio.monkeybanana) & [iOS](https://apps.apple.com/gm/app/id1514479049) by Abedalkareem.  
-[Nonogram Colors](https://play.google.com/store/apps/details?id=com.tbuonomo.nonogramcolordot) by @tommybuonomo.
-[Ripple Effect Puzzle](https://play.google.com/store/apps/details?id=com.tbuonomo.rippleeffectpuzzle) by @tommybuonomo.
-Lights: A Memory Game [Android](https://play.google.com/store/apps/details?id=us.leephillips.lights) & [iOS](https://apps.apple.com/us/app/lights-a-memory-game/id1580230611) by @theLee3.
+[Nonogram Colors](https://play.google.com/store/apps/details?id=com.tbuonomo.nonogramcolordot) by @tommybuonomo.  
+[Ripple Effect Puzzle](https://play.google.com/store/apps/details?id=com.tbuonomo.rippleeffectpuzzle) by @tommybuonomo.  
+Lights: A Memory Game [Android](https://play.google.com/store/apps/details?id=us.leephillips.  lights) & [iOS](https://apps.apple.com/us/app/lights-a-memory-game/id1580230611) by @theLee3.  
 
 
 ## Usage  
@@ -77,6 +77,22 @@ GamesServices.unlock(achievement: Achievement(androidID: 'android_id',
 
 *Note: You need to pass the achievement id for iOS in case of iOS and the achievement id for android in case of android.
 the ```percentComplete``` is required in case of iOS but not android.*  
+
+## Show AccessPoint (iOS Only)
+To show the access point you can call the following function:  
+
+```dart
+GamesServices.showAccessPoint(AccessPointLocation.topLeading);
+```  
+
+This feature support only on the iOS, on Android there is nothing like this supported natively.  
+
+## Player id
+To get the player you can call:
+
+```dart
+final playerID = GamesServices.getPlayerID();
+```
 
 ## Installing  
 Simply add the following line to your pubspec.yaml file:  

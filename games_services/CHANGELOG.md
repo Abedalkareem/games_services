@@ -1,3 +1,6 @@
+## 2.0.5
+- Support getting the player id.
+
 ## 2.0.4
 - Fix the crash play service library. @impure @gyuri-fluttech @jonafeucht
 

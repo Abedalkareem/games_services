@@ -89,12 +89,24 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
     finishPendingOperationWithSuccess()
   }
-  //endregion
 
-  //region isSignedIn
   private val isSignedIn: Boolean get() {
     val activity = activity ?: return false
     return GoogleSignIn.getLastSignedInAccount(activity) != null
+  }
+  //endregion
+
+  //region User
+  private fun getPlayerID(result: Result) {
+    showLoginErrorIfNotLoggedIn(result)
+    val activity = activity ?: return
+    val lastSignedInAccount = GoogleSignIn.getLastSignedInAccount(activity) ?: return
+    Games.getPlayersClient(activity, lastSignedInAccount)
+      .currentPlayerId.addOnSuccessListener {
+        result.success(it)
+      }.addOnFailureListener {
+        result.error("error", it.localizedMessage, null)
+      }
   }
   //endregion
 
@@ -292,6 +304,9 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       Methods.signOut -> {
         signOut(result)
       }
+      Methods.getPlayerID -> {
+        getPlayerID(result)
+      }
       else -> result.notImplemented()
     }
   }
@@ -306,5 +321,6 @@ object Methods {
   const val showAchievements = "showAchievements"
   const val silentSignIn = "silentSignIn"
   const val isSignedIn = "isSignedIn"
+  const val getPlayerID = "getPlayerID"
   const val signOut = "signOut"
 }

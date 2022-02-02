@@ -72,6 +72,21 @@ class _MyAppState extends State<MyApp> {
                     print(result);
                   },
                 ),
+                ElevatedButton(
+                  child: Text('Show AccessPoint (iOS only)'),
+                  onPressed: () async {
+                    final result = await GamesServices.showAccessPoint(
+                        AccessPointLocation.topLeading);
+                    print(result);
+                  },
+                ),
+                ElevatedButton(
+                  child: Text('Get player id'),
+                  onPressed: () async {
+                    final result = await GamesServices.getPlayerID();
+                    print(result);
+                  },
+                ),
               ],
             ),
           )),

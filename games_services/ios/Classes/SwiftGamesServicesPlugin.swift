@@ -11,10 +11,10 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
   }
 
   private var isAuthenticated: Bool {
-    get { return GKLocalPlayer.local.isAuthenticated }
+    return GKLocalPlayer.local.isAuthenticated
   }
 
-  // MARK: - Authenticate
+  // MARK: - User
 
   func authenticateUser(result: @escaping FlutterResult) {
     let player = GKLocalPlayer.local
@@ -30,6 +30,15 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       } else {
         result("error")
       }
+    }
+  }
+
+  func getPlayerID(result: @escaping FlutterResult) {
+    if #available(iOS 12.4, *) {
+      let gamePlayerID = GKLocalPlayer.local.gamePlayerID
+      result(gamePlayerID)
+    } else {
+      result("error")
     }
   }
 
@@ -134,6 +143,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     case "showAccessPoint":
       let location = (arguments?["location"] as? String) ?? ""
       showAccessPoint(location: location)
+    case "getPlayerID":
+      getPlayerID(result: result)
     default:
       result("unimplemented")
       break
