@@ -26,26 +26,40 @@ Lights: A Memory Game [Android](https://play.google.com/store/apps/details?id=us
 
 
 ## Usage  
-#### Sign in:  
+#### Sign in  
 Sign in the user to the Game center (iOS) or Google play games services (Android). You should call the sign in before  
 making any action (like sending a score or unlocking an achievement).  
 ``` dart
  GamesServices.signIn();
 ```  
 
-#### Show achievements:
+#### Is Signed In
+A boolean value to check to see if the user is currently signed into Game Center or Google Play Services.  
+
+```dart
+GamesServices.isSignedIn;
+```  
+
+#### Sign out  
+To sign the user out of Goole Play Services. After calling, you can no longer make any actions on the user's account.  
+
+``` dart
+ GamesServices.signOut();
+```  
+
+#### Show achievements
 To show the achievements screen.  
 ``` dart
 GamesServices.showAchievements();
 ```  
 
-#### Show leaderboards:
+#### Show leaderboards
 To show the leaderboards screen. It takes the leaderbord id for android and iOS.  
 ``` dart
  GamesServices.showLeaderboards(iOSLeaderboardID: 'ios_leaderboard_id', androidLeaderboardID: 'android_leaderboard_id');
 ```   
 
-#### Submit score:  
+#### Submit score  
 To submit a ```Score``` to specific leaderboard.  
 -The ```Score``` class takes three parameters:  
 -```androidLeaderboardID```: the leader board id that you want to send the score for in case of android.  
@@ -58,7 +72,7 @@ GamesServices.submitScore(score: Score(androidLeaderboardID: 'android_leaderboar
                                        value: 5));
 ```  
 
-#### Unlock achievement:  
+#### Unlock achievement  
 To unlock an ```Achievement```.  
 The ```Achievement``` takes three parameters:  
 -```androidID``` the achievement id for android.  
@@ -73,7 +87,15 @@ GamesServices.unlock(achievement: Achievement(androidID: 'android_id',
                                               steps: 2)); 
 ```  
 
-#### Show AccessPoint (iOS Only)
+#### Increment (Android Only)  
+To increment the steps for android achievement.
+
+```dart
+final result = await GamesServices.increment(achievement: Achievement(androidID: 'android_id', steps: 50));
+print(result);
+```  
+
+#### Show AccessPoint (iOS Only)  
 To show the access point you can call the following function:  
 
 ```dart
@@ -82,7 +104,14 @@ GamesServices.showAccessPoint(AccessPointLocation.topLeading);
 
 This feature support only on the iOS, on Android there is nothing like this supported natively.  
 
-#### Player id
+#### Hide AccessPoint (iOS Only)  
+To hide the access point.
+
+```dart
+GamesServices.hideAccessPoint();
+```  
+
+#### Player id  
 To get the player you can call:
 
 ```dart
@@ -95,3 +124,15 @@ Simply add the following line to your pubspec.yaml file:
 dependencies:
   games_services: any       # <-- Add this line
 ```
+
+## Support me 🚀  
+
+You can support this project by:  
+
+1- Checking my [apps](https://apps.apple.com/us/developer/id928910207).  
+2- Star the repo.  
+3- Share the repo with your friends.  
+
+## Follow me ❤️  
+
+[Facebook](https://www.facebook.com/Abedalkareem.Omreyh/) | [Twitter](http://twitter.com/abedalkareemomr) | [Instagram](http://instagram.com/abedalkareemomreyh/) | [Youtube](https://www.youtube.com/user/AbedalkareemOmreyh)
