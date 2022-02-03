@@ -22,12 +22,12 @@ Video tutorial
 Monkey Banana [Android](https://play.google.com/store/apps/details?id=com.jostudio.monkeybanana) & [iOS](https://apps.apple.com/gm/app/id1514479049) by Abedalkareem.  
 [Nonogram Colors](https://play.google.com/store/apps/details?id=com.tbuonomo.nonogramcolordot) by @tommybuonomo.  
 [Ripple Effect Puzzle](https://play.google.com/store/apps/details?id=com.tbuonomo.rippleeffectpuzzle) by @tommybuonomo.  
-Lights: A Memory Game [Android](https://play.google.com/store/apps/details?id=us.leephillips.  lights) & [iOS](https://apps.apple.com/us/app/lights-a-memory-game/id1580230611) by @theLee3.  
+Lights: A Memory Game [Android](https://play.google.com/store/apps/details?id=us.leephillips.lights) & [iOS](https://apps.apple.com/us/app/lights-a-memory-game/id1580230611) by @theLee3.  
 
 
 ## Usage  
 #### Sign in:  
-To sign in the user. You need to call the sign in before  
+Sign in the user to the Game center (iOS) or Google play games services (Android). You should call the sign in before  
 making any action (like sending a score or unlocking an achievement).  
 ``` dart
  GamesServices.signIn();
@@ -40,14 +40,13 @@ GamesServices.showAchievements();
 ```  
 
 #### Show leaderboards:
-To show the leaderboards screen.  
+To show the leaderboards screen. It takes the leaderbord id for android and iOS.  
 ``` dart
- GamesServices.showLeaderboards(iOSLeaderboardID: 'ios_leaderboard_id');
-```  
-*Note: You need to pass the leaderboard id for iOS, for android it's not required.*  
+ GamesServices.showLeaderboards(iOSLeaderboardID: 'ios_leaderboard_id', androidLeaderboardID: 'android_leaderboard_id');
+```   
 
 #### Submit score:  
-To submit a ```Score``` to specific leader board.  
+To submit a ```Score``` to specific leaderboard.  
 -The ```Score``` class takes three parameters:  
 -```androidLeaderboardID```: the leader board id that you want to send the score for in case of android.  
 -```iOSLeaderboardID``` the leader board id that you want to send the score for in case of iOS.  
@@ -58,8 +57,6 @@ GamesServices.submitScore(score: Score(androidLeaderboardID: 'android_leaderboar
                                        iOSLeaderboardID: 'ios_leaderboard_id',
                                        value: 5));
 ```  
-  
-*note: You need to pass the leaderboard id for iOS in case of iOS and the leaderboard id for android in case of android.*  
 
 #### Unlock achievement:  
 To unlock an ```Achievement```.  
@@ -67,16 +64,14 @@ The ```Achievement``` takes three parameters:
 -```androidID``` the achievement id for android.  
 -```iOSID``` the achievement id for iOS.  
 -```percentComplete``` the completion percent of the achievement, this parameter is optional in case of iOS.  
+-```steps``` the achievement steps for Android.
 
 ``` dart
 GamesServices.unlock(achievement: Achievement(androidID: 'android_id',
                                               iOSID: 'ios_id',
-                                              percentComplete: 100)); 
+                                              percentComplete: 100,
+                                              steps: 2)); 
 ```  
-  
-
-*Note: You need to pass the achievement id for iOS in case of iOS and the achievement id for android in case of android.
-the ```percentComplete``` is required in case of iOS but not android.*  
 
 #### Show AccessPoint (iOS Only)
 To show the access point you can call the following function:  
