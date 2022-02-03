@@ -27,8 +27,7 @@ Lights: A Memory Game [Android](https://play.google.com/store/apps/details?id=us
 
 ## Usage  
 #### Sign in  
-Sign in the user to the Game center (iOS) or Google play games services (Android). You should call the sign in before  
-making any action (like sending a score or unlocking an achievement).  
+Sign in the user to the Game center (iOS) or Google play games services (Android). You should call the sign in before making any action (like sending a score or unlocking an achievement).  
 ``` dart
  GamesServices.signIn();
 ```  
