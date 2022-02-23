@@ -31,6 +31,13 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     });
   }
 
+  Future<String?> setSteps({achievement: Achievement}) async {
+    return await _channel.invokeMethod("setSteps", {
+      "achievementID": achievement.id,
+      "steps": achievement.steps,
+    });
+  }
+
   Future<String?> showAchievements() async {
     return await _channel.invokeMethod("showAchievements");
   }
@@ -44,11 +51,11 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   Future<String?> signIn() async {
-    if (Helpers.isPlatformAndroid) {
-      return await _channel.invokeMethod("silentSignIn");
-    } else {
-      return await _channel.invokeMethod("signIn");
-    }
+    return await _channel.invokeMethod("signIn");
+  }
+
+  Future<String?> silentSignIn() async {
+    return await _channel.invokeMethod("silentSignIn");
   }
 
   Future<bool?> get isSignedIn => _channel.invokeMethod("isSignedIn");

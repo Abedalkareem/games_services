@@ -48,8 +48,8 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     }
   }
 
-  //region SignIn
-  private fun silentSignIn(result: Result) {
+  //SignIn
+  private fun signIn(result: Result) {
     val activity = activity ?: return
     val builder = GoogleSignInOptions.Builder(
             GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
@@ -63,6 +63,23 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         Log.e("Error", "signInError", task.exception)
         Log.i("ExplicitSignIn", "Trying explicit sign in")
         explicitSignIn()
+      }
+    }
+  }
+
+  //silent SignIn
+  private fun silentSignIn(result: Result) {
+    val activity = activity ?: return
+    val builder = GoogleSignInOptions.Builder(
+            GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
+    googleSignInClient = GoogleSignIn.getClient(activity, builder.build())
+    googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
+      pendingOperation = PendingOperation(Methods.silentSignIn, result)
+      if (task.isSuccessful) {
+        val googleSignInAccount = task.result ?: return@addOnCompleteListener
+        handleSignInResult(googleSignInAccount)
+      } else {
+        Log.e("Error", "signInError", task.exception)
       }
     }
   }
@@ -150,6 +167,11 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
             }?.addOnFailureListener {
               result.error("error", it.localizedMessage, null)
             }
+  }
+
+  private fun setSteps(achievementID: String, count: Int, result: Result) {
+    showLoginErrorIfNotLoggedIn(result)
+    achievementClient?.setSteps(achievementID, count)
   }
 
   private fun showLeaderboards(leaderboardID: String, result: Result) {
@@ -283,6 +305,11 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         val steps = call.argument<Int>("steps") ?: 1
         increment(achievementID, steps, result)
       }
+      Methods.setSteps -> {
+        val achievementID = call.argument<String>("achievementID") ?: ""
+        val steps = call.argument<Int>("steps") ?: 1
+        setSteps(achievementID, steps, result)
+      }
       Methods.submitScore -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
         val score = call.argument<Int>("value") ?: 0
@@ -294,6 +321,9 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       }
       Methods.showAchievements -> {
         showAchievements(result)
+      }
+      Methods.signIn -> {
+        signIn(result)
       }
       Methods.silentSignIn -> {
         silentSignIn(result)
@@ -316,9 +346,11 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 object Methods {
   const val unlock = "unlock"
   const val increment = "increment"
+  const val setSteps = "setSteps"
   const val submitScore = "submitScore"
   const val showLeaderboards = "showLeaderboards"
   const val showAchievements = "showAchievements"
+  const val signIn = "signIn"
   const val silentSignIn = "silentSignIn"
   const val isSignedIn = "isSignedIn"
   const val getPlayerID = "getPlayerID"

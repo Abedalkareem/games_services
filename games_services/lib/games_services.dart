@@ -31,6 +31,17 @@ class GamesServices {
         .increment(achievement: achievement);
   }
 
+  /// setSteps an [achievement].
+  /// [Achievement] takes two parameters:
+  /// [androidID] the achievement id for android.
+  /// [steps] If the achievement is of the incremental type
+  /// you can use this method to set the steps.
+  /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
+  static Future<String?> setSteps({achievement: Achievement}) async {
+    return await GamesServicesPlatform.instance
+        .setSteps(achievement: achievement);
+  }
+
   /// Submit a [score] to specific leader board.
   /// [Score] takes three parameters:
   /// [androidLeaderboardID] the leader board id that you want to send the score for in case of android.
@@ -58,6 +69,11 @@ class GamesServices {
   /// (like sending a score or unlocking an achievement).
   static Future<String?> signIn() async {
     return await GamesServicesPlatform.instance.signIn();
+  }
+
+  /// Silent sign in the user.
+  static Future<String?> silentSignIn() async {
+    return await GamesServicesPlatform.instance.silentSignIn();
   }
 
   /// Check to see if the user is currently signed into

@@ -32,6 +32,11 @@ Sign in the user to the Game center (iOS) or Google play games services (Android
  GamesServices.signIn();
 ```  
 
+#### Silent Sign in
+``` dart
+ GamesServices.silentSignIn();
+``` 
+
 #### Is Signed In
 A boolean value to check to see if the user is currently signed into Game Center or Google Play Services.  
 
@@ -92,6 +97,13 @@ To increment the steps for android achievement.
 ```dart
 final result = await GamesServices.increment(achievement: Achievement(androidID: 'android_id', steps: 50));
 print(result);
+```  
+
+#### setSteps (Android Only)
+To set the steps for android achievement.
+
+```dart
+GamesServices.setSteps(achievement: Achievement(androidID: 'android_id', steps: 50));
 ```  
 
 #### Show AccessPoint (iOS Only)  

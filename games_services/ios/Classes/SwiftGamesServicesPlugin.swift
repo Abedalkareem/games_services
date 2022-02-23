@@ -33,6 +33,21 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     }
   }
 
+  func silentSignIn(result: @escaping FlutterResult) {
+    let player = GKLocalPlayer.local
+    player.authenticateHandler = { vc, error in
+      guard error == nil else {
+        result(error?.localizedDescription ?? "")
+        return
+      }
+      if player.isAuthenticated {
+        result("success")
+      } else {
+        result("error")
+      }
+    }
+  }
+
   func getPlayerID(result: @escaping FlutterResult) {
     if #available(iOS 12.4, *) {
       let gamePlayerID = GKLocalPlayer.local.gamePlayerID
@@ -136,6 +151,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       result("success")
     case "signIn":
       authenticateUser(result: result)
+    case "silentSignIn":
+      silentSignIn(result: result)
     case "isSignedIn":
       result(isAuthenticated)
     case "hideAccessPoint":

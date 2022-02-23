@@ -37,6 +37,16 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
+  /// setSteps an [achievement].
+  /// [Achievement] takes two parameters:
+  /// [androidID] the achievement id for android.
+  /// [steps] If the achievement is of the incremental type
+  /// you can use this method to set the steps.
+  /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
+  Future<String?> setSteps({achievement: Achievement}) async {
+    throw UnimplementedError("not implemented.");
+  }
+
   /// Unlock an [achievement].
   /// [Achievement] takes three parameters:
   /// [androidID] the achievement id for android.
@@ -71,6 +81,11 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// You need to call the sign in before making any action,
   /// (like sending a score or unlocking an achievement).
   Future<String?> signIn() async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Silent sign in the user.
+  Future<String?> silentSignIn() async {
     throw UnimplementedError("not implemented.");
   }
 
