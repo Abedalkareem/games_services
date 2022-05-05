@@ -69,4 +69,8 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   Future<String?> getPlayerID() async {
     return await _channel.invokeMethod("getPlayerID");
   }
+
+  Future<String?> getPlayerName() async {
+    return await _channel.invokeMethod("getPlayerName");
+  }
 }

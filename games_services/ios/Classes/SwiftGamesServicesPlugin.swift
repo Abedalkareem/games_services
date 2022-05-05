@@ -42,6 +42,15 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     }
   }
 
+  func getPlayerName(result: @escaping FlutterResult) {
+     if #available(iOS 12.4, *) {
+      let gamePlayerAlias = GKLocalPlayer.local.alias
+      result(gamePlayerAlias)
+    } else {
+      result("error")
+    }
+  }
+
   // MARK: - Leaderboard
 
   func showLeaderboardWith(identifier: String) {
@@ -145,6 +154,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       showAccessPoint(location: location)
     case "getPlayerID":
       getPlayerID(result: result)
+    case "getPlayerName":
+      getPlayerName(result: result)
     default:
       result("unimplemented")
       break

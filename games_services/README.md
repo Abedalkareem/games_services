@@ -117,6 +117,13 @@ To get the player you can call:
 final playerID = GamesServices.getPlayerID();
 ```
 
+#### Player name  
+To get the player name can call:
+
+```dart
+final playerID = GamesServices.getPlayerName();
+```
+
 ## Installing  
 Simply add the following line to your pubspec.yaml file:  
 ``` yaml
