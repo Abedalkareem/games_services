@@ -88,7 +88,7 @@ class GamesServices {
     return await GamesServicesPlatform.instance.getPlayerID();
   }
 
-  /// Get the player id.
+  /// Get the player name.
   /// On iOS the player alias is the name used by the Player visible in the leaderboard
   static Future<String?> getPlayerName() async {
     return await GamesServicesPlatform.instance.getPlayerName();
