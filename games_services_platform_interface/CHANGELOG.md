@@ -1,3 +1,6 @@
+## 2.0.6
+- Support getting the player name.
+
 ## 2.0.5
 - Support getting the player id.
 
