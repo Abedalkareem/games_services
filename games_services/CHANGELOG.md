@@ -1,3 +1,6 @@
+## 2.0.8
+- Support getting the player name.
+
 ## 2.0.7
 - Update docs.
 
