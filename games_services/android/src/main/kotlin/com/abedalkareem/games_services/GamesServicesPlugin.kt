@@ -108,6 +108,19 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         result.error("error", it.localizedMessage, null)
       }
   }
+
+  private fun getPlayerName(result: Result) {
+    showLoginErrorIfNotLoggedIn(result)
+    val activity = activity ?: return
+    val lastSignedInAccount = GoogleSignIn.getLastSignedInAccount(activity) ?: return
+    Games.getPlayersClient(activity, lastSignedInAccount)
+      .currentPlayer
+      .addOnSuccessListener { player ->
+        result.success(player.displayName)
+      }.addOnFailureListener {
+        result.error("error", it.localizedMessage, null)
+      }
+  }
   //endregion
 
   //region SignOut
@@ -307,6 +320,9 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       Methods.getPlayerID -> {
         getPlayerID(result)
       }
+      Methods.getPlayerName -> {
+        getPlayerName(result)
+      }
       else -> result.notImplemented()
     }
   }
@@ -322,5 +338,6 @@ object Methods {
   const val silentSignIn = "silentSignIn"
   const val isSignedIn = "isSignedIn"
   const val getPlayerID = "getPlayerID"
+  const val getPlayerName = "getPlayerName"
   const val signOut = "signOut"
 }

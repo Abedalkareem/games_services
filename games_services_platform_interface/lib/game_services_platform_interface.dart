@@ -100,4 +100,10 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   Future<String?> getPlayerID() async {
     throw UnimplementedError("not implemented.");
   }
+
+  /// Get the player name.
+  /// On iOS the player alias is the name of the player.
+  Future<String?> getPlayerName() async {
+    throw UnimplementedError("not implemented.");
+  }
 }
