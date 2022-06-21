@@ -6,6 +6,7 @@ import 'package:games_services_platform_interface/models/achievement.dart';
 import 'package:games_services_platform_interface/models/score.dart';
 export 'package:games_services_platform_interface/models/achievement.dart';
 export 'package:games_services_platform_interface/models/score.dart';
+export 'package:games_services_platform_interface/models/access_point_location.dart';
 
 class GamesServices {
   /// Unlock an [achievement].
@@ -15,7 +16,8 @@ class GamesServices {
   /// [percentComplete] the completion percent of the achievement, this parameter is
   /// optional in case of iOS.
   static Future<String?> unlock({achievement: Achievement}) async {
-    return await GamesServicesPlatform.instance.unlock(achievement: achievement);
+    return await GamesServicesPlatform.instance
+        .unlock(achievement: achievement);
   }
 
   /// Increment an [achievement].
@@ -25,7 +27,8 @@ class GamesServices {
   /// you can use this method to increment the steps.
   /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
   static Future<String?> increment({achievement: Achievement}) async {
-    return await GamesServicesPlatform.instance.increment(achievement: achievement);
+    return await GamesServicesPlatform.instance
+        .increment(achievement: achievement);
   }
 
   /// Submit a [score] to specific leader board.
@@ -43,8 +46,11 @@ class GamesServices {
   }
 
   /// It will open the leaderboards screen.
-  static Future<String?> showLeaderboards({iOSLeaderboardID = ""}) async {
-    return await GamesServicesPlatform.instance.showLeaderboards(iOSLeaderboardID: iOSLeaderboardID);
+  static Future<String?> showLeaderboards(
+      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+    return await GamesServicesPlatform.instance.showLeaderboards(
+        iOSLeaderboardID: iOSLeaderboardID,
+        androidLeaderboardID: androidLeaderboardID);
   }
 
   /// To sign in the user.
@@ -54,13 +60,37 @@ class GamesServices {
     return await GamesServicesPlatform.instance.signIn();
   }
 
+  /// Check to see if the user is currently signed into
+  /// Game Center or Google Play Services
+  static Future<bool> get isSignedIn async =>
+      await GamesServicesPlatform.instance.isSignedIn ?? false;
+
+  /// To sign the user out of Goole Play Services.
+  /// After calling, you can no longer make any actions
+  /// on the user's account.
+  static Future<String?> signOut() async {
+    return await GamesServicesPlatform.instance.signOut();
+  }
+
   /// Show the iOS Access Point.
-  Future<String?> showAccessPoint(AccessPointLocation location) async {
+  static Future<String?> showAccessPoint(AccessPointLocation location) async {
     return await GamesServicesPlatform.instance.showAccessPoint(location);
   }
 
   /// Hide the iOS Access Point.
-  Future<String?> hideAccessPoint() async {
+  static Future<String?> hideAccessPoint() async {
     return await GamesServicesPlatform.instance.hideAccessPoint();
+  }
+
+  /// Get the player id.
+  /// On iOS the player id is unique for your game but not other games.
+  static Future<String?> getPlayerID() async {
+    return await GamesServicesPlatform.instance.getPlayerID();
+  }
+
+  /// Get the player name.
+  /// On iOS the player alias is the name used by the Player visible in the leaderboard
+  static Future<String?> getPlayerName() async {
+    return await GamesServicesPlatform.instance.getPlayerName();
   }
 }

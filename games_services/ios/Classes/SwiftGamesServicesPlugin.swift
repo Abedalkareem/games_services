@@ -10,7 +10,11 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     return UIApplication.shared.windows.first!.rootViewController!
   }
 
-  // MARK: - Authenticate
+  private var isAuthenticated: Bool {
+    return GKLocalPlayer.local.isAuthenticated
+  }
+
+  // MARK: - User
 
   func authenticateUser(result: @escaping FlutterResult) {
     let player = GKLocalPlayer.local
@@ -26,6 +30,24 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       } else {
         result("error")
       }
+    }
+  }
+
+  func getPlayerID(result: @escaping FlutterResult) {
+    if #available(iOS 12.4, *) {
+      let gamePlayerID = GKLocalPlayer.local.gamePlayerID
+      result(gamePlayerID)
+    } else {
+      result("error")
+    }
+  }
+
+  func getPlayerName(result: @escaping FlutterResult) {
+     if #available(iOS 12.4, *) {
+      let gamePlayerAlias = GKLocalPlayer.local.alias
+      result(gamePlayerAlias)
+    } else {
+      result("error")
     }
   }
 
@@ -118,16 +140,22 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       showAchievements()
       result("success")
     case "showLeaderboards":
-      let leaderboardID = (arguments?["iOSLeaderboardID"] as? String) ?? ""
+      let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       showLeaderboardWith(identifier: leaderboardID)
       result("success")
     case "signIn":
       authenticateUser(result: result)
+    case "isSignedIn":
+      result(isAuthenticated)
     case "hideAccessPoint":
       hideAccessPoint()
     case "showAccessPoint":
       let location = (arguments?["location"] as? String) ?? ""
       showAccessPoint(location: location)
+    case "getPlayerID":
+      getPlayerID(result: result)
+    case "getPlayerName":
+      getPlayerName(result: result)
     default:
       result("unimplemented")
       break

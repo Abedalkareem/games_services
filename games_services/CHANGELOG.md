@@ -1,5 +1,38 @@
+## 2.0.8
+- Support getting the player name.
+
+## 2.0.7
+- Update docs.
+
+## 2.0.5
+- Support getting the player id.
+
+## 2.0.4
+- Fix the crash play service library. @impure @gyuri-fluttech @jonafeucht
+
+## 2.0.3
+- Added support for macOS.
+
+## 2.0.2
+- Fix android crash cused by pendingOperation.
+
+## 2.0.1
+- Fix showing a leader board with id on android.
+
+## 2.0.0
+- Migrated `jcenter` to `mavenCentral` See: [Gradle announcement](https://blog.gradle.org/jcenter-shutdown)
+- Removed `android.enableR8`
+- `jdk7` to `jdk8`
+- Bumped up versions
+
+## 2.0.0-nullsafety.3
+- Make access_point_location accessible
+
+## 2.0.0-nullsafety.2
+- fix AccessPoint issues
+
 ## 2.0.0-nullsafety.1
-- 💪 Running with sound null safety 💪
+- 💪 Running with sound null safety 💪 by @jonatadashi
 
 ## 1.0.0
 - Add the iOS Access point

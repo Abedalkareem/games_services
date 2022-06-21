@@ -62,7 +62,8 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   }
 
   /// It will open the leaderboards screen.
-  Future<String?> showLeaderboards({iOSLeaderboardID = ""}) async {
+  Future<String?> showLeaderboards(
+      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -73,6 +74,17 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
+  /// Check to see if the user is currently signed into
+  /// Game Center or Google Play Services
+  Future<bool?> get isSignedIn => throw UnimplementedError("not implemented.");
+
+  /// To sign the user out of Google Play Services.
+  /// After calling, you can no longer make any actions
+  /// on the user's account.
+  Future<String?> signOut() async {
+    throw UnimplementedError("not implemented.");
+  }
+
   /// Show the iOS Access Point.
   Future<String?> showAccessPoint(AccessPointLocation location) async {
     throw UnimplementedError("not implemented.");
@@ -80,6 +92,18 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Hide the iOS Access Point.
   Future<String?> hideAccessPoint() async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Get the player id.
+  /// On iOS the player id is unique for your game but not other games.
+  Future<String?> getPlayerID() async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Get the player name.
+  /// On iOS the player alias is the name of the player.
+  Future<String?> getPlayerName() async {
     throw UnimplementedError("not implemented.");
   }
 }

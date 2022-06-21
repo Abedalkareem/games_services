@@ -1,12 +1,20 @@
-## 2.0.0-nullsafety.1
+## 2.0.6
+- Support getting the player name.
 
-- 💪 Running with sound null safety 💪
+## 2.0.5
+- Support getting the player id.
+
+## 2.0.1
+- Fix the leaderboard id.
+
+## 2.0.0
+- 💪 Running with sound null safety 💪.
 
 ## 1.0.9
-- Add the iOS Access point
+- Add the iOS Access point.
 
 ## 1.0.7
-- Add increment method by @tommybuonomo
+- Add increment method by @tommybuonomo.
 
 ## 1.0.5
 - Change the method channel.

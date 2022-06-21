@@ -3,18 +3,37 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="NONE" />
   </component>
+  <component name="BranchesTreeState">
+    <expand>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+      <path>
+        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
+        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
+      </path>
+    </expand>
+    <select />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="6052bd6d-7de0-4ca5-b442-cbf11e56f4db" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/lib/models/access_point_location.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../games_services/.idea/games_services.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/.idea/games_services.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../games_services/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/android/src/main/kotlin/com/abedalkareem/games_services/GamesServicesPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/android/src/main/kotlin/com/abedalkareem/games_services/GamesServicesPlugin.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../games_services/example/.flutter-plugins-dependencies" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/.flutter-plugins-dependencies" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../games_services/example/android/app/src/main/kotlin/com/abedalkareem/games_services_example/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/android/app/src/main/kotlin/com/abedalkareem/games_services_example/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/example/ios/Flutter/AppFrameworkInfo.plist" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/ios/Flutter/AppFrameworkInfo.plist" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/example/ios/Flutter/Flutter.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/ios/Flutter/Flutter.podspec" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../games_services/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../games_services/ios/Classes/SwiftGamesServicesPlugin.swift" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/ios/Classes/SwiftGamesServicesPlugin.swift" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../games_services/lib/games_services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/lib/games_services.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../games_services/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../games_services/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../games_services/pubspec.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/game_services_platform_interface.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/game_services_platform_interface.dart" afterDir="false" />
@@ -42,6 +61,8 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="dart.analysis.tool.window.force.activate" value="false" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -53,6 +74,7 @@
       <recent name="$PROJECT_DIR$/lib" />
     </key>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -66,23 +88,7 @@
     </task>
     <servers />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="578" y="254" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1599116605497">
-      <screen x="0" y="25" width="1680" height="956" />
-    </state>
-    <state x="578" y="254" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/1680.25.1920.1055/0.25.1680.956@0.25.1680.956" timestamp="1599116605497" />
-    <state x="341" y="138" key="SettingsEditor" timestamp="1599301144313">
-      <screen x="0" y="25" width="1680" height="956" />
-    </state>
-    <state x="341" y="138" key="SettingsEditor/0.25.1680.956@0.25.1680.956" timestamp="1599301144313" />
-    <state x="510" y="332" key="com.intellij.ide.util.TipDialog" timestamp="1599119499480">
-      <screen x="0" y="25" width="1680" height="956" />
-    </state>
-    <state x="510" y="331" key="com.intellij.ide.util.TipDialog/1680.25.1920.1055/0.25.1680.954@0.25.1680.954" timestamp="1599117236991" />
-    <state x="510" y="332" key="com.intellij.ide.util.TipDialog/1680.25.1920.1055/0.25.1680.956@0.25.1680.956" timestamp="1599119499480" />
-    <state x="492" y="259" width="696" height="486" key="find.popup" timestamp="1599118628566">
-      <screen x="0" y="25" width="1680" height="954" />
-    </state>
-    <state x="492" y="259" width="696" height="486" key="find.popup/1680.25.1920.1055/0.25.1680.954@0.25.1680.954" timestamp="1599118628566" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

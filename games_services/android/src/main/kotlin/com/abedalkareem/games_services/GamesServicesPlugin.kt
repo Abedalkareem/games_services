@@ -28,6 +28,7 @@ private const val RC_SIGN_IN = 9000
 
 class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugin, MethodCallHandler, ActivityAware, ActivityResultListener {
 
+
   //region Variables
   private var googleSignInClient: GoogleSignInClient? = null
   private var achievementClient: AchievementsClient? = null
@@ -56,8 +57,8 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
       pendingOperation = PendingOperation(Methods.silentSignIn, result)
       if (task.isSuccessful) {
-        val googleSignInAccount = task.result
-        handleSignInResult(googleSignInAccount!!)
+        val googleSignInAccount = task.result ?: return@addOnCompleteListener
+        handleSignInResult(googleSignInAccount)
       } else {
         Log.e("Error", "signInError", task.exception)
         Log.i("ExplicitSignIn", "Trying explicit sign in")
@@ -76,26 +77,71 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   }
 
   private fun handleSignInResult(googleSignInAccount: GoogleSignInAccount) {
-    val activity = this.activity!!
+    val activity = this.activity ?: return
     achievementClient = Games.getAchievementsClient(activity, googleSignInAccount)
     leaderboardsClient = Games.getLeaderboardsClient(activity, googleSignInAccount)
 
     // Set the popups view.
-    val gamesClient = Games.getGamesClient(activity, GoogleSignIn.getLastSignedInAccount(activity)!!)
+    val lastSignedInAccount = GoogleSignIn.getLastSignedInAccount(activity) ?: return
+    val gamesClient = Games.getGamesClient(activity, lastSignedInAccount)
     gamesClient.setViewForPopups(activity.findViewById(android.R.id.content))
     gamesClient.setGravityForPopups(Gravity.TOP or Gravity.CENTER_HORIZONTAL)
 
     finishPendingOperationWithSuccess()
+  }
+
+  private val isSignedIn: Boolean get() {
+    val activity = activity ?: return false
+    return GoogleSignIn.getLastSignedInAccount(activity) != null
+  }
+  //endregion
+
+  //region User
+  private fun getPlayerID(result: Result) {
+    showLoginErrorIfNotLoggedIn(result)
+    val activity = activity ?: return
+    val lastSignedInAccount = GoogleSignIn.getLastSignedInAccount(activity) ?: return
+    Games.getPlayersClient(activity, lastSignedInAccount)
+      .currentPlayerId.addOnSuccessListener {
+        result.success(it)
+      }.addOnFailureListener {
+        result.error("error", it.localizedMessage, null)
+      }
+  }
+
+  private fun getPlayerName(result: Result) {
+    showLoginErrorIfNotLoggedIn(result)
+    val activity = activity ?: return
+    val lastSignedInAccount = GoogleSignIn.getLastSignedInAccount(activity) ?: return
+    Games.getPlayersClient(activity, lastSignedInAccount)
+      .currentPlayer
+      .addOnSuccessListener { player ->
+        result.success(player.displayName)
+      }.addOnFailureListener {
+        result.error("error", it.localizedMessage, null)
+      }
+  }
+  //endregion
+
+  //region SignOut
+  private fun signOut(result: Result) {
+    googleSignInClient?.signOut()?.addOnCompleteListener { task ->
+      if (task.isSuccessful) {
+        result.success("success")
+      } else {
+        result.error("error", "${task.exception}", null)
+      }
+    }
   }
   //endregion
 
   //region Achievements & Leaderboards
   private fun showAchievements(result: Result) {
     showLoginErrorIfNotLoggedIn(result)
-    achievementClient!!.achievementsIntent.addOnSuccessListener { intent ->
+    achievementClient?.achievementsIntent?.addOnSuccessListener { intent ->
       activity?.startActivityForResult(intent, 0)
       result.success("success")
-    }.addOnFailureListener {
+    }?.addOnFailureListener {
       result.error("error", "${it.message}", null)
     }
   }
@@ -119,13 +165,24 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
             }
   }
 
-  private fun showLeaderboards(result: Result) {
+  private fun showLeaderboards(leaderboardID: String, result: Result) {
     showLoginErrorIfNotLoggedIn(result)
-    leaderboardsClient!!.allLeaderboardsIntent.addOnSuccessListener { intent ->
+    val onSuccessListener: ((Intent) -> Unit) = { intent ->
       activity?.startActivityForResult(intent, 0)
       result.success("success")
-    }.addOnFailureListener {
+    }
+    val onFailureListener: ((Exception) -> Unit) = {
       result.error("error", "${it.message}", null)
+    }
+    if (leaderboardID.isEmpty()) {
+      leaderboardsClient?.allLeaderboardsIntent
+        ?.addOnSuccessListener(onSuccessListener)
+        ?.addOnFailureListener(onFailureListener)
+    } else {
+      leaderboardsClient
+        ?.getLeaderboardIntent(leaderboardID)
+        ?.addOnSuccessListener(onSuccessListener)
+        ?.addOnFailureListener(onFailureListener)
     }
   }
 
@@ -196,14 +253,14 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   private class PendingOperation constructor(val method: String, val result: Result)
 
   private fun finishPendingOperationWithSuccess() {
-    Log.i(pendingOperation!!.method, "success")
-    pendingOperation!!.result.success("success")
+    Log.i(pendingOperation?.method, "success")
+    pendingOperation?.result?.success("success")
     pendingOperation = null
   }
 
   private fun finishPendingOperationWithError(errorMessage: String) {
-    Log.i(pendingOperation!!.method, "error")
-    pendingOperation!!.result.error("error", errorMessage, null)
+    Log.i(pendingOperation?.method, "error")
+    pendingOperation?.result?.error("error", errorMessage, null)
     pendingOperation = null
   }
   //endregion
@@ -211,7 +268,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   //region ActivityResultListener
   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
     if (requestCode == RC_SIGN_IN) {
-      val result = Auth.GoogleSignInApi.getSignInResultFromIntent(data)
+      val result = data?.let { Auth.GoogleSignInApi.getSignInResultFromIntent(it) }
       val signInAccount = result?.signInAccount
       if (result?.isSuccess == true && signInAccount != null) {
         handleSignInResult(signInAccount)
@@ -245,13 +302,26 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         submitScore(leaderboardID, score, result)
       }
       Methods.showLeaderboards -> {
-        showLeaderboards(result)
+        val leaderboardID = call.argument<String>("leaderboardID") ?: ""
+        showLeaderboards(leaderboardID, result)
       }
       Methods.showAchievements -> {
         showAchievements(result)
       }
       Methods.silentSignIn -> {
         silentSignIn(result)
+      }
+      Methods.isSignedIn -> {
+        result.success(isSignedIn)
+      }
+      Methods.signOut -> {
+        signOut(result)
+      }
+      Methods.getPlayerID -> {
+        getPlayerID(result)
+      }
+      Methods.getPlayerName -> {
+        getPlayerName(result)
       }
       else -> result.notImplemented()
     }
@@ -266,4 +336,8 @@ object Methods {
   const val showLeaderboards = "showLeaderboards"
   const val showAchievements = "showAchievements"
   const val silentSignIn = "silentSignIn"
+  const val isSignedIn = "isSignedIn"
+  const val getPlayerID = "getPlayerID"
+  const val getPlayerName = "getPlayerName"
+  const val signOut = "signOut"
 }

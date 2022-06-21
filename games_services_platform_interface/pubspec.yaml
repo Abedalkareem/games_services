@@ -1,11 +1,11 @@
 name: games_services_platform_interface
 description: A common platform interface for the games_services plugin.
 homepage: https://github.com/Abedalkareem/games_services
-version: 2.0.0-nullsafety.1
+version: 2.0.6
 
 environment:
-  sdk: '>=2.12.0-0 <3.0.0'
-  flutter: ">=1.20.0 <2.0.0"
+  sdk: '>=2.12.0 <3.0.0'
+  flutter: ">=1.22.0"
 
 dependencies:
   flutter:
