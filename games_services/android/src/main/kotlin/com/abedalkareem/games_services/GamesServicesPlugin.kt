@@ -114,7 +114,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   private fun loadFromGoogle(result: Result) {
         isBusy = true
         isLoading = true
-        val user = GoogleSignIn.getLastSignedInAccount(this)
+        val user = googleSignInAccount.getLastSignedInAccount(this)
         if (user != null) {
             val snapshotsClient = Games.getSnapshotsClient(this, user)
             val conflictResolutionPolicy =
@@ -151,7 +151,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         jsonData: String
     ): Task<SnapshotsClient.DataOrConflict<Snapshot>>? {
         isBusy = true
-        val user = GoogleSignIn.getLastSignedInAccount(this)
+        val user = googleSignInAccount.getLastSignedInAccount(this)
 
         if (user != null) {
             val snapshotsClient: SnapshotsClient =
