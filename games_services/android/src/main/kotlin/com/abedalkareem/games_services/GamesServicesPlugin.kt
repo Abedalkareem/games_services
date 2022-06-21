@@ -4,14 +4,24 @@ import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import android.view.Gravity
+
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+
+import com.google.android.gms.common.Scopes
+import com.google.android.gms.common.api.Scope
+
 import com.google.android.gms.games.AchievementsClient
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
+
+import com.google.android.gms.games.SnapshotsClient
+import com.google.android.gms.games.snapshot.Snapshot
+import com.google.android.gms.games.snapshot.SnapshotMetadataChange
+
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -51,9 +61,12 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   //region SignIn
   private fun silentSignIn(result: Result) {
     val activity = activity ?: return
+
     val builder = GoogleSignInOptions.Builder(
             GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-    googleSignInClient = GoogleSignIn.getClient(activity, builder.build())
+
+    googleSignInClient = GoogleSignIn.getClient(activity, builder.requestScopes(Scope(Scopes.DRIVE_APPFOLDER)).build())
+
     googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
       pendingOperation = PendingOperation(Methods.silentSignIn, result)
       if (task.isSuccessful) {
@@ -65,6 +78,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         explicitSignIn()
       }
     }
+
   }
 
   private fun explicitSignIn() {
@@ -95,6 +109,95 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     return GoogleSignIn.getLastSignedInAccount(activity) != null
   }
   //endregion
+
+
+  private fun loadFromGoogle(result: Result) {
+        isBusy = true
+        isLoading = true
+        val user = GoogleSignIn.getLastSignedInAccount(this)
+        if (user != null) {
+            val snapshotsClient = Games.getSnapshotsClient(this, user)
+            val conflictResolutionPolicy =
+                SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED
+
+            snapshotsClient.open(mainSaveName, true, conflictResolutionPolicy)
+                .continueWith { task ->
+                    val snapshot: Snapshot? = task.result.data
+                    if (snapshot != null) {
+                        try {
+                            val contents =
+                                String(snapshot.snapshotContents.readFully())
+                            mainDartChannel.invokeMethod(
+                                "loadFromGoogle",
+                                contents
+                            )
+                            result?.success(contents)
+                        } catch (e: IOException) {
+                            Log.d("SAVES", "Error while reading Snapshot.", e)
+                            result?.success("ERROR while loading data from google play")
+                        }
+                    }
+                    isBusy = false
+                    isLoading = false
+                }
+            } else {
+                isBusy = false
+                isLoading = false
+            }
+    }
+
+    private fun saveToGoogle(
+        result: MethodChannel.Result?,
+        jsonData: String
+    ): Task<SnapshotsClient.DataOrConflict<Snapshot>>? {
+        isBusy = true
+        val user = GoogleSignIn.getLastSignedInAccount(this)
+
+        if (user != null) {
+            val snapshotsClient: SnapshotsClient =
+                Games.getSnapshotsClient(this, user)
+            val conflictResolutionPolicy =
+                SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED
+            return snapshotsClient.open(mainSaveName, true, conflictResolutionPolicy)
+                .addOnCompleteListener(this) { task ->
+                    if (!task.result.isConflict) {
+                        val snapshot = task.result.data
+                        if (snapshot != null) {
+                            snapshot.snapshotContents.writeBytes(jsonData.toByteArray())
+
+                            snapshotsClient.commitAndClose(
+                                snapshot,
+                                SnapshotMetadataChange.EMPTY_CHANGE
+                            )
+                            Log.d("SAVES", "Saved game successfully")
+                            result?.success(true)
+                        } else {
+                            Log.d("SAVES", "ERROR snapshot is null")
+                            result?.error("0", "ERROR snapshot is null", "")
+                        }
+                        isBusy = false
+                    } else {
+                        isBusy = false
+                        //TODO: resolve conflicts (occur very often!)
+                        Log.d(
+                            "SAVES",
+                            "ERROR task.result.isConflict is true from saveJSONToGooglePlay"
+                        )
+                        result?.error(
+                            "0",
+                            "ERROR task.result.isConflict is true from saveJSONToGooglePlay",
+                            ""
+                        )
+                    }
+                }
+        }
+
+        result?.error("0", "ERROR (user == null) from saveJSONToGooglePlay", "")
+        Log.d("SAVES", "ERROR (user == null) from saveJSONToGooglePlay")
+
+        return null
+    }
+
 
   //region User
   private fun getPlayerID(result: Result) {
@@ -317,6 +420,12 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       Methods.signOut -> {
         signOut(result)
       }
+      Methods.loadFromGoogle -> {
+        loadFromGoogle(result)
+      }
+      Methods.saveToGoogle -> {
+        saveToGoogle(result)
+      }
       Methods.getPlayerID -> {
         getPlayerID(result)
       }
@@ -337,6 +446,8 @@ object Methods {
   const val showAchievements = "showAchievements"
   const val silentSignIn = "silentSignIn"
   const val isSignedIn = "isSignedIn"
+  const val saveToGoogle = "saveToGoogle"
+  const val loadFromGoogle = "loadFromGoogle"
   const val getPlayerID = "getPlayerID"
   const val getPlayerName = "getPlayerName"
   const val signOut = "signOut"

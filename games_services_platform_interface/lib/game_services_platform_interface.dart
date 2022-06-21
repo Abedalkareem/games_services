@@ -106,4 +106,9 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   Future<String?> getPlayerName() async {
     throw UnimplementedError("not implemented.");
   }
+
+  /// Save Data to Cloud.
+  Future<String?> saveGame() async {
+    throw UnimplementedError("not implemented.");
+  }
 }

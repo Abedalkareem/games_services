@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:games_services_platform_interface/helpers.dart';
@@ -72,5 +73,19 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
 
   Future<String?> getPlayerName() async {
     return await _channel.invokeMethod("getPlayerName");
+  }
+
+  Future<String?> saveGame({dbString}) async {
+    if (Helpers.isPlatformAndroid) {
+      return await _channel.invokeMethod(
+        'saveToGoogle',
+        {
+          'database': dbString,
+        },
+      );
+    } else {
+      // TODO Darwin
+      return null;
+    }
   }
 }
