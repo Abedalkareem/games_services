@@ -73,6 +73,19 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     }
   }
 
+  func report(span: Int64, leaderboardCollection: Int64, leaderboardID: String, result: @escaping FlutterResult) {
+    let reportedScore = GKScore(leaderboardIdentifier: leaderboardID)
+    reportedScore.span = span
+    reportedScore.leaderboardCollection = leaderboardCollection
+    GKScore.report([reportedScore]) { (error) in
+      guard error == nil else {
+        result(error?.localizedDescription ?? "")
+        return
+      }
+      result("success")
+    }
+  }
+
   // MARK: - Achievements
 
   func showAchievements() {
@@ -136,6 +149,11 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       let score = (arguments?["value"] as? Int) ?? 0
       report(score: Int64(score), leaderboardID: leaderboardID, result: result)
+    case "getUserScore":
+      let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
+      let span = (arguments?["span"] as? Int) ?? 0
+      let leaderboardCollection = (arguments?["leaderboardCollection"] as? Int) ?? 0
+      report(span: Int64(span), leaderboardCollection: Int64(leaderboardCollection), leaderboardID: leaderboardID, result: result)
     case "showAchievements":
       showAchievements()
       result("success")

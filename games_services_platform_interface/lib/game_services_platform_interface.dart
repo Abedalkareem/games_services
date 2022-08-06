@@ -56,6 +56,15 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
+  /// [androidLeaderboardID] the leader board id that you want to send the score for in case of android.
+  /// [iOSLeaderboardID] the leader board id that you want to send the score for in case of iOS.
+  /// [span] Time span to retrieve data for. Valid values are LeaderboardVariant.TIME_SPAN_DAILY, LeaderboardVariant.TIME_SPAN_WEEKLY, or LeaderboardVariant.TIME_SPAN_ALL_TIME.
+  /// [leaderboardCollection] The leaderboard collection to retrieve scores for. Valid values are either LeaderboardVariant.COLLECTION_PUBLIC or LeaderboardVariant.COLLECTION_FRIENDS.
+  Future<String?> getUserScore(
+      {iOSLeaderboardID = "", androidLeaderboardID = "", span = 0, leaderboardCollection = 0}) async {
+    throw UnimplementedError("not implemented.");
+  }
+
   /// It will open the achievements screen.
   Future<String?> showAchievements() async {
     throw UnimplementedError("not implemented.");

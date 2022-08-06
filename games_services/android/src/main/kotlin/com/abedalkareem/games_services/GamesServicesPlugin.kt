@@ -195,6 +195,15 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     }
   }
 
+  private fun getUserScore(leaderboardID: String, span: Int, leaderboardCollection: Int, result: Result) {
+    showLoginErrorIfNotLoggedIn(result)
+    leaderboardsClient?.loadCurrentPlayerLeaderboardScore(leaderboardID, span.toLong(), leaderboardCollection.toLong())?.addOnSuccessListener {
+      result.success("success")
+    }?.addOnFailureListener {
+      result.error("error", it.localizedMessage, null)
+    }
+  }
+
   private fun showLoginErrorIfNotLoggedIn(result: Result) {
     if (achievementClient == null || leaderboardsClient == null) {
       result.error("error", "Please make sure to call signIn() first", null)
@@ -300,6 +309,12 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
         val score = call.argument<Int>("value") ?: 0
         submitScore(leaderboardID, score, result)
+      }
+      Methods.getUserScore -> {
+        val leaderboardID = call.argument<String>("leaderboardID") ?: ""
+        val span = call.argument<Int>("span") ?: 0
+        val leaderboardCollection = call.argument<Int>("leaderboardCollection") ?: 0
+        showLeaderboards(leaderboardID, span, leaderboardCollection, result)
       }
       Methods.showLeaderboards -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""

@@ -24,6 +24,16 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     });
   }
 
+  Future<String?> getUserScore(
+      {iOSLeaderboardID = "", androidLeaderboardID = "", span = 0, leaderboardCollection = 0}) async {
+    return await _channel.invokeMethod("getUserScore", {
+      "leaderboardID":
+          Helpers.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+      "span": span,
+      "leaderboardCollection": leaderboardCollection,
+    });
+  }
+
   Future<String?> increment({achievement: Achievement}) async {
     return await _channel.invokeMethod("increment", {
       "achievementID": achievement.id,
