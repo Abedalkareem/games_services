@@ -20,7 +20,6 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
 
 private const val CHANNEL_NAME = "games_services"
@@ -37,16 +36,6 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   private var channel: MethodChannel? = null
   private var pendingOperation: PendingOperation? = null
   //endregion
-
-  companion object {
-    @JvmStatic
-    fun registerWith(registrar: PluginRegistry.Registrar) {
-      val channel = MethodChannel(registrar.messenger(), CHANNEL_NAME)
-      val plugin = GamesServicesPlugin(registrar.activity())
-      channel.setMethodCallHandler(plugin)
-      registrar.addActivityResultListener(plugin)
-    }
-  }
 
   //region SignIn
   private fun silentSignIn(result: Result) {
