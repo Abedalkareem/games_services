@@ -33,7 +33,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// [steps] If the achievement is of the incremental type
   /// you can use this method to increment the steps.
   /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
-  Future<String?> increment({achievement: Achievement}) async {
+  Future<String?> increment({required Achievement achievement}) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -43,7 +43,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// [iOSID] the achievement id for iOS.
   /// [percentComplete] the completion percent of the achievement, this parameter is
   /// optional in case of iOS.
-  Future<String?> unlock({achievement: Achievement}) async {
+  Future<String?> unlock({required Achievement achievement}) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -52,7 +52,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// [androidLeaderboardID] the leader board id that you want to send the score for in case of android.
   /// [iOSLeaderboardID] the leader board id that you want to send the score for in case of iOS.
   /// [value] the score.
-  Future<String?> submitScore({score: Score}) async {
+  Future<String?> submitScore({required Score score}) async {
     throw UnimplementedError("not implemented.");
   }
 

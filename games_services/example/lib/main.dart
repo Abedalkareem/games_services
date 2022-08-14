@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:games_services/games_services.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(const App());
 
-class MyApp extends StatefulWidget {
+class App extends StatefulWidget {
+  const App({Key? key}) : super(key: key);
+
   @override
-  _MyAppState createState() => _MyAppState();
+  AppState createState() => AppState();
 }
 
-class _MyAppState extends State<MyApp> {
+class AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,21 +22,21 @@ class _MyAppState extends State<MyApp> {
             child: Column(
               children: <Widget>[
                 ElevatedButton(
-                  child: Text('signIn'),
+                  child: const Text('signIn'),
                   onPressed: () async {
                     final result = await GamesServices.signIn();
                     print(result);
                   },
                 ),
                 ElevatedButton(
-                  child: Text('Show Achievements'),
+                  child: const Text('Show Achievements'),
                   onPressed: () async {
                     final result = await GamesServices.showAchievements();
                     print(result);
                   },
                 ),
                 ElevatedButton(
-                  child: Text('Show Leaderboards'),
+                  child: const Text('Show Leaderboards'),
                   onPressed: () async {
                     final result = await GamesServices.showLeaderboards(
                         iOSLeaderboardID: 'ios_leaderboard_id');
@@ -42,7 +44,7 @@ class _MyAppState extends State<MyApp> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text('Submit Score'),
+                  child: const Text('Submit Score'),
                   onPressed: () async {
                     final result = await GamesServices.submitScore(
                         score: Score(
@@ -53,7 +55,7 @@ class _MyAppState extends State<MyApp> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text('Unlock'),
+                  child: const Text('Unlock'),
                   onPressed: () async {
                     final result = await GamesServices.unlock(
                         achievement: Achievement(
@@ -64,7 +66,7 @@ class _MyAppState extends State<MyApp> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text('Increment'),
+                  child: const Text('Increment'),
                   onPressed: () async {
                     final result = await GamesServices.increment(
                         achievement:
@@ -73,7 +75,7 @@ class _MyAppState extends State<MyApp> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text('Show AccessPoint (iOS only)'),
+                  child: const Text('Show AccessPoint (iOS only)'),
                   onPressed: () async {
                     final result = await GamesServices.showAccessPoint(
                         AccessPointLocation.topLeading);
@@ -81,7 +83,7 @@ class _MyAppState extends State<MyApp> {
                   },
                 ),
                 ElevatedButton(
-                  child: Text('Get player id'),
+                  child: const Text('Get player id'),
                   onPressed: () async {
                     final result = await GamesServices.getPlayerID();
                     print(result);
