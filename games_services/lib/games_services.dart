@@ -15,7 +15,7 @@ class GamesServices {
   /// [iOSID] the achievement id for iOS.
   /// [percentComplete] the completion percent of the achievement, this parameter is
   /// optional in case of iOS.
-  static Future<String?> unlock({achievement: Achievement}) async {
+  static Future<String?> unlock({required Achievement achievement}) async {
     return await GamesServicesPlatform.instance
         .unlock(achievement: achievement);
   }
@@ -26,7 +26,7 @@ class GamesServices {
   /// [steps] If the achievement is of the incremental type
   /// you can use this method to increment the steps.
   /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
-  static Future<String?> increment({achievement: Achievement}) async {
+  static Future<String?> increment({required Achievement achievement}) async {
     return await GamesServicesPlatform.instance
         .increment(achievement: achievement);
   }
@@ -36,7 +36,7 @@ class GamesServices {
   /// [androidLeaderboardID] the leader board id that you want to send the score for in case of android.
   /// [iOSLeaderboardID] the leader board id that you want to send the score for in case of iOS.
   /// [value] the score.
-  static Future<String?> submitScore({score: Score}) async {
+  static Future<String?> submitScore({required Score score}) async {
     return await GamesServicesPlatform.instance.submitScore(score: score);
   }
 
@@ -92,5 +92,13 @@ class GamesServices {
   /// On iOS the player alias is the name used by the Player visible in the leaderboard
   static Future<String?> getPlayerName() async {
     return await GamesServicesPlatform.instance.getPlayerName();
+  }
+
+  /// Get player score for a specific leaderboard.
+  static Future<int?> getPlayerScore(
+      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+    return await GamesServicesPlatform.instance.getPlayerScore(
+        iOSLeaderboardID: iOSLeaderboardID,
+        androidLeaderboardID: androidLeaderboardID);
   }
 }
