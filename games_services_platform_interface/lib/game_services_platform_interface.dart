@@ -67,6 +67,12 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
+  /// Get player score for a specific leaderboard.
+  Future<int?> getPlayerScore(
+      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+    throw UnimplementedError("not implemented.");
+  }
+
   /// To sign in the user.
   /// You need to call the sign in before making any action,
   /// (like sending a score or unlocking an achievement).

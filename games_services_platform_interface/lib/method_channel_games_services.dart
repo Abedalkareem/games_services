@@ -49,6 +49,15 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
+  Future<int?> getPlayerScore(
+      {iOSLeaderboardID = "", androidLeaderboardID = ""}) {
+    return _channel.invokeMethod("getPlayerScore", {
+      "leaderboardID":
+          Helpers.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
+    });
+  }
+
+  @override
   Future<String?> signIn() async {
     if (Helpers.isPlatformAndroid) {
       return await _channel.invokeMethod("silentSignIn");

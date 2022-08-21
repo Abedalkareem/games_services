@@ -1,3 +1,6 @@
+## 2.0.9
+- Support getting the current player score.
+
 ## 2.0.6
 - Support getting the player name.
 

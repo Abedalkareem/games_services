@@ -24,12 +24,12 @@ extension ViewController {
 #endif
   }
   
-  func dismiss(_ viewController: ViewController) {
+  func dismiss() {
 #if os(iOS) || os(tvOS)
-    self.dismiss(animated: true,
+    dismiss(animated: true,
                  completion: nil)
 #else
-    self.dismiss(true)
+    dismiss(true)
 #endif
   }
 }

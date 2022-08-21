@@ -81,6 +81,23 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     }
   }
   
+  func getPlayerScore(leaderboardID: String, result: @escaping FlutterResult) {
+    if #available(iOS 14.0, *) {
+      Task {
+        do {
+          let leaderboard = try await GKLeaderboard.loadLeaderboards(IDs: [leaderboardID])
+          let response = try await leaderboard.first?.loadEntries(for: [currentPlayer], timeScope: .allTime)
+          let (localPlayerEntry, _) = response ?? (nil, nil)
+          result(localPlayerEntry?.score ?? 0)
+        } catch {
+          result(error.flutterError(code: .failedToGetScore))
+        }
+      }
+    } else {
+      result(PluginError.notSupportedForThisOSVersion.flutterError())
+    }
+  }
+  
   // MARK: - Achievements
   
   func showAchievements(result: @escaping FlutterResult) {
@@ -91,7 +108,7 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     result(nil)
   }
   
-  func report(achievementID: String, percentComplete: Double, result: @escaping FlutterResult) {    
+  func report(achievementID: String, percentComplete: Double, result: @escaping FlutterResult) {
     let achievement = GKAchievement(identifier: achievementID)
     achievement.percentComplete = percentComplete
     achievement.showsCompletionBanner = true
@@ -169,6 +186,9 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       getPlayerID(result: result)
     case Methods.getPlayerName:
       getPlayerName(result: result)
+    case Methods.getPlayerScore:
+      let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
+      getPlayerScore(leaderboardID: leaderboardID, result: result)
     default:
       result(FlutterMethodNotImplemented)
       break
@@ -192,7 +212,7 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
 extension SwiftGamesServicesPlugin: GKGameCenterControllerDelegate {
   
   public func gameCenterViewControllerDidFinish(_ gameCenterViewController: GKGameCenterViewController) {
-    self.viewController.dismiss(gameCenterViewController)
+    self.viewController.dismiss()
   }
 }
 
@@ -206,6 +226,7 @@ enum Methods {
   static let isSignedIn = "isSignedIn"
   static let getPlayerID = "getPlayerID"
   static let getPlayerName = "getPlayerName"
+  static let getPlayerScore = "getPlayerScore"
   static let showAccessPoint = "showAccessPoint"
   static let hideAccessPoint = "hideAccessPoint"
   static let signIn = "signIn"
