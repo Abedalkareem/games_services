@@ -19,6 +19,8 @@ enum PluginError: String {
     switch self {
     case .failedToSendScore:
       return "Failed to send the score"
+    case .failedToGetScore:
+      return "Failed to get the score"
     case .failedToSendAchievement:
       return "Failed to send the achievement"
     case .failedToAuthenticate:
@@ -31,6 +33,7 @@ enum PluginError: String {
   }
   
   case failedToSendScore = "failed_to_send_score"
+  case failedToGetScore = "failed_to_get_score"
   case failedToSendAchievement = "failed_to_send_achievement"
   case failedToAuthenticate = "failed_to_authenticate"
   case notSupportedForThisOSVersion = "not_supported_for_this_os_version"

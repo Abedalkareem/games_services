@@ -93,4 +93,12 @@ class GamesServices {
   static Future<String?> getPlayerName() async {
     return await GamesServicesPlatform.instance.getPlayerName();
   }
+
+  /// Get player score for a specific leaderboard.
+  static Future<int?> getPlayerScore(
+      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+    return await GamesServicesPlatform.instance.getPlayerScore(
+        iOSLeaderboardID: iOSLeaderboardID,
+        androidLeaderboardID: androidLeaderboardID);
+  }
 }

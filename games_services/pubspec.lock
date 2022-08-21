@@ -33,7 +33,7 @@ packages:
       name: games_services_platform_interface
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.6"
+    version: "2.0.9"
   lints:
     dependency: transitive
     description:

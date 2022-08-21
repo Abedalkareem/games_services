@@ -12,6 +12,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.games.AchievementsClient
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
+import com.google.android.gms.games.achievement.AchievementBuffer
+import com.google.android.gms.games.leaderboard.LeaderboardScore
+import com.google.android.gms.games.leaderboard.LeaderboardVariant
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -21,6 +24,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
+
 
 private const val CHANNEL_NAME = "games_services"
 private const val RC_SIGN_IN = 9000
@@ -184,6 +188,22 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     }
   }
 
+  private fun getPlayerScore(leaderboardID: String, result: Result) {
+    showLoginErrorIfNotLoggedIn(result)
+    leaderboardsClient
+      ?.loadCurrentPlayerLeaderboardScore(leaderboardID, LeaderboardVariant.TIME_SPAN_ALL_TIME, LeaderboardVariant.COLLECTION_PUBLIC)
+      ?.addOnSuccessListener {
+        val score = it.get()
+        if (score != null) {
+          result.success(score.rawScore)
+        } else {
+          result.error("error", "Failed to get the score", null)
+        }
+    }?.addOnFailureListener {
+      result.error("error", it.localizedMessage, null)
+    }
+  }
+
   private fun showLoginErrorIfNotLoggedIn(result: Result) {
     if (achievementClient == null || leaderboardsClient == null) {
       result.error("error", "Please make sure to call signIn() first", null)
@@ -312,6 +332,10 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       Methods.getPlayerName -> {
         getPlayerName(result)
       }
+      Methods.getPlayerScore -> {
+        val leaderboardID = call.argument<String>("leaderboardID") ?: ""
+        getPlayerScore(leaderboardID, result)
+      }
       else -> result.notImplemented()
     }
   }
@@ -328,5 +352,6 @@ object Methods {
   const val isSignedIn = "isSignedIn"
   const val getPlayerID = "getPlayerID"
   const val getPlayerName = "getPlayerName"
+  const val getPlayerScore = "getPlayerScore"
   const val signOut = "signOut"
 }
