@@ -98,7 +98,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       .currentPlayerId.addOnSuccessListener {
         result.success(it)
       }.addOnFailureListener {
-        result.error("error", it.localizedMessage, null)
+        result.error(PluginError.failedToGetPlayerId.errorCode(), it.localizedMessage, null)
       }
   }
 
@@ -111,7 +111,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       .addOnSuccessListener { player ->
         result.success(player.displayName)
       }.addOnFailureListener {
-        result.error("error", it.localizedMessage, null)
+        result.error(PluginError.failedToGetPlayerName.errorCode(), it.localizedMessage, null)
       }
   }
   //endregion
@@ -120,9 +120,9 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   private fun signOut(result: Result) {
     googleSignInClient?.signOut()?.addOnCompleteListener { task ->
       if (task.isSuccessful) {
-        result.success("success")
+        result.success(null)
       } else {
-        result.error("error", "${task.exception}", null)
+        result.error(PluginError.failedToSignout.errorCode(), "${task.exception}", null)
       }
     }
   }
@@ -133,18 +133,18 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     showLoginErrorIfNotLoggedIn(result)
     achievementClient?.achievementsIntent?.addOnSuccessListener { intent ->
       activity?.startActivityForResult(intent, 0)
-      result.success("success")
+      result.success(null)
     }?.addOnFailureListener {
-      result.error("error", "${it.message}", null)
+      result.error(PluginError.failedToShowAchievements.errorCode(), "${it.message}", null)
     }
   }
 
   private fun unlock(achievementID: String, result: Result) {
     showLoginErrorIfNotLoggedIn(result)
     achievementClient?.unlockImmediate(achievementID)?.addOnSuccessListener {
-      result.success("success")
+      result.success(null)
     }?.addOnFailureListener {
-      result.error("error", it.localizedMessage, null)
+      result.error(PluginError.failedToSendAchievement.errorCode(), it.localizedMessage, null)
     }
   }
 
@@ -152,9 +152,9 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     showLoginErrorIfNotLoggedIn(result)
     achievementClient?.incrementImmediate(achievementID, count)
             ?.addOnSuccessListener {
-              result.success("success")
+              result.success(null)
             }?.addOnFailureListener {
-              result.error("error", it.localizedMessage, null)
+              result.error(PluginError.failedToIncrementAchievements.errorCode(), it.localizedMessage, null)
             }
   }
 
@@ -162,10 +162,10 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     showLoginErrorIfNotLoggedIn(result)
     val onSuccessListener: ((Intent) -> Unit) = { intent ->
       activity?.startActivityForResult(intent, 0)
-      result.success("success")
+      result.success(null)
     }
     val onFailureListener: ((Exception) -> Unit) = {
-      result.error("error", "${it.message}", null)
+      result.error(PluginError.leaderboardNotFound.errorCode(), "${it.message}", null)
     }
     if (leaderboardID.isEmpty()) {
       leaderboardsClient?.allLeaderboardsIntent
@@ -182,9 +182,9 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   private fun submitScore(leaderboardID: String, score: Int, result: Result) {
     showLoginErrorIfNotLoggedIn(result)
     leaderboardsClient?.submitScoreImmediate(leaderboardID, score.toLong())?.addOnSuccessListener {
-      result.success("success")
+      result.success(null)
     }?.addOnFailureListener {
-      result.error("error", it.localizedMessage, null)
+      result.error(PluginError.failedToSendScore.errorCode(), it.localizedMessage, null)
     }
   }
 
@@ -197,16 +197,16 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         if (score != null) {
           result.success(score.rawScore)
         } else {
-          result.error("error", "Failed to get the score", null)
+          result.error(PluginError.failedToGetScore.errorCode(), PluginError.failedToGetScore.errorMessage(), null)
         }
     }?.addOnFailureListener {
-      result.error("error", it.localizedMessage, null)
+      result.error(PluginError.failedToGetScore.errorCode(), it.localizedMessage, null)
     }
   }
 
   private fun showLoginErrorIfNotLoggedIn(result: Result) {
     if (achievementClient == null || leaderboardsClient == null) {
-      result.error("error", "Please make sure to call signIn() first", null)
+      result.error(PluginError.notAuthenticated.errorCode(), PluginError.notAuthenticated.errorMessage(), null)
     }
   }
   //endregion
@@ -263,13 +263,13 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
   private fun finishPendingOperationWithSuccess() {
     Log.i(pendingOperation?.method, "success")
-    pendingOperation?.result?.success("success")
+    pendingOperation?.result?.success(null)
     pendingOperation = null
   }
 
-  private fun finishPendingOperationWithError(errorMessage: String) {
+  private fun finishPendingOperationWithError(errorCode: String, errorMessage: String) {
     Log.i(pendingOperation?.method, "error")
-    pendingOperation?.result?.error("error", errorMessage, null)
+    pendingOperation?.result?.error(errorCode, errorMessage, null)
     pendingOperation = null
   }
   //endregion
@@ -286,7 +286,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         if (message.isEmpty()) {
           message = "Something went wrong " + result?.status
         }
-        finishPendingOperationWithError(message)
+        finishPendingOperationWithError(PluginError.failedToAuthenticate.errorCode(), message)
       }
       return true
     }
