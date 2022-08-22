@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart';
 import 'package:games_services_platform_interface/game_services_platform_interface.dart';
 import 'package:games_services_platform_interface/models/access_point_location.dart';
 import 'package:games_services_platform_interface/models/achievement.dart';
@@ -100,5 +101,19 @@ class GamesServices {
     return await GamesServicesPlatform.instance.getPlayerScore(
         iOSLeaderboardID: iOSLeaderboardID,
         androidLeaderboardID: androidLeaderboardID);
+  }
+
+  static Future<String?> saveGame(
+      {required String data, required String name}) async {
+    return await GamesServicesPlatform.instance
+        .saveGame(data: data, name: name);
+  }
+
+  static Future<String?> loadGame({required String name}) async {
+    return await GamesServicesPlatform.instance.loadGame(name: name);
+  }
+
+  static Future<String?> getSavedGames() async {
+    return await GamesServicesPlatform.instance.getSavedGames();
   }
 }

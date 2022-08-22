@@ -4,7 +4,7 @@ enum class PluginError {
   failedToSendScore, failedToGetScore, failedToGetPlayerId, failedToGetPlayerName,
   failedToSendAchievement, failedToShowAchievements, failedToIncrementAchievements,
   failedToAuthenticate, failedToSignout, notAuthenticated,
-  notSupportedForThisOSVersion,
+  notSupportedForThisOSVersion, failedToSaveGame, failedToLoadGame, failedToGetSavedGames,
   leaderboardNotFound
 }
 
@@ -46,6 +46,15 @@ fun PluginError.errorCode(): String {
     PluginError.notAuthenticated -> {
       return "not_authenticated"
     }
+    PluginError.failedToSaveGame -> {
+      return "failed_to_save_game"
+    }
+    PluginError.failedToLoadGame -> {
+      return "failed_to_load_game"
+    }
+    PluginError.failedToGetSavedGames -> {
+      return "failed_to_get_saved_games"
+    }
   }
 }
 
@@ -86,6 +95,15 @@ fun PluginError.errorMessage(): String {
     }
     PluginError.notAuthenticated -> {
       return "Player not authenticated, Please make sure to call signIn() first"
+    }
+    PluginError.failedToSaveGame -> {
+      return "Failed to save game"
+    }
+    PluginError.failedToLoadGame -> {
+      return "Failed to load game"
+    }
+    PluginError.failedToGetSavedGames -> {
+      return "Failed to get saved games"
     }
   }
 }

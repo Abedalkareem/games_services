@@ -29,6 +29,12 @@ enum PluginError: String {
       return "Not supported for this OS version"
     case .leaderboardNotFound:
       return "Leaderboard not found"
+    case .failedToSaveGame:
+      return "Failed to save game"
+    case .failedToLoadGame:
+      return "Failed to save game"
+    case .failedToGetSavedGames:
+      return "Failed to get saved games"
     }
   }
   
@@ -36,9 +42,12 @@ enum PluginError: String {
   case failedToGetScore = "failed_to_get_score"
   case failedToSendAchievement = "failed_to_send_achievement"
   case failedToAuthenticate = "failed_to_authenticate"
+  case failedToSaveGame = "failed_to_save_game"
+  case failedToLoadGame = "failed_to_load_game"
   case notSupportedForThisOSVersion = "not_supported_for_this_os_version"
   case leaderboardNotFound = "leaderboard_not_found"
-  
+  case failedToGetSavedGames = "failed_to_get_saved_games"
+
   func flutterError() -> FlutterError {
     return FlutterError(code: rawValue,
                         message: errorDescription,
