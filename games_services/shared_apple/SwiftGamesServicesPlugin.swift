@@ -143,8 +143,11 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
         return
       }
       let items = savedGames?
-        .map({ SavedGame(name: $0.name, modificationDate: $0.modificationDate?.timeIntervalSince1970, deviceName: $0.deviceName) }) ?? []
-      if let data = try? JSONSerialization.data(withJSONObject: items, options: []) {
+        .map({ SavedGame(name: $0.name ?? "",
+                         modificationDate: UInt64($0.modificationDate?.timeIntervalSince1970 ?? 0),
+                         deviceName: $0.deviceName ?? "") }) ?? []
+      if let data = try? JSONEncoder().encode(items) {
+        print(data)
         let string = String(data: data, encoding: String.Encoding.utf8)
         result(string)
       } else {
@@ -174,6 +177,16 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
         result(string)
       }
     })
+  }
+  
+  func deleteGame(name: String, result: @escaping FlutterResult) {
+    currentPlayer.deleteSavedGames(withName: name) { error in
+      guard error == nil else {
+        result(error?.flutterError(code: .failedToDeleteSavedGame))
+        return
+      }
+      result(nil)
+    }
   }
   
   // MARK: - AccessPoint
@@ -244,9 +257,6 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     case Methods.getPlayerScore:
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       getPlayerScore(leaderboardID: leaderboardID, result: result)
-    case Methods.getSavedGames:
-      let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
-      getPlayerScore(leaderboardID: leaderboardID, result: result)
     case Methods.saveGame:
       let data = (arguments?["data"] as? String) ?? ""
       let name = (arguments?["name"] as? String) ?? ""
@@ -256,6 +266,9 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       loadGame(name: name, result: result)
     case Methods.getSavedGames:
       getSavedGames(result: result)
+    case Methods.deleteGame:
+      let name = (arguments?["name"] as? String) ?? ""
+      deleteGame(name: name, result: result)
     default:
       result(FlutterMethodNotImplemented)
       break
@@ -300,12 +313,13 @@ enum Methods {
   static let saveGame = "saveGame"
   static let loadGame = "loadGame"
   static let getSavedGames = "getSavedGames"
+  static let deleteGame = "deleteGame"
 }
 
 // MARK: -
 
 struct SavedGame: Codable {
-  var name: String?
-  var modificationDate: Double?
-  var deviceName: String?
+  var name: String
+  var modificationDate: UInt64
+  var deviceName: String
 }

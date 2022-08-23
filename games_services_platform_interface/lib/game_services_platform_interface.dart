@@ -113,12 +113,18 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   }
 
   /// Save game with [data] and a unique [name].
+  /// The [name] must be between 1 and 100 non-URL-reserved characters (a-z, A-Z, 0-9, or the symbols "-", ".", "_", or "~").
   Future<String?> saveGame({required String data, required String name}) async {
     throw UnimplementedError("not implemented.");
   }
 
   /// Load game with [name].
   Future<String?> loadGame({required String name}) async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Delete game with [name].
+  Future<String?> deleteGame({required String name}) async {
     throw UnimplementedError("not implemented.");
   }
 

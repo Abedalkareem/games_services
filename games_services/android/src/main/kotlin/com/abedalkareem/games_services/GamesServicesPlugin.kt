@@ -197,12 +197,43 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       }
   }
 
-  private fun loadGame(name: String, result: Result) {
-    // In the case of a conflict, the most recently modified version of this snapshot will be used.
-    val conflictResolutionPolicy = SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED
-
+  private fun deleteGame(name: String, result: Result) {
     // Open the saved game using its name.
-    snapshotsClient?.open(name, true, conflictResolutionPolicy)
+    snapshotsClient?.open(name, false)
+      ?.addOnFailureListener {
+        result.error(
+          PluginError.failedToDeleteSavedGame.errorCode(),
+          it.localizedMessage ?: "",
+          null
+        )
+      }
+      ?.continueWith { snapshotOrConflict ->
+        val snapshot = snapshotOrConflict.result.data
+          if (snapshot?.metadata == null) {
+            result.error(
+              PluginError.failedToDeleteSavedGame.errorCode(),
+              PluginError.failedToDeleteSavedGame.errorMessage(),
+              null
+            )
+            return@continueWith
+          }
+          snapshotsClient?.delete(snapshot.metadata)
+            ?.addOnSuccessListener {
+              result.success(it)
+            }
+            ?.addOnFailureListener {
+              result.error(
+                PluginError.failedToDeleteSavedGame.errorCode(),
+                it.localizedMessage ?: "",
+                null
+              )
+            }
+      }
+  }
+
+  private fun loadGame(name: String, result: Result) {
+    // Open the saved game using its name.
+    snapshotsClient?.open(name, false)
       ?.addOnFailureListener {
         result.error(
           PluginError.failedToLoadGame.errorCode(),
@@ -474,6 +505,10 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       Methods.getSavedGames -> {
         getSavedGames(result)
       }
+      Methods.deleteGame -> {
+        val name = call.argument<String>("name") ?: ""
+        deleteGame(name, result)
+      }
       else -> result.notImplemented()
     }
   }
@@ -495,6 +530,7 @@ object Methods {
   const val saveGame = "saveGame"
   const val loadGame = "loadGame"
   const val getSavedGames = "getSavedGames"
+  const val deleteGame = "deleteGame"
 }
 
 data class SavedGame(

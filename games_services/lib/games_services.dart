@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:flutter/services.dart';
 import 'package:games_services_platform_interface/game_services_platform_interface.dart';
 import 'package:games_services_platform_interface/models/access_point_location.dart';
 import 'package:games_services_platform_interface/models/achievement.dart';
@@ -103,17 +101,26 @@ class GamesServices {
         androidLeaderboardID: androidLeaderboardID);
   }
 
+  /// Save game with [data] and a unique [name].
+  /// The [name] must be between 1 and 100 non-URL-reserved characters (a-z, A-Z, 0-9, or the symbols "-", ".", "_", or "~").
   static Future<String?> saveGame(
       {required String data, required String name}) async {
     return await GamesServicesPlatform.instance
         .saveGame(data: data, name: name);
   }
 
+  /// Load game with [name].
   static Future<String?> loadGame({required String name}) async {
     return await GamesServicesPlatform.instance.loadGame(name: name);
   }
 
+  /// Get all saved games.
   static Future<String?> getSavedGames() async {
     return await GamesServicesPlatform.instance.getSavedGames();
+  }
+
+  /// Delete game with [name].
+  static Future<String?> deleteGame({required String name}) async {
+    return await GamesServicesPlatform.instance.deleteGame(name: name);
   }
 }

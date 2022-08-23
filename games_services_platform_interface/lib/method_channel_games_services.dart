@@ -110,4 +110,9 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   Future<String?> getSavedGames() async {
     return await _channel.invokeMethod("getSavedGames");
   }
+
+  @override
+  Future<String?> deleteGame({required String name}) async {
+    return await _channel.invokeMethod("deleteGame", {"name": name});
+  }
 }

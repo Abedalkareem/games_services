@@ -5,7 +5,7 @@ enum class PluginError {
   failedToSendAchievement, failedToShowAchievements, failedToIncrementAchievements,
   failedToAuthenticate, failedToSignout, notAuthenticated,
   notSupportedForThisOSVersion, failedToSaveGame, failedToLoadGame, failedToGetSavedGames,
-  leaderboardNotFound
+  leaderboardNotFound, failedToDeleteSavedGame
 }
 
 fun PluginError.errorCode(): String {
@@ -54,6 +54,9 @@ fun PluginError.errorCode(): String {
     }
     PluginError.failedToGetSavedGames -> {
       return "failed_to_get_saved_games"
+    }
+    PluginError.failedToDeleteSavedGame -> {
+      return "failed_to_delete_saved_game"
     }
   }
 }
@@ -104,6 +107,9 @@ fun PluginError.errorMessage(): String {
     }
     PluginError.failedToGetSavedGames -> {
       return "Failed to get saved games"
+    }
+    PluginError.failedToDeleteSavedGame -> {
+      return "Failed to delete saved game"
     }
   }
 }
