@@ -9,12 +9,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.drive.Drive
 import com.google.android.gms.games.AchievementsClient
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
-import com.google.android.gms.games.achievement.AchievementBuffer
-import com.google.android.gms.games.leaderboard.LeaderboardScore
+import com.google.android.gms.games.SnapshotsClient
 import com.google.android.gms.games.leaderboard.LeaderboardVariant
+import com.google.android.gms.games.snapshot.SnapshotMetadataChange
+import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -29,24 +31,31 @@ import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
 private const val CHANNEL_NAME = "games_services"
 private const val RC_SIGN_IN = 9000
 
-class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugin, MethodCallHandler, ActivityAware, ActivityResultListener {
-
+class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugin,
+  MethodCallHandler, ActivityAware, ActivityResultListener {
 
   //region Variables
   private var googleSignInClient: GoogleSignInClient? = null
+  private var snapshotsClient: SnapshotsClient? = null
   private var achievementClient: AchievementsClient? = null
   private var leaderboardsClient: LeaderboardsClient? = null
   private var activityPluginBinding: ActivityPluginBinding? = null
   private var channel: MethodChannel? = null
   private var pendingOperation: PendingOperation? = null
+
   //endregion
 
   //region SignIn
-  private fun silentSignIn(result: Result) {
+  private fun silentSignIn(shouldEnableSavedGame: Boolean, result: Result) {
     val activity = activity ?: return
-    val builder = GoogleSignInOptions.Builder(
-            GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-    googleSignInClient = GoogleSignIn.getClient(activity, builder.build())
+    val signInOption = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
+
+    if (shouldEnableSavedGame) {
+      signInOption
+        .requestScopes(Drive.SCOPE_APPFOLDER)
+    }
+
+    googleSignInClient = GoogleSignIn.getClient(activity, signInOption.build())
     googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
       pendingOperation = PendingOperation(Methods.silentSignIn, result)
       if (task.isSuccessful) {
@@ -55,17 +64,24 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       } else {
         Log.e("Error", "signInError", task.exception)
         Log.i("ExplicitSignIn", "Trying explicit sign in")
-        explicitSignIn()
+        explicitSignIn(shouldEnableSavedGame)
       }
     }
   }
 
-  private fun explicitSignIn() {
+  private fun explicitSignIn(shouldEnableSavedGame: Boolean) {
     val activity = activity ?: return
-    val builder = GoogleSignInOptions.Builder(
-            GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-            .requestEmail()
-    googleSignInClient = GoogleSignIn.getClient(activity, builder.build())
+    val signInOption = GoogleSignInOptions.Builder(
+      GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
+    )
+      .requestEmail()
+
+    if (shouldEnableSavedGame) {
+      signInOption
+      .requestScopes(Drive.SCOPE_APPFOLDER)
+    }
+
+    googleSignInClient = GoogleSignIn.getClient(activity, signInOption.build())
     activity.startActivityForResult(googleSignInClient?.signInIntent, RC_SIGN_IN)
   }
 
@@ -73,6 +89,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     val activity = this.activity ?: return
     achievementClient = Games.getAchievementsClient(activity, googleSignInAccount)
     leaderboardsClient = Games.getLeaderboardsClient(activity, googleSignInAccount)
+    snapshotsClient = Games.getSnapshotsClient(activity, googleSignInAccount)
 
     // Set the popups view.
     val lastSignedInAccount = GoogleSignIn.getLastSignedInAccount(activity) ?: return
@@ -80,13 +97,14 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     gamesClient.setViewForPopups(activity.findViewById(android.R.id.content))
     gamesClient.setGravityForPopups(Gravity.TOP or Gravity.CENTER_HORIZONTAL)
 
-    finishPendingOperationWithSuccess()
+    finishPendingOperationWithSuccess(null)
   }
 
-  private val isSignedIn: Boolean get() {
-    val activity = activity ?: return false
-    return GoogleSignIn.getLastSignedInAccount(activity) != null
-  }
+  private val isSignedIn: Boolean
+    get() {
+      val activity = activity ?: return false
+      return GoogleSignIn.getLastSignedInAccount(activity) != null
+    }
   //endregion
 
   //region User
@@ -128,6 +146,134 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   }
   //endregion
 
+  //region Save game
+
+  private fun getSavedGames(result: Result) {
+    snapshotsClient?.load(true)
+      ?.addOnCompleteListener { task ->
+        val gson = Gson()
+        val data = task.result.get()
+        if (data == null) {
+          result.error(
+            PluginError.failedToGetSavedGames.errorCode(),
+            PluginError.failedToGetSavedGames.errorMessage(),
+            null
+          )
+          return@addOnCompleteListener
+        }
+        val items = data
+          .toList()
+          .map { SavedGame(it.uniqueName, it.lastModifiedTimestamp, it.deviceName) }
+
+        val string = gson.toJson(items) ?: ""
+        result.success(string)
+        data.release()
+      }
+  }
+
+  private fun saveGame(
+    data: String, desc: String, name: String, result: Result
+  ) {
+    val metadataChange = SnapshotMetadataChange.Builder()
+      .setDescription(desc)
+      .build()
+    snapshotsClient?.open(name, true)
+      ?.addOnCompleteListener { task ->
+        val snapshot = task.result.data
+        if (snapshot != null) {
+          // Set the data payload for the snapshot
+          snapshot.snapshotContents.writeBytes(data.toByteArray())
+
+          // Commit the operation
+          snapshotsClient?.commitAndClose(snapshot, metadataChange)
+            ?.addOnSuccessListener {
+              result.success(null)
+            }
+            ?.addOnFailureListener {
+              result.error(PluginError.failedToSaveGame.errorCode(), it.localizedMessage, null)
+            }
+        } else {
+          result.error(
+            PluginError.failedToSaveGame.errorCode(),
+            PluginError.failedToSaveGame.errorMessage(),
+            null
+          )
+        }
+      }
+  }
+
+  private fun deleteGame(name: String, result: Result) {
+    // Open the saved game using its name.
+    snapshotsClient?.open(name, false)
+      ?.addOnFailureListener {
+        result.error(
+          PluginError.failedToDeleteSavedGame.errorCode(),
+          it.localizedMessage ?: "",
+          null
+        )
+      }
+      ?.continueWith { snapshotOrConflict ->
+        val snapshot = snapshotOrConflict.result.data
+          if (snapshot?.metadata == null) {
+            result.error(
+              PluginError.failedToDeleteSavedGame.errorCode(),
+              PluginError.failedToDeleteSavedGame.errorMessage(),
+              null
+            )
+            return@continueWith
+          }
+          snapshotsClient?.delete(snapshot.metadata)
+            ?.addOnSuccessListener {
+              result.success(it)
+            }
+            ?.addOnFailureListener {
+              result.error(
+                PluginError.failedToDeleteSavedGame.errorCode(),
+                it.localizedMessage ?: "",
+                null
+              )
+            }
+      }
+  }
+
+  private fun loadGame(name: String, result: Result) {
+    // Open the saved game using its name.
+    snapshotsClient?.open(name, false)
+      ?.addOnFailureListener {
+        result.error(
+          PluginError.failedToLoadGame.errorCode(),
+          it.localizedMessage ?: "",
+          null
+        )
+      }
+      ?.continueWith {
+        val snapshot = it.result.data
+
+        // Opening the snapshot was a success and any conflicts have been resolved.
+        try {
+          // Extract the raw data from the snapshot.
+          val value = snapshot?.snapshotContents?.readFully()
+          if (value != null) {
+            result.success(String(value))
+          } else {
+            result.error(
+              PluginError.failedToLoadGame.errorCode(),
+              PluginError.failedToLoadGame.errorMessage(),
+              null
+            )
+          }
+        } catch (e: Exception) {
+          result.error(
+            PluginError.failedToLoadGame.errorCode(),
+            e.localizedMessage ?: "",
+            null
+          )
+        }
+      }
+  }
+
+  //endregion
+
   //region Achievements & Leaderboards
   private fun showAchievements(result: Result) {
     showLoginErrorIfNotLoggedIn(result)
@@ -151,11 +297,15 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   private fun increment(achievementID: String, count: Int, result: Result) {
     showLoginErrorIfNotLoggedIn(result)
     achievementClient?.incrementImmediate(achievementID, count)
-            ?.addOnSuccessListener {
-              result.success(null)
-            }?.addOnFailureListener {
-              result.error(PluginError.failedToIncrementAchievements.errorCode(), it.localizedMessage, null)
-            }
+      ?.addOnSuccessListener {
+        result.success(null)
+      }?.addOnFailureListener {
+        result.error(
+          PluginError.failedToIncrementAchievements.errorCode(),
+          it.localizedMessage,
+          null
+        )
+      }
   }
 
   private fun showLeaderboards(leaderboardID: String, result: Result) {
@@ -191,22 +341,34 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   private fun getPlayerScore(leaderboardID: String, result: Result) {
     showLoginErrorIfNotLoggedIn(result)
     leaderboardsClient
-      ?.loadCurrentPlayerLeaderboardScore(leaderboardID, LeaderboardVariant.TIME_SPAN_ALL_TIME, LeaderboardVariant.COLLECTION_PUBLIC)
+      ?.loadCurrentPlayerLeaderboardScore(
+        leaderboardID,
+        LeaderboardVariant.TIME_SPAN_ALL_TIME,
+        LeaderboardVariant.COLLECTION_PUBLIC
+      )
       ?.addOnSuccessListener {
         val score = it.get()
         if (score != null) {
           result.success(score.rawScore)
         } else {
-          result.error(PluginError.failedToGetScore.errorCode(), PluginError.failedToGetScore.errorMessage(), null)
+          result.error(
+            PluginError.failedToGetScore.errorCode(),
+            PluginError.failedToGetScore.errorMessage(),
+            null
+          )
         }
-    }?.addOnFailureListener {
-      result.error(PluginError.failedToGetScore.errorCode(), it.localizedMessage, null)
-    }
+      }?.addOnFailureListener {
+        result.error(PluginError.failedToGetScore.errorCode(), it.localizedMessage, null)
+      }
   }
 
   private fun showLoginErrorIfNotLoggedIn(result: Result) {
     if (achievementClient == null || leaderboardsClient == null) {
-      result.error(PluginError.notAuthenticated.errorCode(), PluginError.notAuthenticated.errorMessage(), null)
+      result.error(
+        PluginError.notAuthenticated.errorCode(),
+        PluginError.notAuthenticated.errorMessage(),
+        null
+      )
     }
   }
   //endregion
@@ -261,9 +423,9 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   //region PendingOperation
   private class PendingOperation constructor(val method: String, val result: Result)
 
-  private fun finishPendingOperationWithSuccess() {
+  private fun finishPendingOperationWithSuccess(result: Any?) {
     Log.i(pendingOperation?.method, "success")
-    pendingOperation?.result?.success(null)
+    pendingOperation?.result?.success(result)
     pendingOperation = null
   }
 
@@ -318,7 +480,8 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         showAchievements(result)
       }
       Methods.silentSignIn -> {
-        silentSignIn(result)
+        val shouldEnableSavedGame = call.argument<Boolean>("shouldEnableSavedGame") ?: false
+        silentSignIn(shouldEnableSavedGame, result)
       }
       Methods.isSignedIn -> {
         result.success(isSignedIn)
@@ -335,6 +498,22 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       Methods.getPlayerScore -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
         getPlayerScore(leaderboardID, result)
+      }
+      Methods.saveGame -> {
+        val data = call.argument<String>("data") ?: ""
+        val name = call.argument<String>("name") ?: ""
+        saveGame(data, name, name, result)
+      }
+      Methods.loadGame -> {
+        val name = call.argument<String>("name") ?: ""
+        loadGame(name, result)
+      }
+      Methods.getSavedGames -> {
+        getSavedGames(result)
+      }
+      Methods.deleteGame -> {
+        val name = call.argument<String>("name") ?: ""
+        deleteGame(name, result)
       }
       else -> result.notImplemented()
     }
@@ -354,4 +533,14 @@ object Methods {
   const val getPlayerName = "getPlayerName"
   const val getPlayerScore = "getPlayerScore"
   const val signOut = "signOut"
+  const val saveGame = "saveGame"
+  const val loadGame = "loadGame"
+  const val getSavedGames = "getSavedGames"
+  const val deleteGame = "deleteGame"
 }
+
+data class SavedGame(
+  val name: String?,
+  val modificationDate: Long?,
+  val deviceName: String?
+)
