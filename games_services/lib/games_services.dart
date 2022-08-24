@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:games_services/saved_game.dart';
 import 'package:games_services_platform_interface/game_services_platform_interface.dart';
 import 'package:games_services_platform_interface/models/access_point_location.dart';
 import 'package:games_services_platform_interface/models/achievement.dart';
@@ -115,8 +117,15 @@ class GamesServices {
   }
 
   /// Get all saved games.
-  static Future<String?> getSavedGames() async {
-    return await GamesServicesPlatform.instance.getSavedGames();
+  static Future<List<SavedGame>?> getSavedGames() async {
+    final result = await GamesServicesPlatform.instance.getSavedGames();
+    if (result == null) {
+      return null;
+    }
+    final List jsonArray = jsonDecode(result);
+    final savedGames =
+        jsonArray.map((json) => SavedGame.fromJson(json)).toList();
+    return savedGames;
   }
 
   /// Delete game with [name].

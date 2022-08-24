@@ -1,3 +1,6 @@
+## 2.2.0
+- Add save and load game 🎁 👾.
+
 ## 2.0.9
 - Support getting the current player score.
 

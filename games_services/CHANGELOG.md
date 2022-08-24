@@ -1,3 +1,6 @@
+## 2.2.0
+- Release Load/ Save a game 🚀.
+
 ## 2.1.0
 - Return error in case of error and null in case of success on android for the methods that has no return value.
 
