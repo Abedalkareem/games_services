@@ -1,10 +1,9 @@
 import 'dart:async';
-
+import 'package:flutter/services.dart';
 import 'package:games_services_platform_interface/method_channel_games_services.dart';
 import 'package:games_services_platform_interface/models/achievement.dart';
 import 'package:games_services_platform_interface/models/score.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-
 import 'models/access_point_location.dart';
 
 abstract class GamesServicesPlatform extends PlatformInterface {
@@ -74,9 +73,11 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   }
 
   /// To sign in the user.
+  /// If you pass [shouldEnableSavedGame], a drive scope will be will be added to GoogleSignInOptions. This will happed just
+  /// android as for iOS/macOS nothing is required to be sent when authenticate.
   /// You need to call the sign in before making any action,
   /// (like sending a score or unlocking an achievement).
-  Future<String?> signIn() async {
+  Future<String?> signIn({bool shouldEnableSavedGame = false}) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -110,6 +111,27 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// Get the player name.
   /// On iOS the player alias is the name of the player.
   Future<String?> getPlayerName() async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Save game with [data] and a unique [name].
+  /// The [name] must be between 1 and 100 non-URL-reserved characters (a-z, A-Z, 0-9, or the symbols "-", ".", "_", or "~").
+  Future<String?> saveGame({required String data, required String name}) async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Load game with [name].
+  Future<String?> loadGame({required String name}) async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Delete game with [name].
+  Future<String?> deleteGame({required String name}) async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Get all saved games.
+  Future<String?> getSavedGames() async {
     throw UnimplementedError("not implemented.");
   }
 }

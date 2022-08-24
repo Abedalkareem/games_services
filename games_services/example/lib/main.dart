@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:games_services/games_services.dart';
 
@@ -41,7 +43,7 @@ class AppState extends State<App> {
                     padding: const EdgeInsets.all(20),
                     child: Wrap(
                       spacing: 20,
-                      runSpacing: 20,
+                      runSpacing: 10,
                       children: <Widget>[
                         ElevatedButton(
                           onPressed: _signIn,
@@ -89,8 +91,28 @@ class AppState extends State<App> {
                           child: const Text('Get player id'),
                         ),
                         ElevatedButton(
+                          onPressed: _getPlayerScore,
+                          child: const Text('Get player score'),
+                        ),
+                        ElevatedButton(
                           onPressed: _getPlayerName,
                           child: const Text('Get player name'),
+                        ),
+                        ElevatedButton(
+                          onPressed: _getSavedGames,
+                          child: const Text('Get saved games'),
+                        ),
+                        ElevatedButton(
+                          onPressed: _saveGame,
+                          child: const Text('Save game'),
+                        ),
+                        ElevatedButton(
+                          onPressed: _loadGame,
+                          child: const Text('Load game'),
+                        ),
+                        ElevatedButton(
+                          onPressed: _deleteGame,
+                          child: const Text('Delete saved game'),
                         ),
                       ],
                     ),
@@ -124,6 +146,11 @@ class AppState extends State<App> {
 
   void _getPlayerName() async {
     final result = await GamesServices.getPlayerName();
+    print(result);
+  }
+
+  void _getPlayerScore() async {
+    final result = await GamesServices.getPlayerScore();
     print(result);
   }
 
@@ -170,4 +197,42 @@ class AppState extends State<App> {
     final result = await GamesServices.showAchievements();
     print(result);
   }
+
+  void _getSavedGames() async {
+    final result = await GamesServices.getSavedGames();
+    print(result);
+  }
+
+  void _saveGame() async {
+    final data = jsonEncode(GameData(96, "sword").toJson());
+    final result = await GamesServices.saveGame(data: data, name: "slot1");
+    print(result);
+  }
+
+  void _loadGame() async {
+    final result = await GamesServices.loadGame(name: "slot1");
+    if (result != null) {
+      final Map json = jsonDecode(result);
+      final gameData = GameData.fromJson(json);
+      print("Player progress ${gameData.progress}");
+      print("Player weapon ${gameData.weapon}");
+    }
+  }
+
+  void _deleteGame() async {
+    final result = await GamesServices.deleteGame(name: "slot1");
+    print(result);
+  }
+}
+
+class GameData {
+  int progress;
+  String weapon;
+  GameData(this.progress, this.weapon);
+
+  factory GameData.fromJson(Map json) {
+    return GameData(json["progress"], json["weapon"]);
+  }
+
+  Map toJson() => {'progress': progress, 'weapon': weapon};
 }
