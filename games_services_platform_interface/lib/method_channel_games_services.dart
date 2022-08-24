@@ -58,9 +58,10 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> signIn() async {
+  Future<String?> signIn({bool shouldEnableSavedGame = false}) async {
     if (Helpers.isPlatformAndroid) {
-      return await _channel.invokeMethod("silentSignIn");
+      return await _channel.invokeMethod(
+          "silentSignIn", {"shouldEnableSavedGame": shouldEnableSavedGame});
     } else {
       return await _channel.invokeMethod("signIn");
     }

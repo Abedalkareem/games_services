@@ -15,7 +15,6 @@ import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
 import com.google.android.gms.games.SnapshotsClient
 import com.google.android.gms.games.leaderboard.LeaderboardVariant
-import com.google.android.gms.games.snapshot.SnapshotMetadata
 import com.google.android.gms.games.snapshot.SnapshotMetadataChange
 import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -27,12 +26,10 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
-import java.util.*
 
 
 private const val CHANNEL_NAME = "games_services"
 private const val RC_SIGN_IN = 9000
-private const val RC_SAVED_GAMES = 9009
 
 class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugin,
   MethodCallHandler, ActivityAware, ActivityResultListener {
@@ -49,12 +46,16 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
   //endregion
 
   //region SignIn
-  private fun silentSignIn(result: Result) {
+  private fun silentSignIn(shouldEnableSavedGame: Boolean, result: Result) {
     val activity = activity ?: return
     val signInOption = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-      .requestScopes(Drive.SCOPE_APPFOLDER)
-      .build()
-    googleSignInClient = GoogleSignIn.getClient(activity, signInOption)
+
+    if (shouldEnableSavedGame) {
+      signInOption
+        .requestScopes(Drive.SCOPE_APPFOLDER)
+    }
+
+    googleSignInClient = GoogleSignIn.getClient(activity, signInOption.build())
     googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
       pendingOperation = PendingOperation(Methods.silentSignIn, result)
       if (task.isSuccessful) {
@@ -63,20 +64,24 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       } else {
         Log.e("Error", "signInError", task.exception)
         Log.i("ExplicitSignIn", "Trying explicit sign in")
-        explicitSignIn()
+        explicitSignIn(shouldEnableSavedGame)
       }
     }
   }
 
-  private fun explicitSignIn() {
+  private fun explicitSignIn(shouldEnableSavedGame: Boolean) {
     val activity = activity ?: return
     val signInOption = GoogleSignInOptions.Builder(
       GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
     )
-      .requestScopes(Drive.SCOPE_APPFOLDER)
       .requestEmail()
-      .build()
-    googleSignInClient = GoogleSignIn.getClient(activity, signInOption)
+
+    if (shouldEnableSavedGame) {
+      signInOption
+      .requestScopes(Drive.SCOPE_APPFOLDER)
+    }
+
+    googleSignInClient = GoogleSignIn.getClient(activity, signInOption.build())
     activity.startActivityForResult(googleSignInClient?.signInIntent, RC_SIGN_IN)
   }
 
@@ -475,7 +480,8 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         showAchievements(result)
       }
       Methods.silentSignIn -> {
-        silentSignIn(result)
+        val shouldEnableSavedGame = call.argument<Boolean>("shouldEnableSavedGame") ?: false
+        silentSignIn(shouldEnableSavedGame, result)
       }
       Methods.isSignedIn -> {
         result.success(isSignedIn)

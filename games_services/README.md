@@ -30,9 +30,11 @@ Lights: A Memory Game [Android](https://play.google.com/store/apps/details?id=us
 ### Sign in / out  
 
 #### Sign in  
-Sign in the user to the Game center (iOS) or Google play games services (Android). You should call the sign in before making any action (like sending a score or unlocking an achievement).  
+Sign in the user to the Game center (iOS) or Google play games services (Android).  
+If you pass [shouldEnableSavedGame], a drive scope will be will be added to GoogleSignInOptions. This will happed just android as for iOS/macOS nothing is required to be sent when authenticate.  
+You should call the sign in before making any action (like sending a score or unlocking an achievement).  
 ``` dart
- GamesServices.signIn();
+ GamesServices.signIn(shouldEnableSavedGame: true);
 ```  
 
 #### Is Signed In

@@ -73,9 +73,11 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   }
 
   /// To sign in the user.
+  /// If you pass [shouldEnableSavedGame], a drive scope will be will be added to GoogleSignInOptions. This will happed just
+  /// android as for iOS/macOS nothing is required to be sent when authenticate.
   /// You need to call the sign in before making any action,
   /// (like sending a score or unlocking an achievement).
-  Future<String?> signIn() async {
+  Future<String?> signIn({bool shouldEnableSavedGame = false}) async {
     throw UnimplementedError("not implemented.");
   }
 

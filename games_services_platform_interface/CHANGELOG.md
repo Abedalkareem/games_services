@@ -1,3 +1,6 @@
+## 2.2.1
+- Add shouldEnableSavedGame to sign in.
+
 ## 2.2.0
 - Add save and load game 🎁 👾.
 

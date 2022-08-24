@@ -55,10 +55,13 @@ class GamesServices {
   }
 
   /// To sign in the user.
+  /// If you pass [shouldEnableSavedGame], a drive scope will be will be added to GoogleSignInOptions. This will happed just
+  /// android as for iOS/macOS nothing is required to be sent when authenticate.
   /// You need to call the sign in before making any action,
   /// (like sending a score or unlocking an achievement).
-  static Future<String?> signIn() async {
-    return await GamesServicesPlatform.instance.signIn();
+  static Future<String?> signIn({bool shouldEnableSavedGame = false}) async {
+    return await GamesServicesPlatform.instance
+        .signIn(shouldEnableSavedGame: shouldEnableSavedGame);
   }
 
   /// Check to see if the user is currently signed into
