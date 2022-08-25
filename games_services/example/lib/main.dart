@@ -125,7 +125,7 @@ class AppState extends State<App> {
   }
 
   void _signIn() async {
-    final result = await GamesServices.signIn();
+    final result = await GamesServices.signIn(shouldEnableSavedGame: true);
     print(result);
   }
 

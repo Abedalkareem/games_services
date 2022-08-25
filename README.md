@@ -27,10 +27,15 @@ Monkey Banana [Android](https://play.google.com/store/apps/details?id=com.jostud
 Lights: A Memory Game [Android](https://play.google.com/store/apps/details?id=us.leephillips.lights) & [iOS](https://apps.apple.com/us/app/lights-a-memory-game/id1580230611) by @theLee3.  
 
 ## Usage  
+
+### Sign in / out  
+
 #### Sign in  
-Sign in the user to the Game center (iOS) or Google play games services (Android). You should call the sign in before making any action (like sending a score or unlocking an achievement).  
+Sign in the user to the Game center (iOS) or Google play games services (Android).  
+If you pass [shouldEnableSavedGame], a drive scope will be will be added to GoogleSignInOptions. This will happed just android as for iOS/macOS nothing is required to be sent when authenticate.  
+You should call the sign in before making any action (like sending a score or unlocking an achievement).  
 ``` dart
- GamesServices.signIn();
+ GamesServices.signIn(shouldEnableSavedGame: true);
 ```  
 
 #### Is Signed In
@@ -46,6 +51,8 @@ To sign the user out of Goole Play Services. After calling, you can no longer ma
 ``` dart
  GamesServices.signOut();
 ```  
+
+### Leaderboard and achievements  
 
 #### Show achievements
 To show the achievements screen.  
@@ -111,11 +118,67 @@ To hide the access point.
 GamesServices.hideAccessPoint();
 ```  
 
+### Player  
+
 #### Player id  
 To get the player you can call:
 
 ```dart
 final playerID = GamesServices.getPlayerID();
+```
+
+#### Player name  
+To get the player name you can call:
+
+```dart
+final playerID = GamesServices.getPlayerName();
+```
+
+#### Player score  
+To get the player score you can call:
+
+```dart
+final playerID = GamesServices.getPlayerScore();
+```
+
+### Save/Load Game  
+
+#### Save game 
+To save a new game with `data` and a unique `name`.
+
+```dart
+final data = jsonEncode(GameData(96, "sword").toJson());
+final result = await GamesServices.saveGame(data: data, name: "slot1");
+```
+
+*The `name` must be between 1 and 100 non-URL-reserved characters (a-z, A-Z, 0-9, or the symbols "-", ".", "_", or "~").*  
+
+
+#### Load game  
+To load a game with `name`.
+
+```dart
+final result = await GamesServices.loadGame(name: "slot1");
+if (result != null) {
+  final Map json = jsonDecode(result);
+  final gameData = GameData.fromJson(json);
+  print("Player progress ${gameData.progress}");
+  print("Player weapon ${gameData.weapon}");
+}
+```
+
+#### Delete game  
+To delete a saved game.
+
+```dart
+final result = await GamesServices.deleteGame(name: "slot1");
+```
+
+#### Get saved games 
+To get all saved games.
+
+```dart
+final result = await GamesServices.getSavedGames();
 ```
 
 ## Installing  
@@ -135,4 +198,4 @@ You can support this project by:
 
 ## Follow me ❤️  
 
-[Facebook](https://www.facebook.com/Abedalkareem.Omreyh/) | [Twitter](http://twitter.com/abedalkareemomr) | [Instagram](http://instagram.com/abedalkareemomreyh/) | [Youtube](https://www.youtube.com/user/AbedalkareemOmreyh)
+[Facebook](https://www.facebook.com/Abedalkareem.Omreyh/) | [Twitter](https://twitter.com/abedalkareemomr) | [Instagram](https://instagram.com/abedalkareemomreyh/) | [Youtube](https://www.youtube.com/user/AbedalkareemOmreyh)
