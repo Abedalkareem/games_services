@@ -3,7 +3,7 @@ package com.abedalkareem.games_services
 enum class PluginError {
   failedToSendScore, failedToGetScore, failedToGetPlayerId, failedToGetPlayerName,
   failedToSendAchievement, failedToShowAchievements, failedToIncrementAchievements,
-  failedToAuthenticate, failedToSignout, notAuthenticated,
+  failedToLoadAchievements, failedToAuthenticate, failedToSignout, notAuthenticated,
   notSupportedForThisOSVersion, failedToSaveGame, failedToLoadGame, failedToGetSavedGames,
   leaderboardNotFound, failedToDeleteSavedGame
 }
@@ -24,6 +24,9 @@ fun PluginError.errorCode(): String {
     }
     PluginError.failedToIncrementAchievements -> {
       return "failed_to_increment_achievements"
+    }
+    PluginError.failedToLoadAchievements -> {
+      return "failed_to_load_achievements"
     }
     PluginError.failedToAuthenticate -> {
       return "failed_to_authenticate"
@@ -77,6 +80,9 @@ fun PluginError.errorMessage(): String {
     }
     PluginError.failedToIncrementAchievements -> {
       return "Failed to increment achievements"
+    }
+    PluginError.failedToLoadAchievements -> {
+      return "Failed to get the achievements list"
     }
     PluginError.failedToAuthenticate -> {
       return "Failed to authenticate"

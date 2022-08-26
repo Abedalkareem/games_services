@@ -99,6 +99,11 @@ class GamesServices {
   }
 
   /// Get player score for a specific leaderboard.
+  static Future<String?> loadAchievements() async {
+    return await GamesServicesPlatform.instance.loadAchievements();
+  }
+
+  /// Get player score for a specific leaderboard.
   static Future<int?> getPlayerScore(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     return await GamesServicesPlatform.instance.getPlayerScore(
