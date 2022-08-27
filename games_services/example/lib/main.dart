@@ -183,7 +183,7 @@ class AppState extends State<App> {
   }
 
   void _loadAchievement() async {
-    final result = await GamesServices.loadAchievements();
+    final result = await GamesServices.getAchievementsData();
     print(result);
   }
 
