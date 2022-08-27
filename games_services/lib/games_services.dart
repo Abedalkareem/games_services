@@ -98,7 +98,7 @@ class GamesServices {
     return await GamesServicesPlatform.instance.getPlayerName();
   }
 
-  /// Get player score for a specific leaderboard.
+  /// Get Android Achievements list data.
   static Future<String?> loadAchievements() async {
     return await GamesServicesPlatform.instance.loadAchievements();
   }

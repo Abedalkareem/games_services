@@ -324,7 +324,13 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       }
       val items = data.toList().map { 
         AchievementItemData(
-          it.getAchievementId(), 
+          it.getAchievementId(),
+          it.getName(),
+          it.getDescription(),
+          it.getRevealedImageUrl(),
+          it.getUnlockedImageUrl(),
+          if (it.getType() == Achievement.TYPE_INCREMENTAL) it.getCurrentSteps() else 0,
+          if (it.getType() == Achievement.TYPE_INCREMENTAL) it.getTotalSteps() else 0, 
           it.getState() == Achievement.STATE_UNLOCKED,
         ) 
       }
@@ -585,5 +591,11 @@ data class SavedGame(
 
 data class AchievementItemData(
   val id: String?,
-  val unlocked: Boolean
+  val name: String?,
+  val description: String?,
+  val revealImageUrl: String?,
+  val unlockedImageUrl: String?,
+  val currentSteps: Int?,
+  val totalSteps: Int?,
+  val unlocked: Boolean,
 )
