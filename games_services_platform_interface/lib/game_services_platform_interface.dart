@@ -66,6 +66,11 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
+  /// Get the list of Android Achivements data.
+  Future<String?> loadAchievements() async {
+    throw UnimplementedError("not implemented.");
+  }
+
   /// Get player score for a specific leaderboard.
   Future<int?> getPlayerScore(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {

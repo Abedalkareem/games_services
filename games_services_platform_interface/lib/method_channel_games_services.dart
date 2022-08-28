@@ -49,6 +49,11 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
+  Future<String?> loadAchievements() async {
+    return await _channel.invokeMethod("loadAchievements");
+  }
+
+  @override
   Future<int?> getPlayerScore(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     return await _channel.invokeMethod("getPlayerScore", {

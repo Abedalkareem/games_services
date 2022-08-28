@@ -5,6 +5,8 @@ import 'package:games_services_platform_interface/game_services_platform_interfa
 import 'package:games_services_platform_interface/models/access_point_location.dart';
 import 'package:games_services_platform_interface/models/achievement.dart';
 import 'package:games_services_platform_interface/models/score.dart';
+
+import 'achievement_item_data.dart';
 export 'package:games_services_platform_interface/models/achievement.dart';
 export 'package:games_services_platform_interface/models/score.dart';
 export 'package:games_services_platform_interface/models/access_point_location.dart';
@@ -96,6 +98,17 @@ class GamesServices {
   /// On iOS the player alias is the name used by the Player visible in the leaderboard
   static Future<String?> getPlayerName() async {
     return await GamesServicesPlatform.instance.getPlayerName();
+  }
+
+  /// Get Android Achievements list data.
+  static Future<List<AchievementItemData>?> getAchievementsData() async {
+    final response = await GamesServicesPlatform.instance.loadAchievements();
+    if (response != null) {
+      Iterable items = json.decode(response) as List;
+      return List<AchievementItemData>.from(
+          items.map((model) => AchievementItemData.fromJson(model)).toList());
+    }
+    return null;
   }
 
   /// Get player score for a specific leaderboard.

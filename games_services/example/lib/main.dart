@@ -74,6 +74,10 @@ class AppState extends State<App> {
                           child: const Text('Unlock Achievement'),
                         ),
                         ElevatedButton(
+                          onPressed: _loadAchievement,
+                          child: const Text('Load Achievement'),
+                        ),
+                        ElevatedButton(
                           onPressed: _incrementAchievement,
                           child: const Text(
                               'Increment Achievement (Android only)'),
@@ -175,6 +179,11 @@ class AppState extends State<App> {
     final result = await GamesServices.unlock(
         achievement: Achievement(
             androidID: 'android_id', iOSID: 'ios_id', percentComplete: 100));
+    print(result);
+  }
+
+  void _loadAchievement() async {
+    final result = await GamesServices.getAchievementsData();
     print(result);
   }
 

@@ -11,6 +11,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.drive.Drive
 import com.google.android.gms.games.AchievementsClient
+import com.google.android.gms.games.achievement.Achievement
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
 import com.google.android.gms.games.SnapshotsClient
@@ -308,6 +309,45 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       }
   }
 
+  private fun loadAchievements(result: Result)  {
+    showLoginErrorIfNotLoggedIn(result)
+    achievementClient?.load(true)
+    ?.addOnCompleteListener { task ->
+      val data = task.result.get()
+      if (data == null) {
+        result.error(
+            PluginError.failedToLoadAchievements.errorCode(),
+            PluginError.failedToLoadAchievements.errorMessage(),
+            null
+          )
+          return@addOnCompleteListener
+      }
+      val items = data.toList().map { 
+        AchievementItemData(
+          it.getAchievementId(),
+          it.getName(),
+          it.getDescription(),
+          it.getRevealedImageUrl(),
+          it.getUnlockedImageUrl(),
+          if (it.getType() == Achievement.TYPE_INCREMENTAL) it.getCurrentSteps() else 0,
+          if (it.getType() == Achievement.TYPE_INCREMENTAL) it.getTotalSteps() else 0, 
+          it.getState() == Achievement.STATE_UNLOCKED,
+        ) 
+      }
+      val gson = Gson()
+      val string = gson.toJson(items) ?: ""
+      result.success(string)
+      data.release()
+    }
+    ?.addOnFailureListener {
+      result.error(
+          PluginError.failedToLoadAchievements.errorCode(),
+            PluginError.failedToLoadAchievements.errorMessage(),
+          null
+        )
+    }
+  }
+
   private fun showLeaderboards(leaderboardID: String, result: Result) {
     showLoginErrorIfNotLoggedIn(result)
     val onSuccessListener: ((Intent) -> Unit) = { intent ->
@@ -479,6 +519,9 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       Methods.showAchievements -> {
         showAchievements(result)
       }
+      Methods.loadAchievements -> {
+        loadAchievements(result)
+      }
       Methods.silentSignIn -> {
         val shouldEnableSavedGame = call.argument<Boolean>("shouldEnableSavedGame") ?: false
         silentSignIn(shouldEnableSavedGame, result)
@@ -527,6 +570,7 @@ object Methods {
   const val submitScore = "submitScore"
   const val showLeaderboards = "showLeaderboards"
   const val showAchievements = "showAchievements"
+  const val loadAchievements = "loadAchievements"
   const val silentSignIn = "silentSignIn"
   const val isSignedIn = "isSignedIn"
   const val getPlayerID = "getPlayerID"
@@ -543,4 +587,15 @@ data class SavedGame(
   val name: String?,
   val modificationDate: Long?,
   val deviceName: String?
+)
+
+data class AchievementItemData(
+  val id: String?,
+  val name: String?,
+  val description: String?,
+  val revealImageUrl: String?,
+  val unlockedImageUrl: String?,
+  val currentSteps: Int?,
+  val totalSteps: Int?,
+  val unlocked: Boolean,
 )
