@@ -2,8 +2,8 @@ class AchievementItemData {
   final String? id;
   final String? name;
   final String? description;
-  final String? revealedImageUrl;
-  final String? unlockedImageUrl;
+  final String? lockedImage;
+  final String? unlockedImage;
   final int? completedSteps;
   final int? totalSteps;
   final bool? unlocked;
@@ -12,8 +12,8 @@ class AchievementItemData {
     this.id,
     this.name,
     this.description,
-    this.revealedImageUrl,
-    this.unlockedImageUrl,
+    this.lockedImage,
+    this.unlockedImage,
     this.completedSteps,
     this.totalSteps,
     this.unlocked,
@@ -24,8 +24,8 @@ class AchievementItemData {
       id: json["id"],
       name: json["name"],
       description: json["description"],
-      unlockedImageUrl: json["unlockedImageUrl"],
-      revealedImageUrl: json["revealedImageUrl"],
+      unlockedImage: json["unlockedImage"],
+      lockedImage: json["lockedImage"],
       totalSteps: json["totalSteps"],
       completedSteps: json["completedSteps"],
       unlocked: json["unlocked"],
