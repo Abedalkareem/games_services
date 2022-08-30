@@ -138,13 +138,15 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
           for (description, achievement) in achievementsMap {
             let imageData = try? await description.loadImage().pngData()
             let image = imageData?.base64EncodedString()
+            let isCompleted = achievement?.isCompleted ?? false
+            let achievementDescription = isCompleted ? description.achievedDescription : description.unachievedDescription
             items.append(AchievementItemData(id: description.identifier,
                                              name: description.title,
-                                             description: description.unachievedDescription,
+                                             description: achievementDescription,
                                              lockedImage: incompleteAchievementImage,
                                              unlockedImage: image,
                                              completedSteps: Int(achievement?.percentComplete ?? 0),
-                                             unlocked: achievement?.isCompleted ?? false))
+                                             unlocked: isCompleted))
           }
           if let data = try? JSONEncoder().encode(items) {
             let string = String(data: data, encoding: String.Encoding.utf8)
