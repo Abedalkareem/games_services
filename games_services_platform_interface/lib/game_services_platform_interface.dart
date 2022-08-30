@@ -66,7 +66,8 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
-  /// Get the list of Android Achivements data.
+  /// Get achievements json data.
+  /// To show the prebuilt system screen use [showAchievements]
   Future<String?> loadAchievements() async {
     throw UnimplementedError("not implemented.");
   }

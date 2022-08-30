@@ -11,6 +11,6 @@ fun Drawable.getBase64FromUri(): String {
   val bitmap = (this as? BitmapDrawable)?.bitmap
   val byteStream = ByteArrayOutputStream()
   bitmap?.compress(Bitmap.CompressFormat.PNG, 100, byteStream)
-  val byteArray: ByteArray = byteStream.toByteArray()
+  val byteArray = byteStream.toByteArray()
   return Base64.encodeToString(byteArray, Base64.DEFAULT)
 }

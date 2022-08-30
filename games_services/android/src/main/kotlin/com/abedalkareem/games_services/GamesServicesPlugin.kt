@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.view.Gravity
+import com.abedalkareem.games_services.models.AchievementItemData
+import com.abedalkareem.games_services.models.SavedGame
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -30,9 +32,10 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 private const val CHANNEL_NAME = "games_services"
@@ -329,11 +332,11 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
           )
           return@addOnCompleteListener
         }
-        CoroutineScope(Main).launch {
+        CoroutineScope(Dispatchers.Main).launch {
           val achievements = mutableListOf<AchievementItemData>()
           for (item in data) {
-            val lockedImage = item.revealedImageUri?.let { getBase64FromUri(activity, it) }
-            val unlockedImage = item.unlockedImageUri?.let { getBase64FromUri(activity, it) }
+            val lockedImage = item.revealedImageUri?.let { loadAchievementImageFromUri(activity, it) }
+            val unlockedImage = item.unlockedImageUri?.let { loadAchievementImageFromUri(activity, it) }
             achievements.add(
               AchievementItemData(
                 item.achievementId,
@@ -349,8 +352,8 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
           }
           val gson = Gson()
           val string = gson.toJson(achievements) ?: ""
-          result.success(string)
           data.release()
+          result.success(string)
         }
       }
       ?.addOnFailureListener {
@@ -362,12 +365,12 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       }
   }
 
-  private suspend fun getBase64FromUri(activity: Activity, uri: Uri): String =
-    suspendCancellableCoroutine {
+  private suspend fun loadAchievementImageFromUri(activity: Activity, uri: Uri): String =
+    suspendCoroutine { continuation ->
       val imageManager = ImageManager.create(activity)
       imageManager.loadImage({ _, drawable, _ ->
         val baseString = drawable?.getBase64FromUri() ?: ""
-        it.resumeWith(kotlin.Result.success(baseString))
+        continuation.resume(baseString)
       }, uri)
     }
 
@@ -605,20 +608,3 @@ object Methods {
   const val getSavedGames = "getSavedGames"
   const val deleteGame = "deleteGame"
 }
-
-data class SavedGame(
-  val name: String?,
-  val modificationDate: Long?,
-  val deviceName: String?
-)
-
-data class AchievementItemData(
-  val id: String?,
-  val name: String?,
-  val description: String?,
-  val lockedImage: String?,
-  val unlockedImage: String?,
-  val completedSteps: Int?,
-  val totalSteps: Int?,
-  val unlocked: Boolean,
-)

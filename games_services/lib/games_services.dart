@@ -100,8 +100,9 @@ class GamesServices {
     return await GamesServicesPlatform.instance.getPlayerName();
   }
 
-  /// Get Android Achievements list data.
-  static Future<List<AchievementItemData>?> getAchievementsData() async {
+  /// Get achievements as a list. Use this to build your own custom UI.
+  /// To show the prebuilt system UI use [showAchievements]
+  static Future<List<AchievementItemData>?> loadAchievements() async {
     final response = await GamesServicesPlatform.instance.loadAchievements();
     if (response != null) {
       Iterable items = json.decode(response) as List;
