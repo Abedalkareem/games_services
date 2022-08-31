@@ -31,6 +31,7 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
+import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -332,7 +333,14 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
           )
           return@addOnCompleteListener
         }
-        CoroutineScope(Dispatchers.Main).launch {
+        val handler = CoroutineExceptionHandler { _, exception ->
+          result.error(
+            PluginError.failedToLoadAchievements.errorCode(),
+            exception.localizedMessage,
+            null
+          )
+        }
+        CoroutineScope(Dispatchers.Main + handler).launch {
           val achievements = mutableListOf<AchievementItemData>()
           for (item in data) {
             val lockedImage = item.revealedImageUri?.let { loadAchievementImageFromUri(activity, it) }
