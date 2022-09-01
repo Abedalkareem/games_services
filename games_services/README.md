@@ -60,6 +60,12 @@ To show the achievements screen.
 GamesServices.showAchievements();
 ```  
 
+#### Load achievements
+Get achievements as a list. Use this to build your own custom UI. 
+``` dart
+final result = await GamesServices.loadAchievements();
+```  
+
 #### Show leaderboards
 To show the leaderboards screen. It takes the leaderbord id for android and iOS.  
 ``` dart

@@ -121,6 +121,49 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     }
   }
   
+  func loadAchievements(result: @escaping FlutterResult) {
+    if #available(iOS 13.0, *) {
+      Task {
+        do {
+          let achievements = try await GKAchievement.loadAchievements()
+          let descriptions = try await GKAchievementDescription.loadAchievementDescriptions()
+          
+          let achievementsMap = descriptions.reduce(into: [GKAchievementDescription: GKAchievement?]()) { result, description in
+            result[description] = achievements.first(where: { $0.identifier == description.identifier })
+          }
+          
+          let incompleteAchievementImageData = GKAchievementDescription.incompleteAchievementImage()
+          let incompleteAchievementImage = incompleteAchievementImageData.pngData()?.base64EncodedString()
+          var items = [AchievementItemData]()
+          for (description, achievement) in achievementsMap {
+            let imageData = try? await description.loadImage().pngData()
+            let image = imageData?.base64EncodedString()
+            let isCompleted = achievement?.isCompleted ?? false
+            let achievementDescription = isCompleted ? description.achievedDescription : description.unachievedDescription
+            items.append(AchievementItemData(id: description.identifier,
+                                             name: description.title,
+                                             description: achievementDescription,
+                                             lockedImage: incompleteAchievementImage,
+                                             unlockedImage: image,
+                                             completedSteps: Int(achievement?.percentComplete ?? 0),
+                                             unlocked: isCompleted))
+          }
+          if let data = try? JSONEncoder().encode(items) {
+            let string = String(data: data, encoding: String.Encoding.utf8)
+            result(string)
+          } else {
+            result(PluginError.failedToLoadAchievements.flutterError())
+          }
+          
+        } catch {
+          result(error.flutterError(code: .failedToLoadAchievements))
+        }
+      }
+    } else {
+      result(PluginError.notSupportedForThisOSVersion.flutterError())
+    }
+  }
+  
   // MARK: - Save game
   
   func saveGame(name: String, data: String, result: @escaping FlutterResult) {
@@ -269,6 +312,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     case Methods.deleteGame:
       let name = (arguments?["name"] as? String) ?? ""
       deleteGame(name: name, result: result)
+    case Methods.loadAchievements:
+      loadAchievements(result: result)
     default:
       result(FlutterMethodNotImplemented)
       break
@@ -314,6 +359,7 @@ enum Methods {
   static let loadGame = "loadGame"
   static let getSavedGames = "getSavedGames"
   static let deleteGame = "deleteGame"
+  static let loadAchievements = "loadAchievements"
 }
 
 // MARK: -
@@ -322,4 +368,15 @@ struct SavedGame: Codable {
   var name: String
   var modificationDate: UInt64
   var deviceName: String
+}
+
+struct AchievementItemData: Codable {
+  var id: String
+  var name: String
+  var description: String
+  var lockedImage: String?
+  var unlockedImage: String?
+  var completedSteps: Int
+  var totalSteps: Int = 100
+  var unlocked: Bool
 }

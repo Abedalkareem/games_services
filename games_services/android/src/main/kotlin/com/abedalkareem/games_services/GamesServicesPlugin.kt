@@ -2,19 +2,23 @@ package com.abedalkareem.games_services
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.util.Log
 import android.view.Gravity
+import com.abedalkareem.games_services.models.AchievementItemData
+import com.abedalkareem.games_services.models.SavedGame
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.images.ImageManager
 import com.google.android.gms.drive.Drive
 import com.google.android.gms.games.AchievementsClient
-import com.google.android.gms.games.achievement.Achievement
 import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
 import com.google.android.gms.games.SnapshotsClient
+import com.google.android.gms.games.achievement.Achievement
 import com.google.android.gms.games.leaderboard.LeaderboardVariant
 import com.google.android.gms.games.snapshot.SnapshotMetadataChange
 import com.google.gson.Gson
@@ -27,6 +31,12 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 
 private const val CHANNEL_NAME = "games_services"
@@ -79,7 +89,7 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
 
     if (shouldEnableSavedGame) {
       signInOption
-      .requestScopes(Drive.SCOPE_APPFOLDER)
+        .requestScopes(Drive.SCOPE_APPFOLDER)
     }
 
     googleSignInClient = GoogleSignIn.getClient(activity, signInOption.build())
@@ -215,25 +225,25 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       }
       ?.continueWith { snapshotOrConflict ->
         val snapshot = snapshotOrConflict.result.data
-          if (snapshot?.metadata == null) {
+        if (snapshot?.metadata == null) {
+          result.error(
+            PluginError.failedToDeleteSavedGame.errorCode(),
+            PluginError.failedToDeleteSavedGame.errorMessage(),
+            null
+          )
+          return@continueWith
+        }
+        snapshotsClient?.delete(snapshot.metadata)
+          ?.addOnSuccessListener {
+            result.success(it)
+          }
+          ?.addOnFailureListener {
             result.error(
               PluginError.failedToDeleteSavedGame.errorCode(),
-              PluginError.failedToDeleteSavedGame.errorMessage(),
+              it.localizedMessage ?: "",
               null
             )
-            return@continueWith
           }
-          snapshotsClient?.delete(snapshot.metadata)
-            ?.addOnSuccessListener {
-              result.success(it)
-            }
-            ?.addOnFailureListener {
-              result.error(
-                PluginError.failedToDeleteSavedGame.errorCode(),
-                it.localizedMessage ?: "",
-                null
-              )
-            }
       }
   }
 
@@ -309,44 +319,68 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
       }
   }
 
-  private fun loadAchievements(result: Result)  {
+  private fun loadAchievements(result: Result) {
     showLoginErrorIfNotLoggedIn(result)
+    val activity = activity ?: return
     achievementClient?.load(true)
-    ?.addOnCompleteListener { task ->
-      val data = task.result.get()
-      if (data == null) {
-        result.error(
+      ?.addOnCompleteListener { task ->
+        val data = task.result.get()
+        if (data == null) {
+          result.error(
             PluginError.failedToLoadAchievements.errorCode(),
             PluginError.failedToLoadAchievements.errorMessage(),
             null
           )
           return@addOnCompleteListener
+        }
+        val handler = CoroutineExceptionHandler { _, exception ->
+          result.error(
+            PluginError.failedToLoadAchievements.errorCode(),
+            exception.localizedMessage,
+            null
+          )
+        }
+        CoroutineScope(Dispatchers.Main + handler).launch {
+          val achievements = mutableListOf<AchievementItemData>()
+          for (item in data) {
+            val lockedImage = item.revealedImageUri?.let { loadAchievementImageFromUri(activity, it) }
+            val unlockedImage = item.unlockedImageUri?.let { loadAchievementImageFromUri(activity, it) }
+            achievements.add(
+              AchievementItemData(
+                item.achievementId,
+                item.name,
+                item.description,
+                lockedImage,
+                unlockedImage,
+                if (item.type == Achievement.TYPE_INCREMENTAL) item.currentSteps else 0,
+                if (item.type == Achievement.TYPE_INCREMENTAL) item.totalSteps else 0,
+                item.state == Achievement.STATE_UNLOCKED,
+              )
+            )
+          }
+          val gson = Gson()
+          val string = gson.toJson(achievements) ?: ""
+          data.release()
+          result.success(string)
+        }
       }
-      val items = data.toList().map { 
-        AchievementItemData(
-          it.getAchievementId(),
-          it.getName(),
-          it.getDescription(),
-          it.getRevealedImageUrl(),
-          it.getUnlockedImageUrl(),
-          if (it.getType() == Achievement.TYPE_INCREMENTAL) it.getCurrentSteps() else 0,
-          if (it.getType() == Achievement.TYPE_INCREMENTAL) it.getTotalSteps() else 0, 
-          it.getState() == Achievement.STATE_UNLOCKED,
-        ) 
-      }
-      val gson = Gson()
-      val string = gson.toJson(items) ?: ""
-      result.success(string)
-      data.release()
-    }
-    ?.addOnFailureListener {
-      result.error(
+      ?.addOnFailureListener {
+        result.error(
           PluginError.failedToLoadAchievements.errorCode(),
-            PluginError.failedToLoadAchievements.errorMessage(),
+          PluginError.failedToLoadAchievements.errorMessage(),
           null
         )
-    }
+      }
   }
+
+  private suspend fun loadAchievementImageFromUri(activity: Activity, uri: Uri): String =
+    suspendCoroutine { continuation ->
+      val imageManager = ImageManager.create(activity)
+      imageManager.loadImage({ _, drawable, _ ->
+        val baseString = drawable?.getBase64FromUri() ?: ""
+        continuation.resume(baseString)
+      }, uri)
+    }
 
   private fun showLeaderboards(leaderboardID: String, result: Result) {
     showLoginErrorIfNotLoggedIn(result)
@@ -582,20 +616,3 @@ object Methods {
   const val getSavedGames = "getSavedGames"
   const val deleteGame = "deleteGame"
 }
-
-data class SavedGame(
-  val name: String?,
-  val modificationDate: Long?,
-  val deviceName: String?
-)
-
-data class AchievementItemData(
-  val id: String?,
-  val name: String?,
-  val description: String?,
-  val revealImageUrl: String?,
-  val unlockedImageUrl: String?,
-  val currentSteps: Int?,
-  val totalSteps: Int?,
-  val unlocked: Boolean,
-)
