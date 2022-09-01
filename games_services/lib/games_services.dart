@@ -1,15 +1,18 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:games_services/saved_game.dart';
+import 'package:games_services/models/saved_game.dart';
 import 'package:games_services_platform_interface/game_services_platform_interface.dart';
 import 'package:games_services_platform_interface/models/access_point_location.dart';
 import 'package:games_services_platform_interface/models/achievement.dart';
 import 'package:games_services_platform_interface/models/score.dart';
+import 'models/achievement_item_data.dart';
 
-import 'achievement_item_data.dart';
 export 'package:games_services_platform_interface/models/achievement.dart';
 export 'package:games_services_platform_interface/models/score.dart';
 export 'package:games_services_platform_interface/models/access_point_location.dart';
+export 'package:games_services_platform_interface/models/access_point_location.dart';
+export 'models/achievement_item_data.dart';
+export 'models/saved_game.dart';
 
 class GamesServices {
   /// Unlock an [achievement].
