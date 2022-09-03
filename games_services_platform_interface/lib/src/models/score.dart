@@ -1,4 +1,4 @@
-import 'package:games_services_platform_interface/helpers.dart';
+import '../util/device.dart';
 
 class Score {
   String? androidLeaderboardID;
@@ -6,7 +6,7 @@ class Score {
   int? value;
 
   String? get leaderboardID {
-    return Helpers.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID;
+    return Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID;
   }
 
   Score({this.iOSLeaderboardID, this.androidLeaderboardID, this.value});

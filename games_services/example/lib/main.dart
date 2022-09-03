@@ -133,66 +133,65 @@ class AppState extends State<App> {
   }
 
   void _signIn() async {
-    final result = await GamesServices.signIn(shouldEnableSavedGame: true);
+    final result = await GameAuth.signIn(shouldEnableSavedGame: true);
     print(result);
   }
 
   void _isSignedIn() async {
-    final result = await GamesServices.isSignedIn;
+    final result = await GameAuth.isSignedIn;
     print(result);
   }
 
   void _signOut() async {
-    final result = await GamesServices.signOut();
+    final result = await GameAuth.signOut();
     print(result);
   }
 
   void _getPlayerID() async {
-    final result = await GamesServices.getPlayerID();
+    final result = await Player.getPlayerID();
     print(result);
   }
 
   void _getPlayerName() async {
-    final result = await GamesServices.getPlayerName();
+    final result = await Player.getPlayerName();
     print(result);
   }
 
   void _getPlayerScore() async {
-    final result = await GamesServices.getPlayerScore();
+    final result = await Player.getPlayerScore();
     print(result);
   }
 
   void _showAccessPoint() async {
-    final result =
-        await GamesServices.showAccessPoint(AccessPointLocation.topLeading);
+    final result = await Player.showAccessPoint(AccessPointLocation.topLeading);
     print(result);
   }
 
   void _hideAccessPoint() async {
-    final result = await GamesServices.hideAccessPoint();
+    final result = await Player.hideAccessPoint();
     print(result);
   }
 
   void _incrementAchievement() async {
-    final result = await GamesServices.increment(
+    final result = await Achievements.increment(
         achievement: Achievement(androidID: 'android_id', steps: 50));
     print(result);
   }
 
   void _unlockAchievement() async {
-    final result = await GamesServices.unlock(
+    final result = await Achievements.unlock(
         achievement: Achievement(
             androidID: 'android_id', iOSID: 'ios_id', percentComplete: 100));
     print(result);
   }
 
   void _loadAchievement() async {
-    final result = await GamesServices.loadAchievements();
+    final result = await Achievements.loadAchievements();
     print(result);
   }
 
   void _loadLeaderboardScores() async {
-    final result = await GamesServices.loadLeaderboardScores(
+    final result = await Leaderboards.loadLeaderboardScores(
         iOSLeaderboardID: "ios_leaderboard_id",
         androidLeaderboardID: "android_leaderboard_id",
         scope: PlayerScope.global,
@@ -202,7 +201,7 @@ class AppState extends State<App> {
   }
 
   void _submitScore() async {
-    final result = await GamesServices.submitScore(
+    final result = await Leaderboards.submitScore(
         score: Score(
             androidLeaderboardID: 'android_leaderboard_id',
             iOSLeaderboardID: 'ios_leaderboard_id',
@@ -211,29 +210,29 @@ class AppState extends State<App> {
   }
 
   void _showLeaderboards() async {
-    final result = await GamesServices.showLeaderboards(
+    final result = await Leaderboards.showLeaderboards(
         iOSLeaderboardID: 'ios_leaderboard_id');
     print(result);
   }
 
   void _showAchievements() async {
-    final result = await GamesServices.showAchievements();
+    final result = await Achievements.showAchievements();
     print(result);
   }
 
   void _getSavedGames() async {
-    final result = await GamesServices.getSavedGames();
+    final result = await SaveGame.getSavedGames();
     print(result);
   }
 
   void _saveGame() async {
     final data = jsonEncode(GameData(96, "sword").toJson());
-    final result = await GamesServices.saveGame(data: data, name: "slot1");
+    final result = await SaveGame.saveGame(data: data, name: "slot1");
     print(result);
   }
 
   void _loadGame() async {
-    final result = await GamesServices.loadGame(name: "slot1");
+    final result = await SaveGame.loadGame(name: "slot1");
     if (result != null) {
       final Map json = jsonDecode(result);
       final gameData = GameData.fromJson(json);
@@ -243,7 +242,7 @@ class AppState extends State<App> {
   }
 
   void _deleteGame() async {
-    final result = await GamesServices.deleteGame(name: "slot1");
+    final result = await SaveGame.deleteGame(name: "slot1");
     print(result);
   }
 }
