@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'package:flutter/services.dart';
-import 'package:games_services_platform_interface/helpers.dart';
-import 'package:games_services_platform_interface/models/access_point_location.dart';
-import 'package:games_services_platform_interface/models/achievement.dart';
-import 'package:games_services_platform_interface/models/score.dart';
-import 'game_services_platform_interface.dart';
+import '../game_services_platform_interface.dart';
+import 'models/access_point_location.dart';
+import 'models/achievement.dart';
 import 'models/leaderboard_scope.dart';
 import 'models/leaderboard_time_scope.dart';
+import 'models/score.dart';
+import 'util/device.dart';
 
 const MethodChannel _channel = MethodChannel("games_services");
 
@@ -45,7 +45,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     return await _channel.invokeMethod("showLeaderboards", {
       "leaderboardID":
-          Helpers.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
+          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
     });
   }
 
@@ -63,7 +63,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
       required int maxResults}) async {
     return await _channel.invokeMethod("loadLeaderboardScores", {
       "leaderboardID":
-          Helpers.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
       "leaderboardCollection": scope.value,
       "span": timeScope.value,
       "maxResults": maxResults
@@ -75,13 +75,13 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     return await _channel.invokeMethod("getPlayerScore", {
       "leaderboardID":
-          Helpers.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
+          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
     });
   }
 
   @override
   Future<String?> signIn({bool shouldEnableSavedGame = false}) async {
-    if (Helpers.isPlatformAndroid) {
+    if (Device.isPlatformAndroid) {
       return await _channel.invokeMethod(
           "silentSignIn", {"shouldEnableSavedGame": shouldEnableSavedGame});
     } else {

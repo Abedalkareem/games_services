@@ -4,28 +4,28 @@
 To get the current player id.
 
 ```dart
-final playerID = GamesServices.getPlayerID();
+final playerID = Player.getPlayerID();
 ```
 
 ## Player name  
 To get the current player name.
 
 ```dart
-final playerName = GamesServices.getPlayerName();
+final playerName = Player.getPlayerName();
 ```
 
 ## Player score  
 To get the current player score.
 
 ```dart
-final playerScore = GamesServices.getPlayerScore();
+final playerScore = Player.getPlayerScore();
 ```
 
 ## Show AccessPoint (iOS Only)  
 To show the access point you can call the following function.
 
 ```dart
-GamesServices.showAccessPoint(AccessPointLocation.topLeading);
+Player.showAccessPoint(AccessPointLocation.topLeading);
 ```  
 
 This feature support only on the iOS, on Android there is nothing like this supported natively.  
@@ -35,7 +35,7 @@ The `AccessPointLocation` specifies the corner of the screen to display the acce
 To hide the access point.
 
 ```dart
-GamesServices.hideAccessPoint();
+Player.hideAccessPoint();
 ```  
 
 This feature support only on the iOS, on Android there is nothing like this supported natively.  

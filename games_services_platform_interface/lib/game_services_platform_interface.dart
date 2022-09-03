@@ -1,11 +1,7 @@
 import 'dart:async';
-import 'package:games_services_platform_interface/method_channel_games_services.dart';
-import 'package:games_services_platform_interface/models/achievement.dart';
-import 'package:games_services_platform_interface/models/score.dart';
+import 'package:games_services_platform_interface/models.dart';
+import 'src/game_services_platform_impl.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'models/access_point_location.dart';
-import 'models/leaderboard_scope.dart';
-import 'models/leaderboard_time_scope.dart';
 
 abstract class GamesServicesPlatform extends PlatformInterface {
   /// Constructs a GamesServicesPlatform.

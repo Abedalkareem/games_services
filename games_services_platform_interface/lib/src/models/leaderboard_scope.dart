@@ -1,4 +1,4 @@
-import 'package:games_services_platform_interface/helpers.dart';
+import 'package:games_services_platform_interface/src/util/device.dart';
 
 enum PlayerScope { global, friendsOnly }
 
@@ -8,7 +8,7 @@ extension PlayerScopeValue on PlayerScope {
       case PlayerScope.global:
         return 0;
       case PlayerScope.friendsOnly:
-        return Helpers.isPlatformAndroid ? 3 : 1;
+        return Device.isPlatformAndroid ? 3 : 1;
     }
   }
 }

@@ -1,5 +1,5 @@
 import 'dart:io' show Platform;
 
-class Helpers {
+class Device {
   static var isPlatformAndroid = Platform.isAndroid;
 }
