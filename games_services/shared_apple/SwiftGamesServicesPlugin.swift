@@ -103,7 +103,6 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       Task {
         do {
           let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [leaderboardID])
-          print("Start leaderboard \(leaderboards.count)")
           guard let leaderboard = leaderboards.first else {
             result(PluginError.failedToLoadLeaderboardScores.flutterError())
             return
@@ -111,10 +110,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
           let (_, scores, _) = try await leaderboard.loadEntries(for: GKLeaderboard.PlayerScope(rawValue: leaderboardCollection) ?? .global,
                                                                  timeScope: GKLeaderboard.TimeScope(rawValue: span) ?? .allTime,
                                                                  range: NSRange(location: 1, length: maxResults))
-          print("Got scores \(scores.count)")
           var items = [LeaderboardScoreData]()
           for item in scores {
-            print("Start parsing \(scores.count)")
             let imageData = try? await item.player.loadPhoto(for: .normal).pngData()
             let image = imageData?.base64EncodedString()
             items.append(LeaderboardScoreData(rank: item.rank,
@@ -126,7 +123,6 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
           }
           if let data = try? JSONEncoder().encode(items) {
             let string = String(data: data, encoding: String.Encoding.utf8)
-            print("Parsed")
             result(string)
           } else {
             result(PluginError.failedToLoadLeaderboardScores.flutterError())
@@ -233,7 +229,6 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
                          modificationDate: UInt64($0.modificationDate?.timeIntervalSince1970 ?? 0),
                          deviceName: $0.deviceName ?? "") }) ?? []
       if let data = try? JSONEncoder().encode(items) {
-        print(data)
         let string = String(data: data, encoding: String.Encoding.utf8)
         result(string)
       } else {
