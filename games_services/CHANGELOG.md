@@ -1,3 +1,7 @@
+## 2.2.2
+- Add load achievements.
+- Add load leaderboard scores.
+
 ## 2.2.0
 - Release Load/ Save a game 🚀.
 
