@@ -22,7 +22,7 @@ Make sure to enable saved games support for your game in the Google Play Console
 After that when you sign in make sure to pass `shouldEnableSavedGame` as true.
 
 ``` dart
- GamesServices.signIn(shouldEnableSavedGame: true);
+ GameAuth.signIn(shouldEnableSavedGame: true);
 ```  
 
 ## Save game 
@@ -30,14 +30,14 @@ To save a new game with `data` and a unique `name`.
 
 ```dart
 final data = "55";
-final result = await GamesServices.saveGame(data: data, name: "slot1");
+final result = await SaveGame.saveGame(data: data, name: "slot1");
 ```
 
 The data is a `String` but you can pass a json string to save more complex data.  
 
 ```dart
 final data = jsonEncode(GameData(96, "sword").toJson());
-final result = await GamesServices.saveGame(data: data, name: "slot1");
+final result = await SaveGame.saveGame(data: data, name: "slot1");
 ```
 
 *The `name` must be between 1 and 100 non-URL-reserved characters (a-z, A-Z, 0-9, or the symbols "-", ".", "_", or "~").*  
@@ -47,7 +47,7 @@ final result = await GamesServices.saveGame(data: data, name: "slot1");
 To load a game data with a `name`.
 
 ```dart
-final result = await GamesServices.loadGame(name: "slot1");
+final result = await SaveGame.loadGame(name: "slot1");
 if (result != null) {
   print("Player progress ${result}");
 }
@@ -56,7 +56,7 @@ if (result != null) {
 If the data you saved is a json string you can retrieve it as below:  
 
 ```dart
-final result = await GamesServices.loadGame(name: "slot1");
+final result = await SaveGame.loadGame(name: "slot1");
 if (result != null) {
   final Map json = jsonDecode(result);
   final gameData = GameData.fromJson(json);
@@ -69,12 +69,12 @@ if (result != null) {
 To delete a saved game.
 
 ```dart
-final result = await GamesServices.deleteGame(name: "slot1");
+final result = await SaveGame.deleteGame(name: "slot1");
 ```
 
 ## Get saved games 
 To get all saved games as a list of `SavedGame`.
 
 ```dart
-final result = await GamesServices.getSavedGames();
+final result = await SaveGame.getSavedGames();
 ```

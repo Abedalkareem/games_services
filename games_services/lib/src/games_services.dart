@@ -7,7 +7,6 @@ import '../games_services.dart';
 /// Please consider using [GameAuth] for authintication, [Achievements] for anything related to Achievements,
 /// [Leaderboards] for anything related to Leaderboards, [Player] for anything related to Player,
 /// [SaveGame] for anything related to save game.
-
 class GamesServices {
   /// To sign in the user.
   /// If you pass [shouldEnableSavedGame], a drive scope will be will be added to GoogleSignInOptions. This will happed just
