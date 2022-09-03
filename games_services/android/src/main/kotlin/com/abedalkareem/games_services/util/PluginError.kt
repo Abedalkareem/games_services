@@ -1,11 +1,11 @@
-package com.abedalkareem.games_services
+package com.abedalkareem.games_services.util
 
 enum class PluginError {
   failedToSendScore, failedToGetScore, failedToGetPlayerId, failedToGetPlayerName,
   failedToSendAchievement, failedToShowAchievements, failedToIncrementAchievements,
   failedToLoadAchievements, failedToAuthenticate, failedToSignout, notAuthenticated,
   notSupportedForThisOSVersion, failedToSaveGame, failedToLoadGame, failedToGetSavedGames,
-  leaderboardNotFound, failedToDeleteSavedGame
+  leaderboardNotFound, failedToDeleteSavedGame, failedToLoadLeaderboardScores
 }
 
 fun PluginError.errorCode(): String {
@@ -60,6 +60,9 @@ fun PluginError.errorCode(): String {
     }
     PluginError.failedToDeleteSavedGame -> {
       return "failed_to_delete_saved_game"
+    }
+    PluginError.failedToLoadLeaderboardScores -> {
+      return "failed_to_load_leaderboard_scores"
     }
   }
 }
@@ -116,6 +119,9 @@ fun PluginError.errorMessage(): String {
     }
     PluginError.failedToDeleteSavedGame -> {
       return "Failed to delete saved game"
+    }
+    PluginError.failedToLoadLeaderboardScores -> {
+      return "Failed to load leaderboard scores"
     }
   }
 }

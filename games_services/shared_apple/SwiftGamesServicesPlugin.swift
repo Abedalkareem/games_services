@@ -98,6 +98,45 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     }
   }
   
+  func loadLeaderboardScores(leaderboardID: String, span: Int, leaderboardCollection: Int, maxResults: Int, result: @escaping FlutterResult) {
+    if #available(iOS 14.0, *) {
+      Task {
+        do {
+          let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [leaderboardID])
+          guard let leaderboard = leaderboards.first else {
+            result(PluginError.failedToLoadLeaderboardScores.flutterError())
+            return
+          }
+          let (_, scores, _) = try await leaderboard.loadEntries(for: GKLeaderboard.PlayerScope(rawValue: leaderboardCollection) ?? .global,
+                                                                 timeScope: GKLeaderboard.TimeScope(rawValue: span) ?? .allTime,
+                                                                 range: NSRange(location: 1, length: maxResults))
+          var items = [LeaderboardScoreData]()
+          for item in scores {
+            let imageData = try? await item.player.loadPhoto(for: .normal).pngData()
+            let image = imageData?.base64EncodedString()
+            items.append(LeaderboardScoreData(rank: item.rank,
+                                              displayScore: item.formattedScore,
+                                              rawScore: item.score,
+                                              timestampMillis: Int(item.date.timeIntervalSince1970),
+                                              scoreHolderDisplayName: item.player.displayName,
+                                             scoreHolderIconImage: image))
+          }
+          if let data = try? JSONEncoder().encode(items) {
+            let string = String(data: data, encoding: String.Encoding.utf8)
+            result(string)
+          } else {
+            result(PluginError.failedToLoadLeaderboardScores.flutterError())
+          }
+          
+        } catch {
+          result(error.flutterError(code: .failedToLoadLeaderboardScores))
+        }
+      }
+    } else {
+      result(PluginError.notSupportedForThisOSVersion.flutterError())
+    }
+  }
+  
   // MARK: - Achievements
   
   func showAchievements(result: @escaping FlutterResult) {
@@ -190,7 +229,6 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
                          modificationDate: UInt64($0.modificationDate?.timeIntervalSince1970 ?? 0),
                          deviceName: $0.deviceName ?? "") }) ?? []
       if let data = try? JSONEncoder().encode(items) {
-        print(data)
         let string = String(data: data, encoding: String.Encoding.utf8)
         result(string)
       } else {
@@ -314,6 +352,16 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       deleteGame(name: name, result: result)
     case Methods.loadAchievements:
       loadAchievements(result: result)
+    case Methods.loadLeaderboardScores:
+      let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
+      let span = (arguments?["span"] as? Int) ?? 0
+      let leaderboardCollection = (arguments?["leaderboardCollection"] as? Int) ?? 0
+      let maxResults = (arguments?["maxResults"] as? Int) ?? 10
+      loadLeaderboardScores(leaderboardID: leaderboardID,
+                            span: span,
+                            leaderboardCollection: leaderboardCollection,
+                            maxResults: maxResults,
+                            result: result)
     default:
       result(FlutterMethodNotImplemented)
       break
@@ -360,6 +408,7 @@ enum Methods {
   static let getSavedGames = "getSavedGames"
   static let deleteGame = "deleteGame"
   static let loadAchievements = "loadAchievements"
+  static let loadLeaderboardScores = "loadLeaderboardScores"
 }
 
 // MARK: -
@@ -379,4 +428,13 @@ struct AchievementItemData: Codable {
   var completedSteps: Int
   var totalSteps: Int = 100
   var unlocked: Bool
+}
+
+struct LeaderboardScoreData: Codable {
+  var rank: Int
+  var displayScore: String
+  var rawScore: Int
+  var timestampMillis: Int
+  var scoreHolderDisplayName: String
+  var scoreHolderIconImage: String?
 }

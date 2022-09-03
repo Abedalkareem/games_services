@@ -39,6 +39,8 @@ enum PluginError: String {
       return "Failed to delete saved game"
     case  .failedToLoadAchievements:
       return "Failed to get the achievements list"
+    case .failedToLoadLeaderboardScores:
+      return "Failed to load leaderboard scores"
     }
   }
   
@@ -53,7 +55,8 @@ enum PluginError: String {
   case failedToGetSavedGames = "failed_to_get_saved_games"
   case failedToDeleteSavedGame = "failed_to_delete_saved_game"
   case failedToLoadAchievements = "failed_to_load_achievements"
-  
+  case failedToLoadLeaderboardScores = "failed_to_load_leaderboard_scores"
+
   func flutterError() -> FlutterError {
     return FlutterError(code: rawValue,
                         message: errorDescription,

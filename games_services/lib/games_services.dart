@@ -4,13 +4,17 @@ import 'package:games_services/models/saved_game.dart';
 import 'package:games_services_platform_interface/game_services_platform_interface.dart';
 import 'package:games_services_platform_interface/models/access_point_location.dart';
 import 'package:games_services_platform_interface/models/achievement.dart';
+import 'package:games_services_platform_interface/models/leaderboard_scope.dart';
+import 'package:games_services_platform_interface/models/leaderboard_time_scope.dart';
 import 'package:games_services_platform_interface/models/score.dart';
 import 'models/achievement_item_data.dart';
+import 'models/leaderboard_score_data.dart';
 
 export 'package:games_services_platform_interface/models/achievement.dart';
 export 'package:games_services_platform_interface/models/score.dart';
 export 'package:games_services_platform_interface/models/access_point_location.dart';
-export 'package:games_services_platform_interface/models/access_point_location.dart';
+export 'package:games_services_platform_interface/models/leaderboard_time_scope.dart';
+export 'package:games_services_platform_interface/models/leaderboard_scope.dart';
 export 'models/achievement_item_data.dart';
 export 'models/saved_game.dart';
 
@@ -111,6 +115,28 @@ class GamesServices {
       Iterable items = json.decode(response) as List;
       return List<AchievementItemData>.from(
           items.map((model) => AchievementItemData.fromJson(model)).toList());
+    }
+    return null;
+  }
+
+  /// Get leaderboard scores as a list. Use this to build your own custom UI.
+  /// To show the prebuilt system screen use [showLeaderboards].
+  static Future<List<LeaderboardScoreData>?> loadLeaderboardScores(
+      {iOSLeaderboardID = "",
+      androidLeaderboardID = "",
+      required PlayerScope scope,
+      required TimeScope timeScope,
+      required int maxResults}) async {
+    final response = await GamesServicesPlatform.instance.loadLeaderboardScores(
+        androidLeaderboardID: androidLeaderboardID,
+        iOSLeaderboardID: iOSLeaderboardID,
+        scope: scope,
+        timeScope: timeScope,
+        maxResults: maxResults);
+    if (response != null) {
+      Iterable items = json.decode(response) as List;
+      return List<LeaderboardScoreData>.from(
+          items.map((model) => LeaderboardScoreData.fromJson(model)).toList());
     }
     return null;
   }

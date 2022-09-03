@@ -1,10 +1,11 @@
 import 'dart:async';
-import 'package:flutter/services.dart';
 import 'package:games_services_platform_interface/method_channel_games_services.dart';
 import 'package:games_services_platform_interface/models/achievement.dart';
 import 'package:games_services_platform_interface/models/score.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'models/access_point_location.dart';
+import 'models/leaderboard_scope.dart';
+import 'models/leaderboard_time_scope.dart';
 
 abstract class GamesServicesPlatform extends PlatformInterface {
   /// Constructs a GamesServicesPlatform.
@@ -66,9 +67,20 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
-  /// Get achievements json data.
-  /// To show the prebuilt system screen use [showAchievements]
+  /// Get achievements as json data.
+  /// To show the prebuilt system screen use [showAchievements].
   Future<String?> loadAchievements() async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Get leaderboard scores as a json data.
+  /// To show the prebuilt system screen use [showLeaderboards].
+  Future<String?> loadLeaderboardScores(
+      {iOSLeaderboardID = "",
+      androidLeaderboardID = "",
+      required PlayerScope scope,
+      required TimeScope timeScope,
+      required int maxResults}) async {
     throw UnimplementedError("not implemented.");
   }
 

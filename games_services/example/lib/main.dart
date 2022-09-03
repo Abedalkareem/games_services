@@ -78,6 +78,10 @@ class AppState extends State<App> {
                           child: const Text('Load Achievement'),
                         ),
                         ElevatedButton(
+                          onPressed: _loadLeaderboardScores,
+                          child: const Text('Load Leaderboard Scores'),
+                        ),
+                        ElevatedButton(
                           onPressed: _incrementAchievement,
                           child: const Text(
                               'Increment Achievement (Android only)'),
@@ -184,6 +188,16 @@ class AppState extends State<App> {
 
   void _loadAchievement() async {
     final result = await GamesServices.loadAchievements();
+    print(result);
+  }
+
+  void _loadLeaderboardScores() async {
+    final result = await GamesServices.loadLeaderboardScores(
+        iOSLeaderboardID: "ios_leaderboard_id",
+        androidLeaderboardID: "android_leaderboard_id",
+        scope: PlayerScope.global,
+        timeScope: TimeScope.allTime,
+        maxResults: 10);
     print(result);
   }
 

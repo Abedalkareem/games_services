@@ -6,7 +6,11 @@ import android.net.Uri
 import android.util.Log
 import android.view.Gravity
 import com.abedalkareem.games_services.models.AchievementItemData
+import com.abedalkareem.games_services.models.LeaderboardScoreData
 import com.abedalkareem.games_services.models.SavedGame
+import com.abedalkareem.games_services.util.PluginError
+import com.abedalkareem.games_services.util.errorCode
+import com.abedalkareem.games_services.util.errorMessage
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -403,6 +407,58 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
     }
   }
 
+  private fun loadLeaderboardScores(leaderboardID: String, span: Int, leaderboardCollection: Int, maxResults: Int, result: Result) {
+    showLoginErrorIfNotLoggedIn(result)
+    val activity = activity ?: return
+    leaderboardsClient?.loadTopScores(leaderboardID, span, leaderboardCollection, maxResults)
+      ?.addOnCompleteListener { task ->
+        val data = task.result.get()
+        if (data == null) {
+          result.error(
+            PluginError.failedToLoadLeaderboardScores.errorCode(),
+            PluginError.failedToLoadLeaderboardScores.errorMessage(),
+            null
+          )
+          return@addOnCompleteListener
+        }
+        val handler = CoroutineExceptionHandler { _, exception ->
+          result.error(
+            PluginError.failedToLoadLeaderboardScores.errorCode(),
+            exception.localizedMessage,
+            null
+          )
+        }
+
+        CoroutineScope(Dispatchers.Main + handler).launch {
+          val achievements = mutableListOf<LeaderboardScoreData>()
+          for (item in data.scores) {
+            val lockedImage = item.scoreHolderIconImageUri?.let { loadAchievementImageFromUri(activity, it) }
+            achievements.add(
+              LeaderboardScoreData(
+                item.rank,
+                item.displayScore,
+                item.rawScore,
+                item.timestampMillis,
+                item.scoreHolderDisplayName,
+                lockedImage,
+              )
+            )
+          }
+          val gson = Gson()
+          val string = gson.toJson(achievements) ?: ""
+          data.release()
+          result.success(string)
+        }
+      }
+      ?.addOnFailureListener {
+        result.error(
+          PluginError.failedToLoadLeaderboardScores.errorCode(),
+          PluginError.failedToLoadLeaderboardScores.errorMessage(),
+          null
+        )
+      }
+  }
+
   private fun submitScore(leaderboardID: String, score: Int, result: Result) {
     showLoginErrorIfNotLoggedIn(result)
     leaderboardsClient?.submitScoreImmediate(leaderboardID, score.toLong())?.addOnSuccessListener {
@@ -592,6 +648,13 @@ class GamesServicesPlugin(private var activity: Activity? = null) : FlutterPlugi
         val name = call.argument<String>("name") ?: ""
         deleteGame(name, result)
       }
+      Methods.loadLeaderboardScores -> {
+        val leaderboardID = call.argument<String>("leaderboardID") ?: ""
+        val span = call.argument<Int>("span") ?: 0
+        val leaderboardCollection = call.argument<Int>("leaderboardCollection") ?: 0
+        val maxResults = call.argument<Int>("maxResults") ?: 0
+        loadLeaderboardScores(leaderboardID, span, leaderboardCollection, maxResults, result)
+      }
       else -> result.notImplemented()
     }
   }
@@ -615,4 +678,5 @@ object Methods {
   const val loadGame = "loadGame"
   const val getSavedGames = "getSavedGames"
   const val deleteGame = "deleteGame"
+  const val loadLeaderboardScores = "loadLeaderboardScores"
 }
