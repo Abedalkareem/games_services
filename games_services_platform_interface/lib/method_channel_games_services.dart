@@ -1,11 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/services.dart';
 import 'package:games_services_platform_interface/helpers.dart';
 import 'package:games_services_platform_interface/models/access_point_location.dart';
 import 'package:games_services_platform_interface/models/achievement.dart';
 import 'package:games_services_platform_interface/models/score.dart';
 import 'game_services_platform_interface.dart';
+import 'models/leaderboard_scope.dart';
+import 'models/leaderboard_time_scope.dart';
 
 const MethodChannel _channel = MethodChannel("games_services");
 
@@ -51,6 +52,22 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   @override
   Future<String?> loadAchievements() async {
     return await _channel.invokeMethod("loadAchievements");
+  }
+
+  @override
+  Future<String?> loadLeaderboardScores(
+      {iOSLeaderboardID = "",
+      androidLeaderboardID = "",
+      required PlayerScope scope,
+      required TimeScope timeScope,
+      required int maxResults}) async {
+    return await _channel.invokeMethod("loadLeaderboardScores", {
+      "leaderboardID":
+          Helpers.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+      "leaderboardCollection": scope.value,
+      "span": timeScope.value,
+      "maxResults": maxResults
+    });
   }
 
   @override

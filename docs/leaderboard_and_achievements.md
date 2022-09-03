@@ -11,12 +11,26 @@ Get achievements as a list. Use this to build your own custom UI.
 ``` dart
 final result = await GamesServices.loadAchievements();
 ```  
+To show the prebuilt system UI use `showAchievements`.  
 
 ## Show leaderboards
 To show the leaderboards screen. It takes the leaderbord id for android and iOS.  
 ``` dart
  GamesServices.showLeaderboards(iOSLeaderboardID: 'ios_leaderboard_id', androidLeaderboardID: 'android_leaderboard_id');
 ```   
+
+## Load leaderboard scores
+Get leaderboard scores as a list. Use this to build your own custom UI.
+
+``` dart
+final result = await GamesServices.loadLeaderboardScores(
+        iOSLeaderboardID: "ios_leaderboard_id",
+        androidLeaderboardID: "android_leaderboard_id",
+        scope: PlayerScope.global,
+        timeScope: TimeScope.allTime,
+        maxResults: 10);
+```  
+To show the prebuilt system screen use `showLeaderboards`.  
 
 ## Submit score  
 To submit a ```Score``` to specific leaderboard.  
