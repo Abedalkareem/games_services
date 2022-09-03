@@ -30,10 +30,10 @@ packages:
   games_services_platform_interface:
     dependency: "direct main"
     description:
-      path: "../games_services_platform_interface"
-      relative: true
-    source: path
-    version: "2.2.1"
+      name: games_services_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.2"
   lints:
     dependency: transitive
     description:
