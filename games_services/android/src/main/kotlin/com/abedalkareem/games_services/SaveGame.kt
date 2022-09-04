@@ -1,6 +1,5 @@
 package com.abedalkareem.games_services
 
-import android.app.Activity
 import com.abedalkareem.games_services.models.SavedGame
 import com.abedalkareem.games_services.util.PluginError
 import com.abedalkareem.games_services.util.errorCode
@@ -13,19 +12,14 @@ import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodChannel
 
-class SaveGame {
+class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
 
-  private var activityPluginBinding: ActivityPluginBinding
   private val snapshotsClient: SnapshotsClient?
     get() {
       val lastSignedInAccount =
         GoogleSignIn.getLastSignedInAccount(activityPluginBinding.activity) ?: return null
       return Games.getSnapshotsClient(activityPluginBinding.activity, lastSignedInAccount)
     }
-
-  constructor(activityPluginBinding: ActivityPluginBinding) {
-    this.activityPluginBinding = activityPluginBinding
-  }
 
   fun getSavedGames(result: MethodChannel.Result) {
     snapshotsClient?.load(true)
@@ -34,8 +28,8 @@ class SaveGame {
         val data = task.result.get()
         if (data == null) {
           result.error(
-            PluginError.failedToGetSavedGames.errorCode(),
-            PluginError.failedToGetSavedGames.errorMessage(),
+            PluginError.FailedToGetSavedGames.errorCode(),
+            PluginError.FailedToGetSavedGames.errorMessage(),
             null
           )
           return@addOnCompleteListener
@@ -48,6 +42,13 @@ class SaveGame {
         result.success(string)
         data.release()
       }
+      ?.addOnFailureListener {
+        result.error(
+          PluginError.FailedToGetSavedGames.errorCode(),
+          it.localizedMessage,
+          null
+        )
+      }
   }
 
   fun saveGame(
@@ -56,7 +57,7 @@ class SaveGame {
     val metadataChange = SnapshotMetadataChange.Builder()
       .setDescription(desc)
       .build()
-    snapshotsClient?.open(name, true)
+    snapshotsClient?.open(name, true, SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED)
       ?.addOnCompleteListener { task ->
         val snapshot = task.result.data
         if (snapshot != null) {
@@ -69,12 +70,12 @@ class SaveGame {
               result.success(null)
             }
             ?.addOnFailureListener {
-              result.error(PluginError.failedToSaveGame.errorCode(), it.localizedMessage, null)
+              result.error(PluginError.FailedToSaveGame.errorCode(), it.localizedMessage, null)
             }
         } else {
           result.error(
-            PluginError.failedToSaveGame.errorCode(),
-            PluginError.failedToSaveGame.errorMessage(),
+            PluginError.FailedToSaveGame.errorCode(),
+            PluginError.FailedToSaveGame.errorMessage(),
             null
           )
         }
@@ -83,10 +84,10 @@ class SaveGame {
 
   fun deleteGame(name: String, result: MethodChannel.Result) {
     // Open the saved game using its name.
-    snapshotsClient?.open(name, false)
+    snapshotsClient?.open(name, false, SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED)
       ?.addOnFailureListener {
         result.error(
-          PluginError.failedToDeleteSavedGame.errorCode(),
+          PluginError.FailedToDeleteSavedGame.errorCode(),
           it.localizedMessage ?: "",
           null
         )
@@ -95,8 +96,8 @@ class SaveGame {
         val snapshot = snapshotOrConflict.result.data
         if (snapshot?.metadata == null) {
           result.error(
-            PluginError.failedToDeleteSavedGame.errorCode(),
-            PluginError.failedToDeleteSavedGame.errorMessage(),
+            PluginError.FailedToDeleteSavedGame.errorCode(),
+            PluginError.FailedToDeleteSavedGame.errorMessage(),
             null
           )
           return@continueWith
@@ -107,7 +108,7 @@ class SaveGame {
           }
           ?.addOnFailureListener {
             result.error(
-              PluginError.failedToDeleteSavedGame.errorCode(),
+              PluginError.FailedToDeleteSavedGame.errorCode(),
               it.localizedMessage ?: "",
               null
             )
@@ -117,10 +118,10 @@ class SaveGame {
 
   fun loadGame(name: String, result: MethodChannel.Result) {
     // Open the saved game using its name.
-    snapshotsClient?.open(name, false)
+    snapshotsClient?.open(name, false, SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED)
       ?.addOnFailureListener {
         result.error(
-          PluginError.failedToLoadGame.errorCode(),
+          PluginError.FailedToLoadGame.errorCode(),
           it.localizedMessage ?: "",
           null
         )
@@ -136,15 +137,14 @@ class SaveGame {
             result.success(String(value))
           } else {
             result.error(
-              PluginError.failedToLoadGame.errorCode(),
-              PluginError.failedToLoadGame.errorMessage(),
+              PluginError.FailedToLoadGame.errorCode(),
+              PluginError.FailedToLoadGame.errorMessage(),
               null
             )
           }
-        } catch (e: Exception) {
+        } catch (exception: Exception) {
           result.error(
-            PluginError.failedToLoadGame.errorCode(),
-            e.localizedMessage ?: "",
+            PluginError.FailedToLoadGame.errorCode(), exception.localizedMessage ?: "",
             null
           )
         }

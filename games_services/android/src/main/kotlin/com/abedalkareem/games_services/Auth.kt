@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import android.view.Gravity
+import com.abedalkareem.games_services.models.Method
 import com.abedalkareem.games_services.models.PendingOperation
+import com.abedalkareem.games_services.models.value
 import com.abedalkareem.games_services.util.PluginError
 import com.abedalkareem.games_services.util.errorCode
 import com.google.android.gms.auth.api.Auth
@@ -47,7 +49,7 @@ class Auth : PluginRegistry.ActivityResultListener {
 
     googleSignInClient = activity.let { GoogleSignIn.getClient(it, signInOption.build()) }
     googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
-      pendingOperation = PendingOperation(Methods.silentSignIn, result, activity)
+      pendingOperation = PendingOperation(Method.SilentSignIn.value(), result, activity)
       if (task.isSuccessful) {
         val googleSignInAccount = task.result ?: return@addOnCompleteListener
         handleSignInResult(activity, googleSignInAccount)
@@ -82,7 +84,7 @@ class Auth : PluginRegistry.ActivityResultListener {
     gamesClient.setViewForPopups(activity.findViewById(android.R.id.content))
     gamesClient.setGravityForPopups(Gravity.TOP or Gravity.CENTER_HORIZONTAL)
 
-    finishPendingOperationWithSuccess(null)
+    finishPendingOperationWithSuccess()
   }
 
   fun signOut(result: MethodChannel.Result) {
@@ -90,15 +92,15 @@ class Auth : PluginRegistry.ActivityResultListener {
       if (task.isSuccessful) {
         result.success(null)
       } else {
-        result.error(PluginError.failedToSignout.errorCode(), "${task.exception}", null)
+        result.error(PluginError.FailedToSignOut.errorCode(), task.exception?.localizedMessage, null)
       }
     }
   }
 
   //region PendingOperation
-  private fun finishPendingOperationWithSuccess(result: Any?) {
+  private fun finishPendingOperationWithSuccess() {
     Log.i(pendingOperation?.method, "success")
-    pendingOperation?.result?.success(result)
+    pendingOperation?.result?.success(null)
     pendingOperation = null
   }
 
@@ -121,7 +123,7 @@ class Auth : PluginRegistry.ActivityResultListener {
         if (message.isEmpty()) {
           message = "Something went wrong " + result?.status
         }
-        finishPendingOperationWithError(PluginError.failedToAuthenticate.errorCode(), message)
+        finishPendingOperationWithError(PluginError.FailedToAuthenticate.errorCode(), message)
       }
       return true
     }

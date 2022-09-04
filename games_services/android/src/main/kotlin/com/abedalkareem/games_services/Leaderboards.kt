@@ -19,20 +19,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class Leaderboards {
+class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) {
 
   private val imageLoader = AppImageLoader()
-  private var activityPluginBinding: ActivityPluginBinding
-  private var leaderboardsClient: LeaderboardsClient? = null
+  private val leaderboardsClient: LeaderboardsClient?
     get() {
       val lastSignedInAccount =
         GoogleSignIn.getLastSignedInAccount(activityPluginBinding.activity) ?: return null
       return Games.getLeaderboardsClient(activityPluginBinding.activity, lastSignedInAccount)
     }
-
-  constructor(activityPluginBinding: ActivityPluginBinding) {
-    this.activityPluginBinding = activityPluginBinding
-  }
 
   fun showLeaderboards(activity: Activity?, leaderboardID: String, result: MethodChannel.Result) {
     val onSuccessListener: ((Intent) -> Unit) = { intent ->
@@ -40,7 +35,7 @@ class Leaderboards {
       result.success(null)
     }
     val onFailureListener: ((Exception) -> Unit) = {
-      result.error(PluginError.leaderboardNotFound.errorCode(), "${it.message}", null)
+      result.error(PluginError.LeaderboardNotFound.errorCode(), it.message, null)
     }
     if (leaderboardID.isEmpty()) {
       leaderboardsClient?.allLeaderboardsIntent
@@ -68,15 +63,15 @@ class Leaderboards {
         val data = task.result.get()
         if (data == null) {
           result.error(
-            PluginError.failedToLoadLeaderboardScores.errorCode(),
-            PluginError.failedToLoadLeaderboardScores.errorMessage(),
+            PluginError.FailedToLoadLeaderboardScores.errorCode(),
+            PluginError.FailedToLoadLeaderboardScores.errorMessage(),
             null
           )
           return@addOnCompleteListener
         }
         val handler = CoroutineExceptionHandler { _, exception ->
           result.error(
-            PluginError.failedToLoadLeaderboardScores.errorCode(),
+            PluginError.FailedToLoadLeaderboardScores.errorCode(),
             exception.localizedMessage,
             null
           )
@@ -106,8 +101,8 @@ class Leaderboards {
       }
       ?.addOnFailureListener {
         result.error(
-          PluginError.failedToLoadLeaderboardScores.errorCode(),
-          PluginError.failedToLoadLeaderboardScores.errorMessage(),
+          PluginError.FailedToLoadLeaderboardScores.errorCode(),
+          it.localizedMessage,
           null
         )
       }
@@ -117,7 +112,7 @@ class Leaderboards {
     leaderboardsClient?.submitScoreImmediate(leaderboardID, score.toLong())?.addOnSuccessListener {
       result.success(null)
     }?.addOnFailureListener {
-      result.error(PluginError.failedToSendScore.errorCode(), it.localizedMessage, null)
+      result.error(PluginError.FailedToSendScore.errorCode(), it.localizedMessage, null)
     }
   }
 
@@ -134,13 +129,13 @@ class Leaderboards {
           result.success(score.rawScore)
         } else {
           result.error(
-            PluginError.failedToGetScore.errorCode(),
-            PluginError.failedToGetScore.errorMessage(),
+            PluginError.FailedToGetScore.errorCode(),
+            PluginError.FailedToGetScore.errorMessage(),
             null
           )
         }
       }?.addOnFailureListener {
-        result.error(PluginError.failedToGetScore.errorCode(), it.localizedMessage, null)
+        result.error(PluginError.FailedToGetScore.errorCode(), it.localizedMessage, null)
       }
   }
 }

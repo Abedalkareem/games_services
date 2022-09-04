@@ -16,7 +16,7 @@ class Player {
       .currentPlayerId.addOnSuccessListener {
         result.success(it)
       }.addOnFailureListener {
-        result.error(PluginError.failedToGetPlayerId.errorCode(), it.localizedMessage, null)
+        result.error(PluginError.FailedToGetPlayerId.errorCode(), it.localizedMessage, null)
       }
   }
 
@@ -28,7 +28,7 @@ class Player {
       .addOnSuccessListener { player ->
         result.success(player.displayName)
       }.addOnFailureListener {
-        result.error(PluginError.failedToGetPlayerName.errorCode(), it.localizedMessage, null)
+        result.error(PluginError.FailedToGetPlayerName.errorCode(), it.localizedMessage, null)
       }
   }
 }

@@ -18,27 +18,22 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class Achievements {
+class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
 
   private val imageLoader = AppImageLoader()
-  private var activityPluginBinding: ActivityPluginBinding
-  private var achievementClient: AchievementsClient? = null
+  private val achievementClient: AchievementsClient?
     get() {
       val lastSignedInAccount =
         GoogleSignIn.getLastSignedInAccount(activityPluginBinding.activity) ?: return null
       return Games.getAchievementsClient(activityPluginBinding.activity, lastSignedInAccount)
     }
 
-  constructor(activityPluginBinding: ActivityPluginBinding) {
-    this.activityPluginBinding = activityPluginBinding
-  }
-
   fun showAchievements(activity: Activity?, result: MethodChannel.Result) {
     achievementClient?.achievementsIntent?.addOnSuccessListener { intent ->
       activity?.startActivityForResult(intent, 0)
       result.success(null)
     }?.addOnFailureListener {
-      result.error(PluginError.failedToShowAchievements.errorCode(), "${it.message}", null)
+      result.error(PluginError.FailedToShowAchievements.errorCode(), it.localizedMessage, null)
     }
   }
 
@@ -46,7 +41,7 @@ class Achievements {
     achievementClient?.unlockImmediate(achievementID)?.addOnSuccessListener {
       result.success(null)
     }?.addOnFailureListener {
-      result.error(PluginError.failedToSendAchievement.errorCode(), it.localizedMessage, null)
+      result.error(PluginError.FailedToSendAchievement.errorCode(), it.localizedMessage, null)
     }
   }
 
@@ -56,7 +51,7 @@ class Achievements {
         result.success(null)
       }?.addOnFailureListener {
         result.error(
-          PluginError.failedToIncrementAchievements.errorCode(),
+          PluginError.FailedToIncrementAchievements.errorCode(),
           it.localizedMessage,
           null
         )
@@ -70,15 +65,15 @@ class Achievements {
         val data = task.result.get()
         if (data == null) {
           result.error(
-            PluginError.failedToLoadAchievements.errorCode(),
-            PluginError.failedToLoadAchievements.errorMessage(),
+            PluginError.FailedToLoadAchievements.errorCode(),
+            PluginError.FailedToLoadAchievements.errorMessage(),
             null
           )
           return@addOnCompleteListener
         }
         val handler = CoroutineExceptionHandler { _, exception ->
           result.error(
-            PluginError.failedToLoadAchievements.errorCode(),
+            PluginError.FailedToLoadAchievements.errorCode(),
             exception.localizedMessage,
             null
           )
@@ -111,8 +106,8 @@ class Achievements {
       }
       ?.addOnFailureListener {
         result.error(
-          PluginError.failedToLoadAchievements.errorCode(),
-          PluginError.failedToLoadAchievements.errorMessage(),
+          PluginError.FailedToLoadAchievements.errorCode(),
+          it.localizedMessage,
           null
         )
       }

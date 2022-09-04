@@ -2,7 +2,6 @@ package com.abedalkareem.games_services.util
 
 import android.app.Activity
 import android.net.Uri
-import com.abedalkareem.games_services.getBase64FromUri
 import com.google.android.gms.common.images.ImageManager
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
