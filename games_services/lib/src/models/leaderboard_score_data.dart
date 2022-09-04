@@ -22,7 +22,8 @@ class LeaderboardScoreData {
       rawScore: json["rawScore"],
       timestampMillis: json["timestampMillis"],
       scoreHolderDisplayName: json["scoreHolderDisplayName"],
-      scoreHolderIconImage: json["scoreHolderIconImage"],
+      scoreHolderIconImage:
+          (json["scoreHolderIconImage"] as String?)?.replaceAll("\n", ""),
     );
   }
 }
