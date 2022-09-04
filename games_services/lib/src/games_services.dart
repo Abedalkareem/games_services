@@ -67,6 +67,22 @@ class GamesServices {
         androidLeaderboardID: androidLeaderboardID);
   }
 
+  /// Get leaderboard scores as a list. Use this to build your own custom UI.
+  /// To show the prebuilt system screen use [showLeaderboards].
+  static Future<List<LeaderboardScoreData>?> loadLeaderboardScores(
+      {iOSLeaderboardID = "",
+      androidLeaderboardID = "",
+      required PlayerScope scope,
+      required TimeScope timeScope,
+      required int maxResults}) async {
+    return await Leaderboards.loadLeaderboardScores(
+        iOSLeaderboardID: iOSLeaderboardID,
+        androidLeaderboardID: androidLeaderboardID,
+        scope: scope,
+        timeScope: timeScope,
+        maxResults: maxResults);
+  }
+
   /// Submit a [score] to specific leader board.
   /// [Score] takes three parameters:
   /// [androidLeaderboardID] the leader board id that you want to send the score for in case of android.
