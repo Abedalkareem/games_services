@@ -1,6 +1,6 @@
 package com.abedalkareem.games_services.models
 
-class LeaderboardScoreData(
+data class LeaderboardScoreData(
   val rank: Long,
   val displayScore: String,
   val rawScore: Long,

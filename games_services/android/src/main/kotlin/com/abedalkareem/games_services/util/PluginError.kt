@@ -1,67 +1,67 @@
 package com.abedalkareem.games_services.util
 
 enum class PluginError {
-  failedToSendScore, failedToGetScore, failedToGetPlayerId, failedToGetPlayerName,
-  failedToSendAchievement, failedToShowAchievements, failedToIncrementAchievements,
-  failedToLoadAchievements, failedToAuthenticate, failedToSignout, notAuthenticated,
-  notSupportedForThisOSVersion, failedToSaveGame, failedToLoadGame, failedToGetSavedGames,
-  leaderboardNotFound, failedToDeleteSavedGame, failedToLoadLeaderboardScores
+  FailedToSendScore, FailedToGetScore, FailedToGetPlayerId, FailedToGetPlayerName,
+  FailedToSendAchievement, FailedToShowAchievements, FailedToIncrementAchievements,
+  FailedToLoadAchievements, FailedToAuthenticate, FailedToSignOut, NotAuthenticated,
+  NotSupportedForThisOSVersion, FailedToSaveGame, FailedToLoadGame, FailedToGetSavedGames,
+  LeaderboardNotFound, FailedToDeleteSavedGame, FailedToLoadLeaderboardScores
 }
 
 fun PluginError.errorCode(): String {
   when (this) {
-    PluginError.failedToSendScore -> {
+    PluginError.FailedToSendScore -> {
       return "failed_to_send_score"
     }
-    PluginError.failedToGetScore -> {
+    PluginError.FailedToGetScore -> {
       return "failed_to_get_score"
     }
-    PluginError.failedToSendAchievement -> {
+    PluginError.FailedToSendAchievement -> {
       return "failed_to_send_achievement"
     }
-    PluginError.failedToShowAchievements -> {
+    PluginError.FailedToShowAchievements -> {
       return "failed_to_show_achievements"
     }
-    PluginError.failedToIncrementAchievements -> {
+    PluginError.FailedToIncrementAchievements -> {
       return "failed_to_increment_achievements"
     }
-    PluginError.failedToLoadAchievements -> {
+    PluginError.FailedToLoadAchievements -> {
       return "failed_to_load_achievements"
     }
-    PluginError.failedToAuthenticate -> {
+    PluginError.FailedToAuthenticate -> {
       return "failed_to_authenticate"
     }
-    PluginError.notSupportedForThisOSVersion -> {
+    PluginError.NotSupportedForThisOSVersion -> {
       return "not_supported_for_this_os_version"
     }
-    PluginError.leaderboardNotFound -> {
+    PluginError.LeaderboardNotFound -> {
       return "leaderboard_not_found"
     }
-    PluginError.failedToGetPlayerId -> {
+    PluginError.FailedToGetPlayerId -> {
       return "failed_to_get_player_id"
     }
-    PluginError.failedToGetPlayerName -> {
+    PluginError.FailedToGetPlayerName -> {
       return "failed_to_get_player_name"
     }
-    PluginError.failedToSignout -> {
+    PluginError.FailedToSignOut -> {
       return "failed_to_sign_out"
     }
-    PluginError.notAuthenticated -> {
+    PluginError.NotAuthenticated -> {
       return "not_authenticated"
     }
-    PluginError.failedToSaveGame -> {
+    PluginError.FailedToSaveGame -> {
       return "failed_to_save_game"
     }
-    PluginError.failedToLoadGame -> {
+    PluginError.FailedToLoadGame -> {
       return "failed_to_load_game"
     }
-    PluginError.failedToGetSavedGames -> {
+    PluginError.FailedToGetSavedGames -> {
       return "failed_to_get_saved_games"
     }
-    PluginError.failedToDeleteSavedGame -> {
+    PluginError.FailedToDeleteSavedGame -> {
       return "failed_to_delete_saved_game"
     }
-    PluginError.failedToLoadLeaderboardScores -> {
+    PluginError.FailedToLoadLeaderboardScores -> {
       return "failed_to_load_leaderboard_scores"
     }
   }
@@ -69,58 +69,58 @@ fun PluginError.errorCode(): String {
 
 fun PluginError.errorMessage(): String {
   when (this) {
-    PluginError.failedToSendScore -> {
+    PluginError.FailedToSendScore -> {
       return "Failed to send the score"
     }
-    PluginError.failedToGetScore -> {
+    PluginError.FailedToGetScore -> {
       return "Failed to get the score"
     }
-    PluginError.failedToSendAchievement -> {
+    PluginError.FailedToSendAchievement -> {
       return "Failed to send the achievement"
     }
-    PluginError.failedToShowAchievements -> {
+    PluginError.FailedToShowAchievements -> {
       return "Failed to show achievements"
     }
-    PluginError.failedToIncrementAchievements -> {
+    PluginError.FailedToIncrementAchievements -> {
       return "Failed to increment achievements"
     }
-    PluginError.failedToLoadAchievements -> {
+    PluginError.FailedToLoadAchievements -> {
       return "Failed to get the achievements list"
     }
-    PluginError.failedToAuthenticate -> {
+    PluginError.FailedToAuthenticate -> {
       return "Failed to authenticate"
     }
-    PluginError.notSupportedForThisOSVersion -> {
+    PluginError.NotSupportedForThisOSVersion -> {
       return "Not supported for this OS version"
     }
-    PluginError.leaderboardNotFound -> {
+    PluginError.LeaderboardNotFound -> {
       return "Leaderboard not found"
     }
-    PluginError.failedToGetPlayerId -> {
+    PluginError.FailedToGetPlayerId -> {
       return "Failed to get player id"
     }
-    PluginError.failedToGetPlayerName -> {
+    PluginError.FailedToGetPlayerName -> {
       return "Failed to get player name"
     }
-    PluginError.failedToSignout -> {
+    PluginError.FailedToSignOut -> {
       return "Failed to sign out"
     }
-    PluginError.notAuthenticated -> {
+    PluginError.NotAuthenticated -> {
       return "Player not authenticated, Please make sure to call signIn() first"
     }
-    PluginError.failedToSaveGame -> {
+    PluginError.FailedToSaveGame -> {
       return "Failed to save game"
     }
-    PluginError.failedToLoadGame -> {
+    PluginError.FailedToLoadGame -> {
       return "Failed to load game"
     }
-    PluginError.failedToGetSavedGames -> {
+    PluginError.FailedToGetSavedGames -> {
       return "Failed to get saved games"
     }
-    PluginError.failedToDeleteSavedGame -> {
+    PluginError.FailedToDeleteSavedGame -> {
       return "Failed to delete saved game"
     }
-    PluginError.failedToLoadLeaderboardScores -> {
+    PluginError.FailedToLoadLeaderboardScores -> {
       return "Failed to load leaderboard scores"
     }
   }
