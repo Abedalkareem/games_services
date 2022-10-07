@@ -107,7 +107,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     if (Device.isPlatformAndroid) {
       return Future.value(false);
     }
-    return await _channel.invokeMethod("playerIsUnderage");
+    return await _channel.invokeMethod("playerIsMultiplayerGamingRestricted");
   }
 
   @override
@@ -115,7 +115,8 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     if (Device.isPlatformAndroid) {
       return Future.value(false);
     }
-    return await _channel.invokeMethod("playerIsUnderage");
+    return await _channel
+        .invokeMethod("playerIsPersonalizedCommunicationRestricted");
   }
 
   @override
