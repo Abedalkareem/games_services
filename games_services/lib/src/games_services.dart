@@ -1,6 +1,8 @@
 import 'dart:async';
-export 'package:games_services_platform_interface/models.dart';
+
 import '../games_services.dart';
+
+export 'package:games_services_platform_interface/models.dart';
 
 /// A helper class that has all the library functions in one class.
 /// This class to support apps that uses pre 3.0 versions.
@@ -110,6 +112,22 @@ class GamesServices {
   /// On iOS the player alias is the name used by the Player visible in the leaderboard
   static Future<String?> getPlayerName() async {
     return await Player.getPlayerName();
+  }
+
+  /// Check if player is underage (always false on Android).
+  static Future<bool?> get playerIsUnderage async {
+    return await Player.isUnderage;
+  }
+
+  /// Check if player is restricted from joining multiplayer games (always false on Android).
+  static Future<bool?> get playerIsMultiplayerGamingRestricted async {
+    return await Player.isMultiplayerGamingRestricted;
+  }
+
+  /// Check if player is restricted from using personalized communication on
+  /// the device (always false on Android).
+  static Future<bool?> get playerIsPersonalizedCommunicationRestricted async {
+    return await Player.isPersonalizedCommunicationRestricted;
   }
 
   /// Show the iOS Access Point.

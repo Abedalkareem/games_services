@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:flutter/services.dart';
+
 import '../game_services_platform_interface.dart';
 import 'models/access_point_location.dart';
 import 'models/achievement.dart';
@@ -91,6 +93,30 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
 
   @override
   Future<bool?> get isSignedIn => _channel.invokeMethod("isSignedIn");
+
+  @override
+  Future<bool?> get playerIsUnderage async {
+    if (Device.isPlatformAndroid) {
+      return Future.value(false);
+    }
+    return await _channel.invokeMethod("playerIsUnderage");
+  }
+
+  @override
+  Future<bool?> get playerIsMultiplayerGamingRestricted async {
+    if (Device.isPlatformAndroid) {
+      return Future.value(false);
+    }
+    return await _channel.invokeMethod("playerIsUnderage");
+  }
+
+  @override
+  Future<bool?> get playerIsPersonalizedCommunicationRestricted async {
+    if (Device.isPlatformAndroid) {
+      return Future.value(false);
+    }
+    return await _channel.invokeMethod("playerIsUnderage");
+  }
 
   @override
   Future<String?> signOut() async {

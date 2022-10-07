@@ -17,6 +17,26 @@ class Player: BaseGamesServices {
     let gamePlayerAlias = currentPlayer.alias
     result(gamePlayerAlias)
   }
+
+  func isUnderage(result: @escaping FlutterResult) {
+    result(currentPlayer.isUnderage)
+  }
+
+  func isMultiplayerGamingRestricted(result: @escaping FlutterResult) {
+    if #available(iOS 13.0, *) {
+      result(currentPlayer.isMultiplayerGamingRestricted)
+    } else {
+      result(PluginError.notSupportedForThisOSVersion.flutterError())
+    }
+  }
+
+  func isPersonalizedCommunicationRestricted(result: @escaping FlutterResult) {
+    if #available(iOS 14.0, *) {
+      result(currentPlayer.isPersonalizedCommunicationRestricted)
+    } else {
+      result(PluginError.notSupportedForThisOSVersion.flutterError())
+    }
+  }
   
   // MARK: - AccessPoint
   
