@@ -26,7 +26,7 @@ class Player: BaseGamesServices {
     if #available(iOS 13.0, *) {
       result(currentPlayer.isMultiplayerGamingRestricted)
     } else {
-      result(nil)
+      result(PluginError.notSupportedForThisOSVersion.flutterError())
     }
   }
 
@@ -34,7 +34,7 @@ class Player: BaseGamesServices {
     if #available(iOS 14.0, *) {
       result(currentPlayer.isPersonalizedCommunicationRestricted)
     } else {
-      result(nil)
+      result(PluginError.notSupportedForThisOSVersion.flutterError())
     }
   }
   
