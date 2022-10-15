@@ -13,7 +13,8 @@ dependencies:
   flutter:
     sdk: flutter
 
-  games_services_platform_interface: ^3.0.0
+  games_services_platform_interface: # ^3.0.0
+    path: ../games_services_platform_interface/
   
 dev_dependencies:
   flutter_lints: ^2.0.1

@@ -66,6 +66,12 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       player.getPlayerID(result: result)
     case .getPlayerName:
       player.getPlayerName(result: result)
+    case .playerIsUnderage:
+      player.isUnderage(result: result)
+    case .playerIsMultiplayerGamingRestricted:
+      player.isMultiplayerGamingRestricted(result: result)
+    case .playerIsPersonalizedCommunicationRestricted:
+      player.isPersonalizedCommunicationRestricted(result: result)
     case .saveGame:
       let data = (arguments?["data"] as? String) ?? ""
       let name = (arguments?["name"] as? String) ?? ""

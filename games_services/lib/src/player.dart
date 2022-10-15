@@ -31,4 +31,22 @@ abstract class Player {
         iOSLeaderboardID: iOSLeaderboardID,
         androidLeaderboardID: androidLeaderboardID);
   }
+
+  /// Check if player is underage (always false on Android).
+  static Future<bool?> get isUnderage async {
+    return await GamesServicesPlatform.instance.playerIsUnderage;
+  }
+
+  /// Check if player is restricted from joining multiplayer games (always false on Android).
+  static Future<bool?> get isMultiplayerGamingRestricted async {
+    return await GamesServicesPlatform
+        .instance.playerIsMultiplayerGamingRestricted;
+  }
+
+  /// Check if player is restricted from using personalized communication on
+  /// the device (always false on Android).
+  static Future<bool?> get isPersonalizedCommunicationRestricted async {
+    return await GamesServicesPlatform
+        .instance.playerIsPersonalizedCommunicationRestricted;
+  }
 }

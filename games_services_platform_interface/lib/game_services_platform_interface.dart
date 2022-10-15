@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:games_services_platform_interface/models.dart';
-import 'src/game_services_platform_impl.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+
+import 'src/game_services_platform_impl.dart';
 
 abstract class GamesServicesPlatform extends PlatformInterface {
   /// Constructs a GamesServicesPlatform.
@@ -85,6 +87,19 @@ abstract class GamesServicesPlatform extends PlatformInterface {
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     throw UnimplementedError("not implemented.");
   }
+
+  /// Check if player is underage (always false on Android).
+  Future<bool?> get playerIsUnderage =>
+      throw UnimplementedError("not implemented.");
+
+  /// Check if player is restricted from joining multiplayer games (always false on Android).
+  Future<bool?> get playerIsMultiplayerGamingRestricted =>
+      throw UnimplementedError("not implemented.");
+
+  /// Check if player is restricted from using personalized communication on
+  /// the device (always false on Android).
+  Future<bool?> get playerIsPersonalizedCommunicationRestricted =>
+      throw UnimplementedError("not implemented.");
 
   /// To sign in the user.
   /// If you pass [shouldEnableSavedGame], a drive scope will be will be added to GoogleSignInOptions. This will happed just
