@@ -31,4 +31,10 @@ class Player {
         result.error(PluginError.FailedToGetPlayerName.errorCode(), it.localizedMessage, null)
       }
   }
+
+  fun getPlayerEmail(activity: Activity?, result: MethodChannel.Result) {
+    activity ?: return
+    val lastSignedInAccount = GoogleSignIn.getLastSignedInAccount(activity) ?: return
+    result.success(lastSignedInAccount.email)
+  }
 }

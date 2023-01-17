@@ -1,7 +1,7 @@
 package com.abedalkareem.games_services.util
 
 enum class PluginError {
-  FailedToSendScore, FailedToGetScore, FailedToGetPlayerId, FailedToGetPlayerName,
+  FailedToSendScore, FailedToGetScore, FailedToGetPlayerId, FailedToGetPlayerName,FailedToGetPlayerEmail,
   FailedToSendAchievement, FailedToShowAchievements, FailedToIncrementAchievements,
   FailedToLoadAchievements, FailedToAuthenticate, FailedToSignOut, NotAuthenticated,
   NotSupportedForThisOSVersion, FailedToSaveGame, FailedToLoadGame, FailedToGetSavedGames,
@@ -42,6 +42,9 @@ fun PluginError.errorCode(): String {
     }
     PluginError.FailedToGetPlayerName -> {
       return "failed_to_get_player_name"
+    }
+    PluginError.FailedToGetPlayerEmail -> {
+      return "failed_to_get_player_email"
     }
     PluginError.FailedToSignOut -> {
       return "failed_to_sign_out"
@@ -101,6 +104,9 @@ fun PluginError.errorMessage(): String {
     }
     PluginError.FailedToGetPlayerName -> {
       return "Failed to get player name"
+    }
+    PluginError.FailedToGetPlayerEmail -> {
+      return "failed_to_get_player_email"
     }
     PluginError.FailedToSignOut -> {
       return "Failed to sign out"

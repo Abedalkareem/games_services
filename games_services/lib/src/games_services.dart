@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import '../games_services.dart';
-
 export 'package:games_services_platform_interface/models.dart';
 
 /// A helper class that has all the library functions in one class.
@@ -128,6 +126,10 @@ class GamesServices {
   /// the device (always false on Android).
   static Future<bool?> get playerIsPersonalizedCommunicationRestricted async {
     return await Player.isPersonalizedCommunicationRestricted;
+
+  /// Get the player email.
+  static Future<String?> getPlayerEmail() async {
+    return await Player.getPlayerEmail();
   }
 
   /// Show the iOS Access Point.

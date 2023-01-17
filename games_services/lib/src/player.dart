@@ -24,6 +24,12 @@ abstract class Player {
     return await GamesServicesPlatform.instance.getPlayerName();
   }
 
+  /// Get the player email.
+  /// Implemented only on Android.
+  static Future<String?> getPlayerEmail() async {
+    return await GamesServicesPlatform.instance.getPlayerEmail();
+  }
+
   /// Get player score for a specific leaderboard.
   static Future<int?> getPlayerScore(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {

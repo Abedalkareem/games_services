@@ -40,7 +40,7 @@ class Auth : PluginRegistry.ActivityResultListener {
     result: MethodChannel.Result
   ) {
     activity ?: return
-    val signInOption = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
+    val signInOption = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN).requestEmail()
 
     if (shouldEnableSavedGame) {
       signInOption

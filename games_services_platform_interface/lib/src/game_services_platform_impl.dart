@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:flutter/services.dart';
-
 import '../game_services_platform_interface.dart';
 import 'models/access_point_location.dart';
 import 'models/achievement.dart';
@@ -143,6 +141,11 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   @override
   Future<String?> getPlayerName() async {
     return await _channel.invokeMethod("getPlayerName");
+  }
+
+  @override
+  Future<String?> getPlayerEmail() async {
+    return await _channel.invokeMethod("getPlayerEmail");
   }
 
   @override

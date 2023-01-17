@@ -1,8 +1,6 @@
 import 'dart:async';
-
 import 'package:games_services_platform_interface/models.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-
 import 'src/game_services_platform_impl.dart';
 
 abstract class GamesServicesPlatform extends PlatformInterface {
@@ -140,6 +138,12 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// Get the player name.
   /// On iOS the player alias is the name of the player.
   Future<String?> getPlayerName() async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Get the player email.
+  /// On iOS the player alias is the name of the player.
+  Future<String?> getPlayerEmail() async {
     throw UnimplementedError("not implemented.");
   }
 
