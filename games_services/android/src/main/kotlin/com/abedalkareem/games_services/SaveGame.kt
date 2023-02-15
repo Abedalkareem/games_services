@@ -23,9 +23,9 @@ class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
 
   fun getSavedGames(result: MethodChannel.Result) {
     snapshotsClient?.load(true)
-      ?.addOnSuccessListener { snapshotResult ->
+      ?.addOnSuccessListener { annotatedData ->
         val gson = Gson()
-        val data = snapshotResult.get()
+        val data = annotatedData.get()
         if (data == null) {
           result.error(
             PluginError.FailedToGetSavedGames.errorCode(),
