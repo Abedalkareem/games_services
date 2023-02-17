@@ -18,7 +18,7 @@ A Flutter plugin to support game center and google play games services.
 
 ## Tutorials  
 
-[Written tutorial](https://bit.ly/2yv1C00)  
+[Written tutorial](https://bit.ly/flutter_games_services)  
 
 Video tutorial
 *Will be added soon.*  
