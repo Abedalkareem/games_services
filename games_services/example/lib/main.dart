@@ -21,7 +21,7 @@ class AppState extends State<App> {
         appBarTheme: const AppBarTheme(color: Colors.black),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-          primary: Colors.black,
+          backgroundColor: Colors.black,
         )),
       ),
       home: Scaffold(
