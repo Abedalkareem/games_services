@@ -9,7 +9,7 @@ You should call the sign in before making any action (like sending a score or un
  GameAuth.signIn(shouldEnableSavedGame: true);
 ```  
 
-## Is Signed In
+## Is Signed In 
 A boolean value to check if the user is currently signed into Game Center or Google Play Services.  
 
 ```dart

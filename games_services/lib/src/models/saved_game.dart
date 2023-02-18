@@ -19,6 +19,6 @@ class SavedGame {
   Map toJson() => {
         "name": name,
         "modificationDate": modificationDate,
-        "deviceName": deviceName
+        "deviceName": deviceName,
       };
 }
