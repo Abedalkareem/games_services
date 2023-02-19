@@ -1,5 +1,5 @@
 import { message, warn, fail, danger } from "danger"
-const child_process = require('child_process');
+const child_process = require('child_process')
 
 var libFileChangeRegex = /.*lib.*/
 var changelogChangeRegex = /.*CHANGELOG.md/
