@@ -29,7 +29,8 @@ Monkey Banana [Android](https://play.google.com/store/apps/details?id=com.jostud
 [Nonogram Colors](https://play.google.com/store/apps/details?id=com.tbuonomo.nonogramcolordot) by @tommybuonomo.  
 [Ripple Effect Puzzle](https://play.google.com/store/apps/details?id=com.tbuonomo.rippleeffectpuzzle) by @tommybuonomo.  
 Lights: A Memory Game [Android](https://play.google.com/store/apps/details?id=us.leephillips.lights) & [iOS](https://apps.apple.com/us/app/lights-a-memory-game/id1580230611) by @theLee3.  
-
+TTG - Through The Galaxies 🚀 casual game . [Android](https://play.google.com/store/apps/details?id=dev.app2pack.ttg) & [iOS](https://apps.apple.com/app/ttg-through-the-galaxy/id6444870791) by [@imaNNeo](https://github.com/imaNNeo)
+ 
 ## Documentation
 
 Check the docs folder for documentation and how to use the plugin.  
