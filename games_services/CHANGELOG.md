@@ -1,3 +1,10 @@
+## 3.0.1
+- add playerIsUnderage by @theLee3
+- add playerIsMultiplayerGamingRestricted by @theLee3
+- add playerIsPersonalizedCommunicationRestricted by @theLee3
+- Fix getSavedGames crash by @AntonHolovin
+- Exclude Gson serialized data models from obfuscation by @theLee3
+
 ## 3.0.0
 - Rearrange classes to group features. `GameAuth` for authintication, `Achievements` for anything related to Achievements, `Leaderboards` for anything related to Leaderboards, `Player` for anything related to Player, and `SaveGame` for anything related to save game.
 
