@@ -28,7 +28,9 @@ apply plugin: 'kotlin-android'
 android {
     compileSdkVersion 31
 
-    namespace 'com.abedalkareem.games_services'
+    if (project.android.hasProperty('namespace')) {
+        namespace 'com.abedalkareem.games_services'
+    }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
