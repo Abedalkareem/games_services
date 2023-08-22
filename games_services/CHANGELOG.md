@@ -1,3 +1,6 @@
+## 3.0.2
+- Fix class not found exception on android @theLee3
+
 ## 3.0.1
 - add playerIsUnderage by @theLee3
 - add playerIsMultiplayerGamingRestricted by @theLee3
