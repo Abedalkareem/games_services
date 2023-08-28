@@ -24,6 +24,18 @@ abstract class Player {
     return await GamesServicesPlatform.instance.getPlayerName();
   }
 
+  /// Get the player's icon-size profile image as a base64 encoded String.
+  static Future<String?> getPlayerIconImage() async {
+    return (await GamesServicesPlatform.instance.getPlayerIconImage())
+        ?.replaceAll("\n", "");
+  }
+
+  /// Get the player's hi-res profile image as a base64 encoded String.
+  static Future<String?> getPlayerHiResImage() async {
+    return (await GamesServicesPlatform.instance.getPlayerHiResImage())
+        ?.replaceAll("\n", "");
+  }
+
   /// Get player score for a specific leaderboard.
   static Future<int?> getPlayerScore(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {

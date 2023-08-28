@@ -25,6 +25,8 @@ enum PluginError: String {
       return "Failed to send the achievement"
     case .failedToAuthenticate:
       return "Failed to authenticate"
+    case .failedToGetPlayerProfileImage:
+      return "Failed to get player profile image"
     case .notSupportedForThisOSVersion:
       return "Not supported for this OS version"
     case .leaderboardNotFound:
@@ -48,6 +50,7 @@ enum PluginError: String {
   case failedToGetScore = "failed_to_get_score"
   case failedToSendAchievement = "failed_to_send_achievement"
   case failedToAuthenticate = "failed_to_authenticate"
+  case failedToGetPlayerProfileImage = "failed_to_get_player_profile_image"
   case failedToSaveGame = "failed_to_save_game"
   case failedToLoadGame = "failed_to_load_game"
   case notSupportedForThisOSVersion = "not_supported_for_this_os_version"

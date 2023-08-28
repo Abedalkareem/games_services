@@ -146,6 +146,16 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
+  Future<String?> getPlayerIconImage() async {
+    return await _channel.invokeMethod("getPlayerIconImage");
+  }
+
+  @override
+  Future<String?> getPlayerHiResImage() async {
+    return await _channel.invokeMethod("getPlayerHiResImage");
+  }
+
+  @override
   Future<String?> saveGame({required String data, required String name}) async {
     return await _channel
         .invokeMethod("saveGame", {"data": data, "name": name});

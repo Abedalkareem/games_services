@@ -8,6 +8,8 @@ enum Method: String {
   case isSignedIn = "isSignedIn"
   case getPlayerID = "getPlayerID"
   case getPlayerName = "getPlayerName"
+  case getPlayerHiResImage = "getPlayerHiResImage"
+  case getPlayerIconImage = "getPlayerIconImage"
   case getPlayerScore = "getPlayerScore"
   case playerIsUnderage = "playerIsUnderage"
   case playerIsMultiplayerGamingRestricted = "playerIsMultiplayerGamingRestricted"
