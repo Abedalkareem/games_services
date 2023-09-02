@@ -6,15 +6,15 @@ repository: https://github.com/Abedalkareem/games_services
 issue_tracker: https://github.com/Abedalkareem/games_services/issues
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: '>=2.12.0 <4.0.0'
   flutter: ">=1.22.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  games_services_platform_interface: # ^3.0.2
-    path: ../games_services_platform_interface/ 
+  games_services_platform_interface: ^3.0.3
+    # path: ../games_services_platform_interface/ 
     # uncomment in time of development.
   
 dev_dependencies:

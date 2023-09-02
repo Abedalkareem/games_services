@@ -1,3 +1,7 @@
+## 3.0.3
+- Fix gradle issue by @Skyost
+- add getPlayer by @theLee3
+
 ## 3.0.2
 - Fix class not found exception on android @theLee3
 

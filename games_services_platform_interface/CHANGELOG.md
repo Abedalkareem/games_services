@@ -1,3 +1,6 @@
+## 3.0.3
+- add getPlayer by @theLee3
+
 ## 3.0.1
 - add playerIsUnderage
 - add playerIsMultiplayerGamingRestricted
