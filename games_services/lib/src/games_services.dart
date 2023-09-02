@@ -114,7 +114,17 @@ class GamesServices {
     return await Player.getPlayerName();
   }
 
-  /// Check if player is underage (always false on Android).
+  /// Get the player's icon-size profile image as a base64 encoded String.
+  static Future<String?> getPlayerIconImage() async {
+    return await Player.getPlayerIconImage();
+  }
+
+  /// Get the player's hi-res profile image as a base64 encoded String.
+  static Future<String?> getPlayerHiResImage() async {
+    return await Player.getPlayerHiResImage();
+  }
+
+  /// Check if player is underage (iOS & MacOS only).
   static Future<bool?> get playerIsUnderage async {
     return await Player.isUnderage;
   }

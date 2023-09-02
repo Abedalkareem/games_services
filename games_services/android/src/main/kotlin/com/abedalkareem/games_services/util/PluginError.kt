@@ -2,10 +2,11 @@ package com.abedalkareem.games_services.util
 
 enum class PluginError {
   FailedToSendScore, FailedToGetScore, FailedToGetPlayerId, FailedToGetPlayerName,
-  FailedToSendAchievement, FailedToShowAchievements, FailedToIncrementAchievements,
-  FailedToLoadAchievements, FailedToAuthenticate, FailedToSignOut, NotAuthenticated,
-  NotSupportedForThisOSVersion, FailedToSaveGame, FailedToLoadGame, FailedToGetSavedGames,
-  LeaderboardNotFound, FailedToDeleteSavedGame, FailedToLoadLeaderboardScores
+  FailedToGetPlayerProfileImage, FailedToSendAchievement, FailedToShowAchievements,
+  FailedToIncrementAchievements, FailedToLoadAchievements, FailedToAuthenticate,
+  FailedToSignOut, NotAuthenticated, NotSupportedForThisOSVersion, FailedToSaveGame,
+  FailedToLoadGame, FailedToGetSavedGames, LeaderboardNotFound, FailedToDeleteSavedGame,
+  FailedToLoadLeaderboardScores
 }
 
 fun PluginError.errorCode(): String {
@@ -42,6 +43,9 @@ fun PluginError.errorCode(): String {
     }
     PluginError.FailedToGetPlayerName -> {
       return "failed_to_get_player_name"
+    }
+    PluginError.FailedToGetPlayerProfileImage -> {
+      return "failed_to_get_player_profile_image"
     }
     PluginError.FailedToSignOut -> {
       return "failed_to_sign_out"
@@ -101,6 +105,9 @@ fun PluginError.errorMessage(): String {
     }
     PluginError.FailedToGetPlayerName -> {
       return "Failed to get player name"
+    }
+    PluginError.FailedToGetPlayerProfileImage -> {
+      return "Failed to get player profile image"
     }
     PluginError.FailedToSignOut -> {
       return "Failed to sign out"

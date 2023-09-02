@@ -12,6 +12,25 @@ class Player: BaseGamesServices {
       result(PluginError.notSupportedForThisOSVersion.flutterError())
     }
   }
+
+
+  func getPlayerProfileImage(result: @escaping FlutterResult, size: GKPlayer.PhotoSize = GKPlayer.PhotoSize.normal) {
+    currentPlayer.loadPhoto(
+      for: size,
+      withCompletionHandler: { image, error in
+        guard error == nil else {
+          result(error?.flutterError(code: .failedToGetPlayerProfileImage))
+          return
+        }
+        #if os(macOS)
+          let imageData = image?.tiffRepresentation
+        #else
+          let imageData = image?.pngData()
+        #endif
+        result(imageData?.base64EncodedString())
+      }
+    )
+  }
   
   func getPlayerName(result: @escaping FlutterResult) {
     let gamePlayerAlias = currentPlayer.alias

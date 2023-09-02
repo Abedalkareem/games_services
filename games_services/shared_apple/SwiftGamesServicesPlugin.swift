@@ -66,6 +66,10 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       player.getPlayerID(result: result)
     case .getPlayerName:
       player.getPlayerName(result: result)
+    case .getPlayerHiResImage:
+      player.getPlayerProfileImage(result: result)
+    case .getPlayerIconImage:
+      player.getPlayerProfileImage(result: result, size: GKPlayer.PhotoSize.small)
     case .playerIsUnderage:
       player.isUnderage(result: result)
     case .playerIsMultiplayerGamingRestricted:
