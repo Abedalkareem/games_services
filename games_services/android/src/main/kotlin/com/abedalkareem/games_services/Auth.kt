@@ -3,7 +3,6 @@ package com.abedalkareem.games_services
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
-import android.view.Gravity
 import com.abedalkareem.games_services.models.Method
 import com.abedalkareem.games_services.models.PendingOperation
 import com.abedalkareem.games_services.models.value
@@ -11,11 +10,12 @@ import com.abedalkareem.games_services.util.PluginError
 import com.abedalkareem.games_services.util.errorCode
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.drive.Drive
-import com.google.android.gms.games.Games
+import com.google.android.gms.games.AuthenticationResult
+import com.google.android.gms.games.PlayGames
+import com.google.android.gms.tasks.Task
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.PluginRegistry
 
@@ -40,49 +40,62 @@ class Auth : PluginRegistry.ActivityResultListener {
     result: MethodChannel.Result
   ) {
     activity ?: return
+    if (!shouldEnableSavedGame) {
+      signInV2(activity)
+      return
+    }
     val signInOption = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
 
-    if (shouldEnableSavedGame) {
-      signInOption
-        .requestScopes(Drive.SCOPE_APPFOLDER)
-    }
+    signInOption.requestScopes(Drive.SCOPE_APPFOLDER)
 
     googleSignInClient = activity.let { GoogleSignIn.getClient(it, signInOption.build()) }
     googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
       pendingOperation = PendingOperation(Method.SilentSignIn.value(), result, activity)
       if (task.isSuccessful) {
-        val googleSignInAccount = task.result ?: return@addOnCompleteListener
-        handleSignInResult(activity, googleSignInAccount)
+        handleSignInResult(activity)
       } else {
         Log.e("Error", "signInError", task.exception)
         Log.i("ExplicitSignIn", "Trying explicit sign in")
-        explicitSignIn(activity, shouldEnableSavedGame)
+        explicitSignIn(activity)
       }
     }
   }
 
-  private fun explicitSignIn(activity: Activity?, shouldEnableSavedGame: Boolean) {
+  private fun signInV2(activity: Activity) {
+    val gamesSignInClient = PlayGames.getGamesSignInClient(activity)
+
+    gamesSignInClient.isAuthenticated.addOnCompleteListener { isAuthenticatedTask: Task<AuthenticationResult> ->
+      val isAuthenticated = isAuthenticatedTask.isSuccessful &&
+        isAuthenticatedTask.result.isAuthenticated
+      if (isAuthenticated) {
+        handleSignInResult(activity)
+      } else {
+        gamesSignInClient.signIn().addOnSuccessListener {
+          it?.let { result -> Log.i("PlayService", "isAuthenticated: ${result.isAuthenticated} toString: $result") }
+          handleSignInResult(activity)
+        }.addOnFailureListener {
+          it.let { result -> Log.i("PlayService", "isAuthenticated: ${result.localizedMessage} toString: $result") }
+          finishPendingOperationWithError(PluginError.FailedToAuthenticate.errorCode(), it.message ?: "")
+        }
+      }
+    }
+  }
+
+  private fun explicitSignIn(activity: Activity?) {
     activity ?: return
     val signInOption = GoogleSignInOptions.Builder(
       GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
     )
       .requestEmail()
 
-    if (shouldEnableSavedGame) {
-      signInOption
-        .requestScopes(Drive.SCOPE_APPFOLDER)
-    }
+    signInOption.requestScopes(Drive.SCOPE_APPFOLDER)
 
     googleSignInClient = GoogleSignIn.getClient(activity, signInOption.build())
     activity.startActivityForResult(googleSignInClient?.signInIntent, RC_SIGN_IN)
   }
 
-  private fun handleSignInResult(activity: Activity?, googleSignInAccount: GoogleSignInAccount) {
+  private fun handleSignInResult(activity: Activity?) {
     activity ?: return
-    // Set the popups view.
-    val gamesClient = Games.getGamesClient(activity, googleSignInAccount)
-    gamesClient.setViewForPopups(activity.findViewById(android.R.id.content))
-    gamesClient.setGravityForPopups(Gravity.TOP or Gravity.CENTER_HORIZONTAL)
 
     finishPendingOperationWithSuccess()
   }
@@ -117,7 +130,7 @@ class Auth : PluginRegistry.ActivityResultListener {
       val result = data?.let { Auth.GoogleSignInApi.getSignInResultFromIntent(it) }
       val signInAccount = result?.signInAccount
       if (result?.isSuccess == true && signInAccount != null) {
-        handleSignInResult(pendingOperation?.activity, signInAccount)
+        handleSignInResult(pendingOperation?.activity)
       } else {
         var message = result?.status?.statusMessage ?: ""
         if (message.isEmpty()) {
