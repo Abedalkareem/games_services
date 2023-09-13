@@ -36,10 +36,10 @@ TTG - Through The Galaxies 🚀 casual game . [Android](https://play.google.com/
 Check the docs folder for documentation and how to use the plugin.  
 
 ## Installing  
-Simply add the following line to your pubspec.yaml file:  
-``` yaml
-dependencies:
-  games_services: any       # <-- Add this line
+Simply add `games_services` as a dependency in your `pubspec.yaml` by running the following command:
+
+``` console
+$ flutter pub add games_services
 ```
 
 ## Support me 🚀  
