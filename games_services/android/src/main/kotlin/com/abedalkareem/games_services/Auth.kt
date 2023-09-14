@@ -41,7 +41,7 @@ class Auth : PluginRegistry.ActivityResultListener {
   ) {
     activity ?: return
     if (!shouldEnableSavedGame) {
-      signInV2(activity)
+      signInV2(activity, result)
       return
     }
     val signInOption = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
@@ -61,9 +61,9 @@ class Auth : PluginRegistry.ActivityResultListener {
     }
   }
 
-  private fun signInV2(activity: Activity) {
+  private fun signInV2(activity: Activity, result: MethodChannel.Result) {
     val gamesSignInClient = PlayGames.getGamesSignInClient(activity)
-
+    pendingOperation = PendingOperation(Method.SilentSignIn.value(), result, activity)
     gamesSignInClient.isAuthenticated.addOnCompleteListener { isAuthenticatedTask: Task<AuthenticationResult> ->
       val isAuthenticated = isAuthenticatedTask.isSuccessful &&
         isAuthenticatedTask.result.isAuthenticated
