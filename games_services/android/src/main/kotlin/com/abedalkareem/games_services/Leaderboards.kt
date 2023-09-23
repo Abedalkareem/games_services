@@ -7,9 +7,8 @@ import com.abedalkareem.games_services.util.AppImageLoader
 import com.abedalkareem.games_services.util.PluginError
 import com.abedalkareem.games_services.util.errorCode
 import com.abedalkareem.games_services.util.errorMessage
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.games.Games
 import com.google.android.gms.games.LeaderboardsClient
+import com.google.android.gms.games.PlayGames
 import com.google.android.gms.games.leaderboard.LeaderboardVariant
 import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -22,11 +21,9 @@ import kotlinx.coroutines.launch
 class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) {
 
   private val imageLoader = AppImageLoader()
-  private val leaderboardsClient: LeaderboardsClient?
+  private val leaderboardsClient: LeaderboardsClient
     get() {
-      val lastSignedInAccount =
-        GoogleSignIn.getLastSignedInAccount(activityPluginBinding.activity) ?: return null
-      return Games.getLeaderboardsClient(activityPluginBinding.activity, lastSignedInAccount)
+      return PlayGames.getLeaderboardsClient(activityPluginBinding.activity)
     }
 
   fun showLeaderboards(activity: Activity?, leaderboardID: String, result: MethodChannel.Result) {
@@ -38,14 +35,14 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) {
       result.error(PluginError.LeaderboardNotFound.errorCode(), it.message, null)
     }
     if (leaderboardID.isEmpty()) {
-      leaderboardsClient?.allLeaderboardsIntent
-        ?.addOnSuccessListener(onSuccessListener)
-        ?.addOnFailureListener(onFailureListener)
+      leaderboardsClient.allLeaderboardsIntent
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
     } else {
       leaderboardsClient
-        ?.getLeaderboardIntent(leaderboardID)
-        ?.addOnSuccessListener(onSuccessListener)
-        ?.addOnFailureListener(onFailureListener)
+        .getLeaderboardIntent(leaderboardID)
+        .addOnSuccessListener(onSuccessListener)
+        .addOnFailureListener(onFailureListener)
     }
   }
 
@@ -58,8 +55,8 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) {
     result: MethodChannel.Result
   ) {
     activity ?: return
-    leaderboardsClient?.loadTopScores(leaderboardID, span, leaderboardCollection, maxResults)
-      ?.addOnCompleteListener { task ->
+    leaderboardsClient.loadTopScores(leaderboardID, span, leaderboardCollection, maxResults)
+      .addOnCompleteListener { task ->
         val data = task.result.get()
         if (data == null) {
           result.error(
@@ -99,7 +96,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) {
           result.success(string)
         }
       }
-      ?.addOnFailureListener {
+      .addOnFailureListener {
         result.error(
           PluginError.FailedToLoadLeaderboardScores.errorCode(),
           it.localizedMessage,
@@ -109,21 +106,24 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) {
   }
 
   fun submitScore(leaderboardID: String, score: Int, result: MethodChannel.Result) {
-    leaderboardsClient?.submitScoreImmediate(leaderboardID, score.toLong())?.addOnSuccessListener {
+    leaderboardsClient
+      .submitScoreImmediate(leaderboardID, score.toLong())
+      .addOnSuccessListener {
       result.success(null)
-    }?.addOnFailureListener {
+    }
+      .addOnFailureListener {
       result.error(PluginError.FailedToSendScore.errorCode(), it.localizedMessage, null)
     }
   }
 
   fun getPlayerScore(leaderboardID: String, result: MethodChannel.Result) {
     leaderboardsClient
-      ?.loadCurrentPlayerLeaderboardScore(
+      .loadCurrentPlayerLeaderboardScore(
         leaderboardID,
         LeaderboardVariant.TIME_SPAN_ALL_TIME,
         LeaderboardVariant.COLLECTION_PUBLIC
       )
-      ?.addOnSuccessListener {
+      .addOnSuccessListener {
         val score = it.get()
         if (score != null) {
           result.success(score.rawScore)
@@ -134,7 +134,8 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) {
             null
           )
         }
-      }?.addOnFailureListener {
+      }
+      .addOnFailureListener {
         result.error(PluginError.FailedToGetScore.errorCode(), it.localizedMessage, null)
       }
   }

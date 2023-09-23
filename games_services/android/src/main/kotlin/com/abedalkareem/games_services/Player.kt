@@ -4,8 +4,7 @@ import android.app.Activity
 import com.abedalkareem.games_services.util.AppImageLoader
 import com.abedalkareem.games_services.util.PluginError
 import com.abedalkareem.games_services.util.errorCode
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.games.Games
+import com.google.android.gms.games.PlayGames
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
@@ -16,8 +15,7 @@ class Player {
 
   fun getPlayerID(activity: Activity?, result: MethodChannel.Result) {
     activity ?: return
-    val lastSignedInAccount = GoogleSignIn.getLastSignedInAccount(activity) ?: return
-    Games.getPlayersClient(activity, lastSignedInAccount)
+    PlayGames.getPlayersClient(activity)
       .currentPlayerId.addOnSuccessListener {
         result.success(it)
       }.addOnFailureListener {
@@ -27,8 +25,7 @@ class Player {
 
   fun getPlayerName(activity: Activity?, result: MethodChannel.Result) {
     activity ?: return
-    val lastSignedInAccount = GoogleSignIn.getLastSignedInAccount(activity) ?: return
-    Games.getPlayersClient(activity, lastSignedInAccount)
+    PlayGames.getPlayersClient(activity)
       .currentPlayer
       .addOnSuccessListener { player ->
         result.success(player.displayName)
@@ -39,8 +36,7 @@ class Player {
 
   fun getPlayerProfileImage(activity: Activity?, result: MethodChannel.Result, hiRes: Boolean = true) {
     activity ?: return
-    val lastSignedInAccount = GoogleSignIn.getLastSignedInAccount(activity) ?: return
-    Games.getPlayersClient(activity, lastSignedInAccount)
+    PlayGames.getPlayersClient(activity)
       .currentPlayer
       .addOnSuccessListener { player ->
         val handler = CoroutineExceptionHandler { _, exception ->
