@@ -54,10 +54,6 @@ class AppState extends State<App> {
                           child: const Text('Is signedIn'),
                         ),
                         ElevatedButton(
-                          onPressed: _signOut,
-                          child: const Text('Is signOut'),
-                        ),
-                        ElevatedButton(
                           onPressed: _showAchievements,
                           child: const Text('Show Achievements'),
                         ),
@@ -133,17 +129,12 @@ class AppState extends State<App> {
   }
 
   void _signIn() async {
-    final result = await GameAuth.signIn(shouldEnableSavedGame: true);
+    final result = await GameAuth.signIn();
     print(result);
   }
 
   void _isSignedIn() async {
     final result = await GameAuth.isSignedIn;
-    print(result);
-  }
-
-  void _signOut() async {
-    final result = await GameAuth.signOut();
     print(result);
   }
 

@@ -95,15 +95,11 @@ class GamesServicesPlugin : FlutterPlugin,
       return
     }
     when (method) {
-      Method.SilentSignIn -> {
-        val shouldEnableSavedGame = call.argument<Boolean>("shouldEnableSavedGame") ?: false
-        auth.silentSignIn(activity, shouldEnableSavedGame, result)
+      Method.SignIn -> {
+        auth.signIn(activity, result)
       }
       Method.IsSignedIn -> {
         auth.isSignedIn(activity, result)
-      }
-      Method.SignOut -> {
-        auth.signOut(result)
       }
       Method.ShowAchievements -> {
         achievements?.showAchievements(activity, result)
