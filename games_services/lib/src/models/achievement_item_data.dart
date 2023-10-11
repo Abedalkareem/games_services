@@ -2,22 +2,22 @@ class AchievementItemData {
   final String id;
   final String name;
 
-  /// On iOS [description] will be [achievedDescription] in case chievement completed else it
-  /// will be [unachievedDescription].
+  /// On iOS/macOS [description] will be either [achievedDescription] or
+  /// [unachievedDescription], depending on whether or not the achievement has been unlocked.
   final String description;
 
-  /// The achievement locked (revealed) image as base64.
+  /// The achievement's locked (unrevealed) image as base64.
   final String? lockedImage;
 
-  /// The achievement locked (revealed) image as base64.
+  /// The achievement's unlocked (revealed) image as base64.
   final String? unlockedImage;
 
-  /// On android the achievement type should be [TYPE_INCREMENTAL] to get the steps, else it will be 0.
-  /// On iOS [completedSteps] is same as [percentComplete].
+  /// On Android the achievement type should be [TYPE_INCREMENTAL] to get the steps, otherwise it will be 0.
+  /// On iOS/macOS [completedSteps] is the same as [percentComplete].
   final int completedSteps;
 
-  /// On android the achievement type should be [TYPE_INCREMENTAL] to get the total steps, else it will be 0.
-  /// On iOS [totalSteps] will have always 100.
+  /// On Android the achievement type should be [TYPE_INCREMENTAL] to get the total steps, otherwise it will be 0.
+  /// On iOS/macOS [totalSteps] will always be 100.
   final int totalSteps;
 
   final bool unlocked;

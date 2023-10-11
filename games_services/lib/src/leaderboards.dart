@@ -5,7 +5,8 @@ import 'package:games_services_platform_interface/game_services_platform_interfa
 import 'package:games_services_platform_interface/models.dart';
 
 abstract class Leaderboards {
-  /// It will open the leaderboards screen.
+  /// Open the device's default leaderboards screen. If a leaderboard ID is provided,
+  /// it will display the specific leaderboard, otherwise it will show the list of all leaderboards.
   static Future<String?> showLeaderboards(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     return await GamesServicesPlatform.instance.showLeaderboards(
@@ -13,8 +14,8 @@ abstract class Leaderboards {
         androidLeaderboardID: androidLeaderboardID);
   }
 
-  /// Get leaderboard scores as a list. Use this to build your own custom UI.
-  /// To show the prebuilt system screen use [showLeaderboards].
+  /// Get leaderboard scores as a list. Use this to build a custom UI.
+  /// To show the device's default leaderboards screen use [showLeaderboards].
   static Future<List<LeaderboardScoreData>?> loadLeaderboardScores(
       {iOSLeaderboardID = "",
       androidLeaderboardID = "",
@@ -35,10 +36,10 @@ abstract class Leaderboards {
     return null;
   }
 
-  /// Submit a [score] to specific leader board.
+  /// Submit a [score] to specific leaderboard.
   /// [Score] takes three parameters:
-  /// [androidLeaderboardID] the leader board id that you want to send the score for in case of android.
-  /// [iOSLeaderboardID] the leader board id that you want to send the score for in case of iOS.
+  /// [androidLeaderboardID] the leaderboard ID for Google Play Games.
+  /// [iOSLeaderboardID] the leaderboard ID for Game Center.
   /// [value] the score.
   static Future<String?> submitScore({required Score score}) async {
     return await GamesServicesPlatform.instance.submitScore(score: score);

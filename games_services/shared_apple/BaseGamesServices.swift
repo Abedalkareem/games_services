@@ -12,10 +12,6 @@ public class BaseGamesServices: NSObject {
 #endif
   }
   
-  var isAuthenticated: Bool {
-    GKLocalPlayer.local.isAuthenticated
-  }
-  
   var currentPlayer: GKLocalPlayer {
     GKLocalPlayer.local
   }

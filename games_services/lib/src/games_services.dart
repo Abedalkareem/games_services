@@ -4,47 +4,45 @@ import '../games_services.dart';
 
 export 'package:games_services_platform_interface/models.dart';
 
-/// A helper class that has all the library functions in one class.
-/// This class to support apps that uses pre 3.0 versions.
-/// Please consider using [GameAuth] for authintication, [Achievements] for anything related to Achievements,
+/// A helper class that contains all of the library's functions.
+/// This is a support class for apps that use pre-3.0 versions of the library.
+/// Please consider using [GameAuth] for authentication, [Achievements] for anything related to Achievements,
 /// [Leaderboards] for anything related to Leaderboards, [Player] for anything related to Player,
-/// [SaveGame] for anything related to save game.
+/// and [SaveGame] for anything related to game saves.
 class GamesServices {
-  /// To sign in the user.
-  /// You need to call the sign in before making any action,
-  /// (like sending a score or unlocking an achievement).
+  /// Sign the user into Game Center or Google Play Games. This must be called before
+  /// taking any action (such as submitting a score or unlocking an achievement).
   static Future<String?> signIn() async {
     return await GameAuth.signIn();
   }
 
-  /// Check to see if the user is currently signed into
-  /// Game Center or Google Play Services
+  /// Check to see if the user is currently signed into Game Center or Google Play Games.
   static Future<bool> get isSignedIn => GameAuth.isSignedIn;
 
-  /// It will open the achievements screen.
+  /// Open the device's default achievements screen.
   static Future<String?> showAchievements() async {
     return await Achievements.showAchievements();
   }
 
-  /// Get achievements as a list. Use this to build your own custom UI.
-  /// To show the prebuilt system UI use [showAchievements]
+  /// Get achievements as a list. Use this to build a custom UI.
+  /// To show the device's default achievements screen use [showAchievements].
   static Future<List<AchievementItemData>?> loadAchievements() async {
     return await Achievements.loadAchievements();
   }
 
   /// Unlock an [achievement].
   /// [Achievement] takes three parameters:
-  /// [androidID] the achievement id for android.
-  /// [iOSID] the achievement id for iOS.
-  /// [percentComplete] the completion percent of the achievement, this parameter is
-  /// optional in case of iOS.
+  /// [androidID] the achievement ID for Google Play Games.
+  /// [iOSID] the achievement ID for Game Center.
+  /// [percentComplete] the completion percentage of the achievement,
+  /// this parameter is optional on iOS/macOS.
   static Future<String?> unlock({required Achievement achievement}) async {
     return await Achievements.unlock(achievement: achievement);
   }
 
   /// Increment an [achievement].
   /// [Achievement] takes two parameters:
-  /// [androidID] the achievement id for android.
+  /// [androidID] the achievement ID for Google Play Games.
   /// [steps] If the achievement is of the incremental type
   /// you can use this method to increment the steps.
   /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
@@ -52,7 +50,8 @@ class GamesServices {
     return await Achievements.increment(achievement: achievement);
   }
 
-  /// It will open the leaderboards screen.
+  /// Open the device's default leaderboards screen. If a leaderboard ID is provided,
+  /// it will display the specific leaderboard, otherwise it will show the list of all leaderboards.
   static Future<String?> showLeaderboards(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     return await Leaderboards.showLeaderboards(
@@ -60,8 +59,8 @@ class GamesServices {
         androidLeaderboardID: androidLeaderboardID);
   }
 
-  /// Get leaderboard scores as a list. Use this to build your own custom UI.
-  /// To show the prebuilt system screen use [showLeaderboards].
+  /// Get leaderboard scores as a list. Use this to build a custom UI.
+  /// To show the device's default leaderboards screen use [showLeaderboards].
   static Future<List<LeaderboardScoreData>?> loadLeaderboardScores(
       {iOSLeaderboardID = "",
       androidLeaderboardID = "",
@@ -76,22 +75,22 @@ class GamesServices {
         maxResults: maxResults);
   }
 
-  /// Submit a [score] to specific leader board.
+  /// Submit a [score] to specific leaderboard.
   /// [Score] takes three parameters:
-  /// [androidLeaderboardID] the leader board id that you want to send the score for in case of android.
-  /// [iOSLeaderboardID] the leader board id that you want to send the score for in case of iOS.
+  /// [androidLeaderboardID] the leaderboard ID for Google Play Games.
+  /// [iOSLeaderboardID] the leaderboard ID for Game Center.
   /// [value] the score.
   static Future<String?> submitScore({required Score score}) async {
     return await Leaderboards.submitScore(score: score);
   }
 
-  /// Get the player id.
-  /// On iOS the player id is unique for your game but not other games.
+  /// Get the current player's ID.
+  /// On iOS/macOS the player ID is unique for your game but not other games.
   static Future<String?> getPlayerID() async {
     return await Player.getPlayerID();
   }
 
-  /// Get player score for a specific leaderboard.
+  /// Get the current player's score for a specific leaderboard.
   static Future<int?> getPlayerScore(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     return await Player.getPlayerScore(
@@ -99,8 +98,8 @@ class GamesServices {
         androidLeaderboardID: androidLeaderboardID);
   }
 
-  /// Get the player name.
-  /// On iOS the player alias is the name used by the Player visible in the leaderboard
+  /// Get the current player's name.
+  /// On iOS/macOS the player's alias is provided.
   static Future<String?> getPlayerName() async {
     return await Player.getPlayerName();
   }
@@ -115,28 +114,28 @@ class GamesServices {
     return await Player.getPlayerHiResImage();
   }
 
-  /// Check if player is underage (iOS & MacOS only).
+  /// Check if the current player is underage (always false on Android).
   static Future<bool?> get playerIsUnderage async {
     return await Player.isUnderage;
   }
 
-  /// Check if player is restricted from joining multiplayer games (always false on Android).
+  /// Check if the current player is restricted from joining multiplayer games (always false on Android).
   static Future<bool?> get playerIsMultiplayerGamingRestricted async {
     return await Player.isMultiplayerGamingRestricted;
   }
 
-  /// Check if player is restricted from using personalized communication on
+  /// Check if the current player is restricted from using personalized communication on
   /// the device (always false on Android).
   static Future<bool?> get playerIsPersonalizedCommunicationRestricted async {
     return await Player.isPersonalizedCommunicationRestricted;
   }
 
-  /// Show the iOS Access Point.
+  /// Show the Game Center Access Point for the current player.
   static Future<String?> showAccessPoint(AccessPointLocation location) async {
     return await Player.showAccessPoint(location);
   }
 
-  /// Hide the iOS Access Point.
+  /// Hide the Game Center Access Point.
   static Future<String?> hideAccessPoint() async {
     return await Player.hideAccessPoint();
   }

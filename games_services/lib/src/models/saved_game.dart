@@ -1,9 +1,9 @@
 class SavedGame {
-  /// The saved game name.
+  /// The saved game's name.
   String name;
 
-  /// The modification date, this will be also the creation date once you create the
-  /// saved game for the first time. The date is in milliseconds.
+  /// The saved game's modification date (in milliseconds). When the saved game is
+  /// first created, this will be the creation date.
   int modificationDate;
 
   /// The device that saved the game.

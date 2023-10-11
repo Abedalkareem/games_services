@@ -2,24 +2,24 @@ import 'package:games_services_platform_interface/game_services_platform_interfa
 import 'package:games_services_platform_interface/models.dart';
 
 abstract class Player {
-  /// Show the iOS Access Point.
+  /// Show the Game Center Access Point for the current player.
   static Future<String?> showAccessPoint(AccessPointLocation location) async {
     return await GamesServicesPlatform.instance.showAccessPoint(location);
   }
 
-  /// Hide the iOS Access Point.
+  /// Hide the Game Center Access Point.
   static Future<String?> hideAccessPoint() async {
     return await GamesServicesPlatform.instance.hideAccessPoint();
   }
 
-  /// Get the player id.
-  /// On iOS the player id is unique for your game but not other games.
+  /// Get the current player's ID.
+  /// On iOS/macOS the player ID is unique for your game but not other games.
   static Future<String?> getPlayerID() async {
     return await GamesServicesPlatform.instance.getPlayerID();
   }
 
-  /// Get the player name.
-  /// On iOS the player alias is the name used by the Player visible in the leaderboard
+  /// Get the current player's name.
+  /// On iOS/macOS the player's alias is provided.
   static Future<String?> getPlayerName() async {
     return await GamesServicesPlatform.instance.getPlayerName();
   }
@@ -36,7 +36,7 @@ abstract class Player {
         ?.replaceAll("\n", "");
   }
 
-  /// Get player score for a specific leaderboard.
+  /// Get the current player's score for a specific leaderboard.
   static Future<int?> getPlayerScore(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     return await GamesServicesPlatform.instance.getPlayerScore(
@@ -44,18 +44,18 @@ abstract class Player {
         androidLeaderboardID: androidLeaderboardID);
   }
 
-  /// Check if player is underage (always false on Android).
+  /// Check if the current player is underage (always false on Android).
   static Future<bool?> get isUnderage async {
     return await GamesServicesPlatform.instance.playerIsUnderage;
   }
 
-  /// Check if player is restricted from joining multiplayer games (always false on Android).
+  /// Check if the current player is restricted from joining multiplayer games (always false on Android).
   static Future<bool?> get isMultiplayerGamingRestricted async {
     return await GamesServicesPlatform
         .instance.playerIsMultiplayerGamingRestricted;
   }
 
-  /// Check if player is restricted from using personalized communication on
+  /// Check if the current player is restricted from using personalized communication on
   /// the device (always false on Android).
   static Future<bool?> get isPersonalizedCommunicationRestricted async {
     return await GamesServicesPlatform
