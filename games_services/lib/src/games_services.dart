@@ -11,24 +11,15 @@ export 'package:games_services_platform_interface/models.dart';
 /// [SaveGame] for anything related to save game.
 class GamesServices {
   /// To sign in the user.
-  /// If you pass [shouldEnableSavedGame], a drive scope will be will be added to GoogleSignInOptions. This will happed just
-  /// android as for iOS/macOS nothing is required to be sent when authenticate.
   /// You need to call the sign in before making any action,
   /// (like sending a score or unlocking an achievement).
-  static Future<String?> signIn({bool shouldEnableSavedGame = false}) async {
-    return await GameAuth.signIn(shouldEnableSavedGame: shouldEnableSavedGame);
+  static Future<String?> signIn() async {
+    return await GameAuth.signIn();
   }
 
   /// Check to see if the user is currently signed into
   /// Game Center or Google Play Services
-  static Future<bool> get isSignedIn async => await GameAuth.isSignedIn;
-
-  /// To sign the user out of Goole Play Services.
-  /// After calling, you can no longer make any actions
-  /// on the user's account.
-  static Future<String?> signOut() async {
-    return await GameAuth.signOut();
-  }
+  static Future<bool> get isSignedIn => GameAuth.isSignedIn;
 
   /// It will open the achievements screen.
   static Future<String?> showAchievements() async {

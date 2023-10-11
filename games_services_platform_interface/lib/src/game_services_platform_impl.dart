@@ -82,13 +82,8 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> signIn({bool shouldEnableSavedGame = false}) async {
-    if (Device.isPlatformAndroid) {
-      return await _channel.invokeMethod(
-          "silentSignIn", {"shouldEnableSavedGame": shouldEnableSavedGame});
-    } else {
-      return await _channel.invokeMethod("signIn");
-    }
+  Future<String?> signIn() async {
+    return await _channel.invokeMethod("signIn");
   }
 
   @override
@@ -117,11 +112,6 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     }
     return await _channel
         .invokeMethod("playerIsPersonalizedCommunicationRestricted");
-  }
-
-  @override
-  Future<String?> signOut() async {
-    return await _channel.invokeMethod("signOut");
   }
 
   @override

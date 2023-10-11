@@ -33,11 +33,12 @@ packages:
   games_services_platform_interface:
     dependency: "direct main"
     description:
-      name: games_services_platform_interface
-      sha256: c71f484e38f7ed4126d4b2314ca8040422947a86b71c7fa52d3d13a5dbd6aef8
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.3"
+      path: games_services_platform_interface
+      ref: finish-v2-migration
+      resolved-ref: a5b889fc5da889649318f7f237237cedc79f00b0
+      url: "https://github.com/theLee3/games_services.git"
+    source: git
+    version: "3.1.0"
   lints:
     dependency: transitive
     description:
