@@ -15,6 +15,10 @@ class Auth: BaseGamesServices {
       }
     }
   }
+
+  var isAuthenticated: Bool {
+    currentPlayer.isAuthenticated
+  }
   
 }
 
