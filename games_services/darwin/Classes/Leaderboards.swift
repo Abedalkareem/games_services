@@ -1,4 +1,9 @@
 import GameKit
+#if os(iOS) || os(tvOS)
+import Flutter
+#else
+import FlutterMacOS
+#endif
 
 class Leaderboards: BaseGamesServices {
   

@@ -30,6 +30,8 @@ flutter:
         package: com.abedalkareem.games_services
         pluginClass: GamesServicesPlugin
       ios:
-        pluginClass: GamesServicesPlugin
+        pluginClass: SwiftGamesServicesPlugin
+        sharedDarwinSource: true
       macos:
-        pluginClass: GamesServicesPlugin
+        pluginClass: SwiftGamesServicesPlugin
+        sharedDarwinSource: true
