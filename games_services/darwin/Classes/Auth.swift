@@ -1,5 +1,11 @@
+#if os(iOS) || os(tvOS)
+import Flutter
+#else
+import FlutterMacOS
+#endif
+
 class Auth: BaseGamesServices {
-  
+
   func authenticateUser(result: @escaping FlutterResult) {
     currentPlayer.authenticateHandler = { vc, error in
       guard error == nil else {

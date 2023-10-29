@@ -1,4 +1,9 @@
 import GameKit
+#if os(iOS) || os(tvOS)
+import Flutter
+#else
+import FlutterMacOS
+#endif
 
 class Achievements: BaseGamesServices {
   
@@ -43,9 +48,11 @@ class Achievements: BaseGamesServices {
           var items = [AchievementItemData]()
           for (description, achievement) in achievementsMap {
             #if os(macOS)
-            let imageData = try? await description.loadImage().tiffRepresentation
+            let uiimage = try? await description.loadImage()
+            let imageData = uiimage?.tiffRepresentation
             #else
-            let imageData = try? await description.loadImage().pngData()
+            let uiimage = try? await description.loadImage()
+            let imageData = uiimage?.pngData()
             #endif
             let image = imageData?.base64EncodedString()
             let isCompleted = achievement?.isCompleted ?? false
