@@ -1,3 +1,7 @@
+## 4.0.0
+- migrate to google play games services 2.0.0.
+- use darwin folder for iOS and macOS.
+
 ## 3.0.3
 - Fix gradle issue by @Skyost
 - add getPlayer by @theLee3

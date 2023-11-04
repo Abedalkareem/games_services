@@ -1,4 +1,8 @@
-[![pub package](https://img.shields.io/pub/v/games_services.svg)](https://pub.dartlang.org/packages/games_services)
+[![pub package](https://img.shields.io/pub/v/scale.svg)](https://pub.dartlang.org/packages/scale)
+[![Telegram](https://img.shields.io/badge/chat-telegram-0088cc)](https://t.me/+NvUXzshmIg44N2M0)
+[![Youtube](https://img.shields.io/badge/subscribe-youtube-c4302b)](https://www.youtube.com/@AkDebuging)
+[![Twitter](https://img.shields.io/badge/follow-x-000000)](https://x.com/akdebuging)
+[![Coffee](https://img.shields.io/badge/buy%20me%20a-coffee-orange)](https://www.buymeacoffee.com/akdebuging)
 
 <img src="https://github.com/Abedalkareem/games_services/raw/master/logo.png" width="200"/>
 
@@ -14,7 +18,7 @@ A Flutter plugin to support game center and google play games services.
 
 ## Tutorials  
 
-[Written tutorial](https://bit.ly/2yv1C00)  
+[Written tutorial](https://bit.ly/flutter_games_services)  
 
 Video tutorial
 *Will be added soon.*  
@@ -25,16 +29,17 @@ Monkey Banana [Android](https://play.google.com/store/apps/details?id=com.jostud
 [Nonogram Colors](https://play.google.com/store/apps/details?id=com.tbuonomo.nonogramcolordot) by @tommybuonomo.  
 [Ripple Effect Puzzle](https://play.google.com/store/apps/details?id=com.tbuonomo.rippleeffectpuzzle) by @tommybuonomo.  
 Lights: A Memory Game [Android](https://play.google.com/store/apps/details?id=us.leephillips.lights) & [iOS](https://apps.apple.com/us/app/lights-a-memory-game/id1580230611) by @theLee3.  
-
+TTG - Through The Galaxies 🚀 casual game . [Android](https://play.google.com/store/apps/details?id=dev.app2pack.ttg) & [iOS](https://apps.apple.com/app/ttg-through-the-galaxy/id6444870791) by [@imaNNeo](https://github.com/imaNNeo)
+ 
 ## Documentation
 
 Check the docs folder for documentation and how to use the plugin.  
 
 ## Installing  
-Simply add the following line to your pubspec.yaml file:  
-``` yaml
-dependencies:
-  games_services: any       # <-- Add this line
+Simply add `games_services` as a dependency in your `pubspec.yaml` by running the following command:
+
+``` console
+$ flutter pub add games_services
 ```
 
 ## Support me 🚀  
@@ -44,7 +49,8 @@ You can support this project by:
 1- Checking my [apps](https://apps.apple.com/us/developer/id928910207).  
 2- Star the repo.  
 3- Share the repo with your friends.  
+4- [Buy Me A Coffee](https://www.buymeacoffee.com/akdebuging).  
 
 ## Follow me ❤️  
 
-[Facebook](https://www.facebook.com/Abedalkareem.Omreyh/) | [Twitter](https://twitter.com/abedalkareemomr) | [Instagram](https://instagram.com/abedalkareemomreyh/) | [Youtube](https://www.youtube.com/user/AbedalkareemOmreyh)
+[Facebook](https://www.facebook.com/Abedalkareem.Omreyh/) | [Twitter](https://twitter.com/akdebuging) | [Instagram](https://instagram.com/abedalkareemomreyh/) | [Youtube](https://www.youtube.com/@akdebuging)

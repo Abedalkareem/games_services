@@ -33,11 +33,10 @@ packages:
   games_services_platform_interface:
     dependency: "direct main"
     description:
-      path: games_services_platform_interface
-      ref: HEAD
-      resolved-ref: "257b49b3c3d716d6631e2127fa7a95894a737a33"
-      url: "https://github.com/Abedalkareem/games_services"
-    source: git
+      name: games_services_platform_interface
+      sha256: db4a4c38914d8a235f7bb9173979e136509699684a15f7385ef75a45cc2830e1
+      url: "https://pub.dev"
+    source: hosted
     version: "4.0.0"
   lints:
     dependency: transitive
