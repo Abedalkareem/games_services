@@ -56,15 +56,16 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) {
   ) {
     activity ?: return
     leaderboardsClient.loadTopScores(leaderboardID, span, leaderboardCollection, maxResults)
-      .addOnCompleteListener { task ->
-        val data = task.result.get()
+      .addOnSuccessListener { annotatedData ->
+        val data = annotatedData.get()
+
         if (data == null) {
           result.error(
             PluginError.FailedToLoadLeaderboardScores.errorCode(),
             PluginError.FailedToLoadLeaderboardScores.errorMessage(),
             null
           )
-          return@addOnCompleteListener
+          return@addOnSuccessListener
         }
         val handler = CoroutineExceptionHandler { _, exception ->
           result.error(

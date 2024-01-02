@@ -66,15 +66,16 @@ class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
     activity ?: return
     achievementClient
       .load(true)
-      .addOnCompleteListener { task ->
-        val data = task.result.get()
+      .addOnSuccessListener { annotatedData ->
+        val data = annotatedData.get()
+
         if (data == null) {
           result.error(
             PluginError.FailedToLoadAchievements.errorCode(),
             PluginError.FailedToLoadAchievements.errorMessage(),
             null
           )
-          return@addOnCompleteListener
+          return@addOnSuccessListener
         }
         val handler = CoroutineExceptionHandler { _, exception ->
           result.error(
