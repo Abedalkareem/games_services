@@ -38,7 +38,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   private var result: MethodChannel.Result? = null;
   private var errorMessage: String? = null;
 
-  // handle result from firends list permission request
+  // handle result from friends list permission request
   override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
     activityPluginBinding.removeActivityResultListener(this)
     return if (requestCode == 26703) {
