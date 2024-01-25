@@ -17,14 +17,59 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import android.util.Log
+import com.google.android.gms.games.FriendsResolutionRequiredException
+import io.flutter.plugin.common.PluginRegistry
 
-class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) {
+class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
+  PluginRegistry.ActivityResultListener {
 
   private val imageLoader = AppImageLoader()
   private val leaderboardsClient: LeaderboardsClient
     get() {
       return PlayGames.getLeaderboardsClient(activityPluginBinding.activity)
     }
+
+  // used to retry [loadLeaderboardScore] after being granted friends list access
+  private var leaderboardID: String? = null;
+  private var span: Int? = null;
+  private var leaderboardCollection: Int? = null;
+  private var maxResults: Int? = null;
+  private var result: MethodChannel.Result? = null;
+  private var errorMessage: String? = null;
+
+  // handle result from friends list permission request
+  override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
+    activityPluginBinding.removeActivityResultListener(this)
+    return if (requestCode == 26703) {
+      // retry loadLeaderboard if permission granted, otherwise throw the original error
+      if (resultCode == -1 && leaderboardID != null) {
+        loadLeaderboardScores(
+          activityPluginBinding.activity,
+          leaderboardID!!,
+          span!!,
+          leaderboardCollection!!,
+          maxResults!!,
+          result!!
+        )
+      } else {
+        result?.error(
+          PluginError.FailedToLoadLeaderboardScores.errorCode(),
+          errorMessage,
+          null,
+        )
+      }
+      leaderboardID = null
+      span = null
+      leaderboardCollection = null
+      maxResults = null
+      result = null
+      errorMessage = null;
+      true
+    } else {
+      false
+    }
+  }
 
   fun showLeaderboards(activity: Activity?, leaderboardID: String, result: MethodChannel.Result) {
     val onSuccessListener: ((Intent) -> Unit) = { intent ->
@@ -46,6 +91,8 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) {
     }
   }
 
+//  private
+
   fun loadLeaderboardScores(
     activity: Activity?,
     leaderboardID: String,
@@ -56,15 +103,16 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) {
   ) {
     activity ?: return
     leaderboardsClient.loadTopScores(leaderboardID, span, leaderboardCollection, maxResults)
-      .addOnCompleteListener { task ->
-        val data = task.result.get()
+      .addOnSuccessListener { annotatedData ->
+        val data = annotatedData.get()
+
         if (data == null) {
           result.error(
             PluginError.FailedToLoadLeaderboardScores.errorCode(),
             PluginError.FailedToLoadLeaderboardScores.errorMessage(),
             null
           )
-          return@addOnCompleteListener
+          return@addOnSuccessListener
         }
         val handler = CoroutineExceptionHandler { _, exception ->
           result.error(
@@ -75,33 +123,54 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) {
         }
 
         CoroutineScope(Dispatchers.Main + handler).launch {
-          val achievements = mutableListOf<LeaderboardScoreData>()
+          val scores = mutableListOf<LeaderboardScoreData>()
           for (item in data.scores) {
-            val lockedImage =
+            val image =
               item.scoreHolderIconImageUri.let { imageLoader.loadImageFromUri(activity, it) }
-            achievements.add(
+            scores.add(
               LeaderboardScoreData(
                 item.rank,
                 item.displayScore,
                 item.rawScore,
                 item.timestampMillis,
                 item.scoreHolderDisplayName,
-                lockedImage,
+                image,
               )
             )
           }
           val gson = Gson()
-          val string = gson.toJson(achievements) ?: ""
+          val string = gson.toJson(scores) ?: ""
           data.release()
           result.success(string)
         }
       }
       .addOnFailureListener {
-        result.error(
-          PluginError.FailedToLoadLeaderboardScores.errorCode(),
-          it.localizedMessage,
-          null
-        )
+        // handle friends list CONSENT_REQUIRED error to trigger permission request dialog
+        if (it is FriendsResolutionRequiredException) {
+          this.leaderboardID = leaderboardID
+          this.span = span
+          this.leaderboardCollection = leaderboardCollection
+          this.maxResults = maxResults
+          this.result = result
+          this.errorMessage = it.localizedMessage
+          val pendingIntent = it.resolution
+          activityPluginBinding.addActivityResultListener(this)
+          activity.startIntentSenderForResult(
+            pendingIntent.intentSender,
+            26703,
+            null,
+            0,
+            0,
+            0
+          )
+          Log.i("GamesServices", "Friends list access requested")
+        } else {
+          result.error(
+            PluginError.FailedToLoadLeaderboardScores.errorCode(),
+            it.localizedMessage,
+            null
+          )
+        }
       }
   }
 
