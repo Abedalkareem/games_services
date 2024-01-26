@@ -4,6 +4,5 @@ struct LeaderboardScoreData: Codable {
   var displayScore: String
   var rawScore: Int
   var timestampMillis: Int
-  var scoreHolderDisplayName: String
-  var scoreHolderIconImage: String?
+  var scoreHolder: PlayerData
 }

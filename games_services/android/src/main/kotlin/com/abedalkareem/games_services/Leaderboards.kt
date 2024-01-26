@@ -3,6 +3,7 @@ package com.abedalkareem.games_services
 import android.app.Activity
 import android.content.Intent
 import com.abedalkareem.games_services.models.LeaderboardScoreData
+import com.abedalkareem.games_services.models.PlayerData
 import com.abedalkareem.games_services.util.AppImageLoader
 import com.abedalkareem.games_services.util.PluginError
 import com.abedalkareem.games_services.util.errorCode
@@ -125,7 +126,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
         CoroutineScope(Dispatchers.Main + handler).launch {
           val scores = mutableListOf<LeaderboardScoreData>()
           for (item in data.scores) {
-            val image =
+            val scoreHolderIconImage =
               item.scoreHolderIconImageUri.let { imageLoader.loadImageFromUri(activity, it) }
             scores.add(
               LeaderboardScoreData(
@@ -133,8 +134,11 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
                 item.displayScore,
                 item.rawScore,
                 item.timestampMillis,
-                item.scoreHolderDisplayName,
-                image,
+                PlayerData(
+                  item.scoreHolderDisplayName,
+                  item.scoreHolder?.playerId,
+                  scoreHolderIconImage
+                )
               )
             )
           }
