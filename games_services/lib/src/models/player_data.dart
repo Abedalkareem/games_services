@@ -1,10 +1,11 @@
 class PlayerData {
-  // can be null on Android due to privacy settings
+  /// Value can be `null` on Android due to privacy settings
   final String? playerID;
   final String displayName;
-  // only available from GameCenter
-  final String? teamPlayerID;
   final String? iconImage;
+
+  /// only available from GameCenter
+  final String? teamPlayerID;
 
   const PlayerData({
     required this.playerID,

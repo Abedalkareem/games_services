@@ -7,9 +7,10 @@ class LeaderboardScoreData {
   final int timestampMillis;
   final PlayerData scoreHolder;
 
-  // TODO: deprecate in favor of accessing PlayerData properties directly
   // provided to maintain backwards compatibility
+  @Deprecated('Use scoreHolder.displayName instead.')
   String get scoreHolderDisplayName => scoreHolder.displayName;
+  @Deprecated('Use scoreHolder.iconImage instead.')
   String? get scoreHolderIconImage => scoreHolder.iconImage;
 
   const LeaderboardScoreData({
