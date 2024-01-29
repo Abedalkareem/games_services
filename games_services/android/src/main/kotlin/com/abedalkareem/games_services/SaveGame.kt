@@ -55,8 +55,9 @@ class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
       .setDescription(desc)
       .build()
     snapshotsClient.open(name, true, SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED)
-      .addOnCompleteListener { task ->
-        val snapshot = task.result.data
+      .addOnSuccessListener { annotatedData ->
+        val snapshot = annotatedData.data
+
         if (snapshot != null) {
           // Set the data payload for the snapshot
           snapshot.snapshotContents.writeBytes(data.toByteArray())
@@ -76,6 +77,13 @@ class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
             null
           )
         }
+      }
+      .addOnFailureListener {
+        result.error(
+          PluginError.FailedToSaveGame.errorCode(),
+          it.localizedMessage,
+          null
+        )
       }
   }
 
