@@ -14,7 +14,7 @@ class Auth: BaseGamesServices {
 
   func authenticateUser(result: @escaping FlutterResult) {
     #if DEBUG
-      if (self.debugSignInFailed) {
+      if (self.debugSignInFailed && !isAuthenticated) {
         result(PluginError.failedToAuthenticate.flutterError())
         return
       }
