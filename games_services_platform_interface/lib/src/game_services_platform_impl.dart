@@ -90,6 +90,11 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   Future<bool?> get isSignedIn => _channel.invokeMethod("isSignedIn");
 
   @override
+  Future<String?> getAuthCode(String clientID) => Device.isPlatformAndroid
+      ? _channel.invokeMethod("getAuthCode", {"clientID": clientID})
+      : Future.value(null);
+
+  @override
   Future<bool?> get playerIsUnderage async {
     if (Device.isPlatformAndroid) {
       return Future.value(false);

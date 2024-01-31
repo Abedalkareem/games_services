@@ -4,7 +4,7 @@ enum class Method {
   Unlock, Increment, SubmitScore, ShowLeaderboards, ShowAchievements,
   LoadAchievements, SignIn, IsSignedIn, GetPlayerID, GetPlayerName,
   GetPlayerHiResImage, GetPlayerIconImage, GetPlayerScore, SaveGame,
-  LoadGame, GetSavedGames, DeleteGame, LoadLeaderboardScores
+  LoadGame, GetSavedGames, DeleteGame, LoadLeaderboardScores, GetAuthCode
 }
 
 fun Method.value(): String {

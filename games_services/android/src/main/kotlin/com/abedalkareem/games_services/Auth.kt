@@ -9,7 +9,6 @@ import com.abedalkareem.games_services.models.value
 import com.abedalkareem.games_services.util.PluginError
 import com.abedalkareem.games_services.util.errorCode
 import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.drive.Drive
 import com.google.android.gms.games.AuthenticationResult
 import com.google.android.gms.games.PlayGames
 import com.google.android.gms.tasks.Task
@@ -42,6 +41,16 @@ class Auth : PluginRegistry.ActivityResultListener {
     }.addOnFailureListener {
       it.let { result -> Log.i("PlayService", "isAuthenticated: ${result.localizedMessage} toString: $result") }
       finishPendingOperationWithError(PluginError.FailedToAuthenticate.errorCode(), it.message ?: "")
+    }
+  }
+
+  fun getAuthCode(clientID: String, activity: Activity?, result: MethodChannel.Result) {
+    activity ?: return
+    val gamesSignInClient = PlayGames.getGamesSignInClient(activity)
+    gamesSignInClient.requestServerSideAccess(clientID, false).addOnSuccessListener {
+      result.success(it)
+    }.addOnFailureListener {
+      result.error(PluginError.FailedToGetAuthCode.errorCode(), it.message ?: "", null)
     }
   }
 
