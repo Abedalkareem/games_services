@@ -64,13 +64,15 @@ class Leaderboards: BaseGamesServices {
             #else
             let imageData = try? await item.player.loadPhoto(for: .normal).pngData()
             #endif
-            let image = imageData?.base64EncodedString()
+            let scoreHolderIconImage = imageData?.base64EncodedString()
             items.append(LeaderboardScoreData(rank: item.rank,
                                               displayScore: item.formattedScore,
                                               rawScore: item.score,
                                               timestampMillis: Int(item.date.timeIntervalSince1970),
-                                              scoreHolderDisplayName: item.player.displayName,
-                                             scoreHolderIconImage: image))
+                                              scoreHolder: PlayerData(
+                                                displayName: item.player.displayName, playerID: item.player.gamePlayerID, teamPlayerID: item.player.teamPlayerID,
+                                                iconImage: scoreHolderIconImage
+                                              )))
           }
           if let data = try? JSONEncoder().encode(items) {
             let string = String(data: data, encoding: String.Encoding.utf8)
