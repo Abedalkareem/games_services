@@ -8,5 +8,5 @@ import Foundation
 import games_services
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
-  SwiftGamesServicesPlugin.register(with: registry.registrar(forPlugin: "GamesServicesPlugin"))
+  SwiftGamesServicesPlugin.register(with: registry.registrar(forPlugin: "SwiftGamesServicesPlugin"))
 }

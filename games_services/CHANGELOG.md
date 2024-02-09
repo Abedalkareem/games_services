@@ -1,3 +1,11 @@
+## 4.0.1
+- Add ability to get Play Games auth code for use with backends by @theLee3
+- Add PlayerData class to return more score holder details by @theLee3
+- Add isAuthenticated check alongside DEBUG signInFailed by @theLee3
+- Add signInFailed check to prevent hanging on hot reload by @theLee3
+- Handle consent exception when calling loadLeaderboardScores with Scope.friendsOnly by @theLee3
+- Ensure all task exceptions are handled, to prevent crashes. by @Erfa
+
 ## 4.0.0
 - migrate to google play games services 2.0.0.
 - use darwin folder for iOS and macOS.
