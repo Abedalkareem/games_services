@@ -101,6 +101,10 @@ class GamesServicesPlugin : FlutterPlugin,
       Method.IsSignedIn -> {
         auth.isSignedIn(activity, result)
       }
+      Method.GetAuthCode -> {
+        val clientID = call.argument<String>("clientID") ?: ""
+        auth.getAuthCode(clientID, activity, result)
+      }
       Method.ShowAchievements -> {
         achievements?.showAchievements(activity, result)
       }

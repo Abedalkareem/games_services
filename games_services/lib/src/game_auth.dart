@@ -10,4 +10,9 @@ abstract class GameAuth {
   /// Check to see if the user is currently signed into Game Center or Google Play Games.
   static Future<bool> get isSignedIn async =>
       await GamesServicesPlatform.instance.isSignedIn ?? false;
+
+  /// Retrieve a Google Play Games `server_auth_code` to be used by a backend,
+  /// such as Firebase, to authenticate the user. `null` on other platforms.
+  static Future<String?> getAuthCode(String clientID) async =>
+      await GamesServicesPlatform.instance.getAuthCode(clientID);
 }

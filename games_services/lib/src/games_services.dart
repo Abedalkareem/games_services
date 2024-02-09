@@ -19,6 +19,11 @@ class GamesServices {
   /// Check to see if the user is currently signed into Game Center or Google Play Games.
   static Future<bool> get isSignedIn => GameAuth.isSignedIn;
 
+  /// Retrieve a Google Play Games `server_auth_code` to be used by a backend,
+  /// such as Firebase, to authenticate the user. `null` on other platforms.
+  static Future<String?> getAuthCode(String clientID) async =>
+      await GameAuth.getAuthCode(clientID);
+
   /// Open the device's default achievements screen.
   static Future<String?> showAchievements() async {
     return await Achievements.showAchievements();
