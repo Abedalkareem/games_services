@@ -42,6 +42,12 @@ Simply add `games_services` as a dependency in your `pubspec.yaml` by running th
 $ flutter pub add games_services
 ```
 
+## The amazing people that made this plugin possible
+
+<a href="https://github.com/Abedalkareem/games_services/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=Abedalkareem/games_services" />
+</a>
+
 ## Support me 🚀  
 
 You can support this project by:  
