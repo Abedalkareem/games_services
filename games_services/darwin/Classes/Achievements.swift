@@ -15,10 +15,10 @@ class Achievements: BaseGamesServices {
     result(nil)
   }
   
-  func report(achievementID: String, percentComplete: Double, result: @escaping FlutterResult) {
+  func report(achievementID: String, percentComplete: Double, showsCompletionBanner: Bool, result: @escaping FlutterResult) {
     let achievement = GKAchievement(identifier: achievementID)
     achievement.percentComplete = percentComplete
-    achievement.showsCompletionBanner = true
+    achievement.showsCompletionBanner = showsCompletionBanner
     GKAchievement.report([achievement]) { (error) in
       guard error == nil else {
         result(error?.flutterError(code: .failedToSendAchievement))
@@ -80,6 +80,18 @@ class Achievements: BaseGamesServices {
       result(PluginError.notSupportedForThisOSVersion.flutterError())
     }
   }
-  
+
+  func resetAchievements(result: @escaping FlutterResult) {
+    if #available(iOS 13.0, *) {
+      Task {
+        do {
+          try await GKAchievement.resetAchievements()
+          result(nil)
+          } catch {
+          result(error.flutterError(code: .failedToResetAchievements))
+        }
+      }
+    }
+  }
 }
 

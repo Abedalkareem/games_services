@@ -134,11 +134,18 @@ class GamesServicesPlugin : FlutterPlugin,
       Method.SubmitScore -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
         val score = call.argument<Int>("value") ?: 0
-        leaderboards?.submitScore(leaderboardID, score, result)
+        val token = call.argument<String>("token") ?: ""
+        leaderboards?.submitScore(leaderboardID, score, token, result)
       }
       Method.GetPlayerScore -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
         leaderboards?.getPlayerScore(leaderboardID, result)
+      }
+      Method.GetPlayerScoreObject -> {
+        val leaderboardID = call.argument<String>("leaderboardID") ?: ""
+        val span = call.argument<Int>("span") ?: 0
+        val leaderboardCollection = call.argument<Int>("leaderboardCollection") ?: 0
+        leaderboards?.getPlayerScoreObject(activity, leaderboardID, span, leaderboardCollection, result)
       }
       Method.GetPlayerID -> {
         player?.getPlayerID(activity, result)

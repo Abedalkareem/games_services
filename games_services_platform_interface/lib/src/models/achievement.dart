@@ -3,6 +3,7 @@ import '../util/device.dart';
 class Achievement {
   String? androidID;
   String iOSID;
+  bool showsCompletionBanner;
   double percentComplete;
   int steps;
 
@@ -11,8 +12,5 @@ class Achievement {
   }
 
   Achievement(
-      {this.androidID,
-      this.iOSID = "",
-      this.percentComplete = 100,
-      this.steps = 0});
+      {this.androidID, this.iOSID = "", this.showsCompletionBanner = true, this.percentComplete = 100, this.steps = 0});
 }

@@ -18,15 +18,14 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     return await _channel.invokeMethod("unlock", {
       "achievementID": achievement.id,
       "percentComplete": achievement.percentComplete,
+      "showsCompletionBanner": achievement.showsCompletionBanner
     });
   }
 
   @override
   Future<String?> submitScore({required Score score}) async {
-    return await _channel.invokeMethod("submitScore", {
-      "leaderboardID": score.leaderboardID,
-      "value": score.value,
-    });
+    return await _channel.invokeMethod(
+        "submitScore", {"leaderboardID": score.leaderboardID, "value": score.value, "token": score.token});
   }
 
   @override
@@ -57,6 +56,11 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
+  Future<String?> resetAchievements() async {
+    return await _channel.invokeMethod("resetAchievements");
+  }
+
+  @override
   Future<String?> loadLeaderboardScores(
       {iOSLeaderboardID = "",
       androidLeaderboardID = "",
@@ -78,6 +82,19 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     return await _channel.invokeMethod("getPlayerScore", {
       "leaderboardID":
           Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
+    });
+  }
+
+  @override
+  Future<String?> getPlayerScoreObject(
+      {iOSLeaderboardID = "",
+      androidLeaderboardID = "",
+      required PlayerScope scope,
+      required TimeScope timeScope}) async {
+    return await _channel.invokeMethod("getPlayerScoreObject", {
+      "leaderboardID": Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+      "leaderboardCollection": scope.value,
+      "span": timeScope.value
     });
   }
 
