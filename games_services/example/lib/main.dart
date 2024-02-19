@@ -74,6 +74,10 @@ class AppState extends State<App> {
                           child: const Text('Load Achievement'),
                         ),
                         ElevatedButton(
+                          onPressed: _resetAchievement,
+                          child: const Text('Reset Achievement'),
+                        ),
+                        ElevatedButton(
                           onPressed: _loadLeaderboardScores,
                           child: const Text('Load Leaderboard Scores'),
                         ),
@@ -97,6 +101,10 @@ class AppState extends State<App> {
                         ElevatedButton(
                           onPressed: _getPlayerScore,
                           child: const Text('Get player score'),
+                        ),
+                        ElevatedButton(
+                          onPressed: _getPlayerScoreObject,
+                          child: const Text('Load Player Centered Scores'),
                         ),
                         ElevatedButton(
                           onPressed: _getPlayerName,
@@ -153,6 +161,15 @@ class AppState extends State<App> {
     print(result);
   }
 
+  void _getPlayerScoreObject() async {
+    final result = await Leaderboards.getPlayerScoreObject(
+        iOSLeaderboardID: "ios_leaderboard_id",
+        androidLeaderboardID: "android_leaderboard_id",
+        scope: PlayerScope.global,
+        timeScope: TimeScope.allTime);
+    print(result);
+  }
+
   void _showAccessPoint() async {
     final result = await Player.showAccessPoint(AccessPointLocation.topLeading);
     print(result);
@@ -160,6 +177,11 @@ class AppState extends State<App> {
 
   void _hideAccessPoint() async {
     final result = await Player.hideAccessPoint();
+    print(result);
+  }
+
+  void _resetAchievement() async {
+    final result = await Achievements.resetAchievements();
     print(result);
   }
 

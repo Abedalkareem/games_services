@@ -35,12 +35,18 @@ class GamesServices {
     return await Achievements.loadAchievements();
   }
 
+  /// It will reset the achievements.
+  static Future<String?> resetAchievements() async {
+    return await Achievements.resetAchievements();
+  }
+
   /// Unlock an [achievement].
   /// [Achievement] takes three parameters:
   /// [androidID] the achievement ID for Google Play Games.
   /// [iOSID] the achievement ID for Game Center.
   /// [percentComplete] the completion percentage of the achievement,
   /// this parameter is optional on iOS/macOS.
+  /// [showsCompletionBanner] for iOS only, defaults to true
   static Future<String?> unlock({required Achievement achievement}) async {
     return await Achievements.unlock(achievement: achievement);
   }

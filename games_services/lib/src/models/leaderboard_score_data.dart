@@ -6,6 +6,7 @@ class LeaderboardScoreData {
   final int rawScore;
   final int timestampMillis;
   final PlayerData scoreHolder;
+  final String? token;
 
   // provided to maintain backwards compatibility
   @Deprecated('Use scoreHolder.displayName instead.')
@@ -13,13 +14,13 @@ class LeaderboardScoreData {
   @Deprecated('Use scoreHolder.iconImage instead.')
   String? get scoreHolderIconImage => scoreHolder.iconImage;
 
-  const LeaderboardScoreData({
-    required this.rank,
-    required this.displayScore,
-    required this.rawScore,
-    required this.timestampMillis,
-    required this.scoreHolder,
-  });
+  const LeaderboardScoreData(
+      {required this.rank,
+      required this.displayScore,
+      required this.rawScore,
+      required this.timestampMillis,
+      required this.scoreHolder,
+      this.token});
 
   factory LeaderboardScoreData.fromJson(Map<String, dynamic> json) {
     return LeaderboardScoreData(
@@ -28,6 +29,7 @@ class LeaderboardScoreData {
       rawScore: json["rawScore"],
       timestampMillis: json["timestampMillis"],
       scoreHolder: PlayerData.fromJson(json["scoreHolder"]),
+      token: (json["token"] as String?)?.replaceAll("\n", ""),
     );
   }
 }

@@ -5,4 +5,5 @@ struct LeaderboardScoreData: Codable {
   var rawScore: Int
   var timestampMillis: Int
   var scoreHolder: PlayerData
+  var token: String?
 }

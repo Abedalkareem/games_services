@@ -72,6 +72,11 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
+  /// Reset achievements.
+  Future<String?> resetAchievements() async {
+    throw UnimplementedError("not implemented.");
+  }
+
   /// Get leaderboard scores as json data.
   /// To show the device's default leaderboards screen use [showLeaderboards].
   Future<String?> loadLeaderboardScores(
@@ -80,6 +85,16 @@ abstract class GamesServicesPlatform extends PlatformInterface {
       required PlayerScope scope,
       required TimeScope timeScope,
       required int maxResults}) async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Get leaderboard scores as a json data for current player.
+  /// To show the prebuilt system screen use [showLeaderboards].
+  Future<String?> getPlayerScoreObject(
+      {iOSLeaderboardID = "",
+      androidLeaderboardID = "",
+      required PlayerScope scope,
+      required TimeScope timeScope}) async {
     throw UnimplementedError("not implemented.");
   }
 

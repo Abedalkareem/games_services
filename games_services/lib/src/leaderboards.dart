@@ -36,6 +36,21 @@ abstract class Leaderboards {
     return null;
   }
 
+  /// Get leaderboard scores as a list for current player
+  static Future<LeaderboardScoreData>? getPlayerScoreObject(
+      {iOSLeaderboardID = "",
+      androidLeaderboardID = "",
+      required PlayerScope scope,
+      required TimeScope timeScope}) async {
+    final String? response = await GamesServicesPlatform.instance.getPlayerScoreObject(
+        androidLeaderboardID: androidLeaderboardID,
+        iOSLeaderboardID: iOSLeaderboardID,
+        scope: scope,
+        timeScope: timeScope);
+
+    return LeaderboardScoreData.fromJson(json.decode(response ?? ""));
+  }
+
   /// Submit a [score] to specific leaderboard.
   /// [Score] takes three parameters:
   /// [androidLeaderboardID] the leaderboard ID for Google Play Games.

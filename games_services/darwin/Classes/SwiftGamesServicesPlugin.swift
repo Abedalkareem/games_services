@@ -33,16 +33,27 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       achievements.loadAchievements(result: result)
     case .showAchievements:
       achievements.showAchievements(result: result)
+    case .resetAchievements:
+      achievements.resetAchievements(result: result)    
     case .unlock:
       let achievementID = (arguments?["achievementID"] as? String) ?? ""
       let percentComplete = (arguments?["percentComplete"] as? Double) ?? 0.0
-      achievements.report(achievementID: achievementID, percentComplete: percentComplete, result: result)
+      let showsCompletionBanner = (arguments?["showsCompletionBanner"] as? Bool) ?? true
+      achievements.report(achievementID: achievementID, percentComplete: percentComplete, showsCompletionBanner: showsCompletionBanner, result: result)
     case .showLeaderboards:
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       leaderboards.showLeaderboardWith(identifier: leaderboardID, result: result)
     case .getPlayerScore:
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       leaderboards.getPlayerScore(leaderboardID: leaderboardID, result: result)
+    case .getPlayerScoreObject:
+      let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
+      let span = (arguments?["span"] as? Int) ?? 0
+      let leaderboardCollection = (arguments?["leaderboardCollection"] as? Int) ?? 0
+      leaderboards.getPlayerScoreObject(leaderboardID: leaderboardID,
+                            span: span,
+                            leaderboardCollection: leaderboardCollection,
+                            result: result)      
     case .loadLeaderboardScores:
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       let span = (arguments?["span"] as? Int) ?? 0
@@ -56,7 +67,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     case .submitScore:
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       let score = (arguments?["value"] as? Int) ?? 0
-      leaderboards.report(score: score, leaderboardID: leaderboardID, result: result)
+      let token = (arguments?["token"] as? String) ?? ""
+      leaderboards.report(score: score, leaderboardID: leaderboardID, token: token, result: result)
     case .hideAccessPoint:
       player.hideAccessPoint(result: result)
     case .showAccessPoint:

@@ -5,5 +5,6 @@ data class LeaderboardScoreData(
   val displayScore: String,
   val rawScore: Long,
   val timestampMillis: Long,
-  val scoreHolder: PlayerData
+  val scoreHolder: PlayerData,
+  val token: String?
 )

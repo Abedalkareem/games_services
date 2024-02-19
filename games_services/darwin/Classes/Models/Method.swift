@@ -11,6 +11,7 @@ enum Method: String {
   case getPlayerHiResImage = "getPlayerHiResImage"
   case getPlayerIconImage = "getPlayerIconImage"
   case getPlayerScore = "getPlayerScore"
+  case getPlayerScoreObject = "getPlayerScoreObject"
   case playerIsUnderage = "playerIsUnderage"
   case playerIsMultiplayerGamingRestricted = "playerIsMultiplayerGamingRestricted"
   case playerIsPersonalizedCommunicationRestricted = "playerIsPersonalizedCommunicationRestricted"
@@ -22,5 +23,6 @@ enum Method: String {
   case getSavedGames = "getSavedGames"
   case deleteGame = "deleteGame"
   case loadAchievements = "loadAchievements"
+  case resetAchievements = "resetAchievements"
   case loadLeaderboardScores = "loadLeaderboardScores"
 }
