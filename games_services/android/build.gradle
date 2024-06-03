@@ -48,6 +48,6 @@ android {
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'com.google.code.gson:gson:2.10.1'
-    api "com.google.android.gms:play-services-games-v2:17.0.0"
-    api 'com.google.android.gms:play-services-auth:20.6.0'
+    api "com.google.android.gms:play-services-games-v2:19.0.0"
+    api 'com.google.android.gms:play-services-auth:20.7.0'
 }
