@@ -34,10 +34,10 @@ packages:
     dependency: "direct main"
     description:
       name: games_services_platform_interface
-      sha256: be5a69656d0b76dd03a7d3d3db5c3eec5d85c51d44c862d83761576fa6cb4f13
+      sha256: "3742c23afdd5ebd5498612b13dc251853fccf935f6f56ef6bf13c6e8c0c89a8d"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "4.0.2"
   lints:
     dependency: transitive
     description:
