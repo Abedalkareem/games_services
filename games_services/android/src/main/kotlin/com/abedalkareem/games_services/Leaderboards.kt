@@ -138,7 +138,8 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
                   item.scoreHolderDisplayName,
                   item.scoreHolder?.playerId,
                   scoreHolderIconImage
-                )
+                ),
+                item.scoreTag
               )
             )
           }
@@ -178,10 +179,8 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
       }
   }
 
-  fun submitScore(leaderboardID: String, score: Int, result: MethodChannel.Result) {
-    leaderboardsClient
-      .submitScoreImmediate(leaderboardID, score.toLong())
-      .addOnSuccessListener {
+  fun submitScore(leaderboardID: String, score: Int, token: String, result: MethodChannel.Result) {
+    leaderboardsClient.submitScoreImmediate(leaderboardID, score.toLong(), token).addOnSuccessListener {
       result.success(null)
     }
       .addOnFailureListener {
@@ -212,4 +211,63 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
         result.error(PluginError.FailedToGetScore.errorCode(), it.localizedMessage, null)
       }
   }
+  
+  fun getPlayerScoreObject(
+    activity: Activity?,
+    leaderboardID: String,
+    span: Int,
+    leaderboardCollection: Int,
+    result: MethodChannel.Result
+  ) {
+    activity ?: return
+    leaderboardsClient?.loadCurrentPlayerLeaderboardScore(leaderboardID, span, leaderboardCollection)
+      ?.addOnSuccessListener { snapshotResult ->
+        val data = snapshotResult.get()
+        if (data == null) {
+          result.error(
+            PluginError.FailedToGetScore.errorCode(),
+            PluginError.FailedToGetScore.errorMessage(),
+            null
+          )
+          return@addOnSuccessListener
+        }
+        val handler = CoroutineExceptionHandler { _, exception ->
+          result.error(
+            PluginError.FailedToGetScore.errorCode(),
+            exception.localizedMessage,
+            null
+          )
+        }
+
+        CoroutineScope(Dispatchers.Main + handler).launch {
+          val scoreHolderIconImage =
+            data.scoreHolderIconImageUri.let { imageLoader.loadImageFromUri(activity, it) }
+
+          val score = LeaderboardScoreData(
+              data.rank,
+              data.displayScore,
+              data.rawScore,
+              data.timestampMillis,
+              PlayerData(
+                  data.scoreHolderDisplayName,
+                  data.scoreHolder?.playerId,
+                  scoreHolderIconImage
+              ),
+              data.scoreTag
+            )
+                   
+          val gson = Gson()
+          val string = gson.toJson(score) ?: ""
+          
+          result.success(string)
+        }
+      }
+      ?.addOnFailureListener {
+        result.error(
+          PluginError.FailedToGetScore.errorCode(),
+          it.localizedMessage,
+          null
+        )
+      }
+  }  
 }

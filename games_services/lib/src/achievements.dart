@@ -22,6 +22,11 @@ abstract class Achievements {
     return null;
   }
 
+  /// It will reset the achievements.
+  static Future<String?> resetAchievements() async {
+    return await GamesServicesPlatform.instance.resetAchievements();
+  }
+
   /// Unlock an [achievement].
   /// [Achievement] takes three parameters:
   /// [androidID] the achievement ID for Google Play Games.
