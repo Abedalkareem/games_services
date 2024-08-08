@@ -24,8 +24,11 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
 
   @override
   Future<String?> submitScore({required Score score}) async {
-    return await _channel.invokeMethod(
-        "submitScore", {"leaderboardID": score.leaderboardID, "value": score.value, "token": score.token});
+    return await _channel.invokeMethod("submitScore", {
+      "leaderboardID": score.leaderboardID,
+      "value": score.value,
+      "token": score.token
+    });
   }
 
   @override
@@ -64,12 +67,14 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   Future<String?> loadLeaderboardScores(
       {iOSLeaderboardID = "",
       androidLeaderboardID = "",
+      bool playerCentered = false,
       required PlayerScope scope,
       required TimeScope timeScope,
       required int maxResults}) async {
     return await _channel.invokeMethod("loadLeaderboardScores", {
       "leaderboardID":
           Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+      "playerCentered": playerCentered,
       "leaderboardCollection": scope.value,
       "span": timeScope.value,
       "maxResults": maxResults
@@ -92,7 +97,8 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
       required PlayerScope scope,
       required TimeScope timeScope}) async {
     return await _channel.invokeMethod("getPlayerScoreObject", {
-      "leaderboardID": Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+      "leaderboardID":
+          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
       "leaderboardCollection": scope.value,
       "span": timeScope.value
     });

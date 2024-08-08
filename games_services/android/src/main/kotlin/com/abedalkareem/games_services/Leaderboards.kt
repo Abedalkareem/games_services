@@ -33,6 +33,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
 
   // used to retry [loadLeaderboardScore] after being granted friends list access
   private var leaderboardID: String? = null;
+  private var playerCentered: Boolean? = null;
   private var span: Int? = null;
   private var leaderboardCollection: Int? = null;
   private var maxResults: Int? = null;
@@ -48,6 +49,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
         loadLeaderboardScores(
           activityPluginBinding.activity,
           leaderboardID!!,
+          playerCentered!!,
           span!!,
           leaderboardCollection!!,
           maxResults!!,
@@ -61,6 +63,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
         )
       }
       leaderboardID = null
+      playerCentered = null
       span = null
       leaderboardCollection = null
       maxResults = null
@@ -97,13 +100,15 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   fun loadLeaderboardScores(
     activity: Activity?,
     leaderboardID: String,
+    playerCentered: Boolean,
     span: Int,
     leaderboardCollection: Int,
     maxResults: Int,
     result: MethodChannel.Result
   ) {
     activity ?: return
-    leaderboardsClient.loadTopScores(leaderboardID, span, leaderboardCollection, maxResults)
+    (if (playerCentered) leaderboardsClient.loadPlayerCenteredScores(leaderboardID, span, leaderboardCollection, maxResults)
+        else leaderboardsClient.loadTopScores(leaderboardID, span, leaderboardCollection, maxResults))
       .addOnSuccessListener { annotatedData ->
         val data = annotatedData.get()
 
@@ -153,6 +158,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
         // handle friends list CONSENT_REQUIRED error to trigger permission request dialog
         if (it is FriendsResolutionRequiredException) {
           this.leaderboardID = leaderboardID
+          this.playerCentered = playerCentered
           this.span = span
           this.leaderboardCollection = leaderboardCollection
           this.maxResults = maxResults

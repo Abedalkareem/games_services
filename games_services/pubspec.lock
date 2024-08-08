@@ -33,10 +33,9 @@ packages:
   games_services_platform_interface:
     dependency: "direct main"
     description:
-      name: games_services_platform_interface
-      sha256: "3742c23afdd5ebd5498612b13dc251853fccf935f6f56ef6bf13c6e8c0c89a8d"
-      url: "https://pub.dev"
-    source: hosted
+      path: "../games_services_platform_interface"
+      relative: true
+    source: path
     version: "4.0.2"
   lints:
     dependency: transitive

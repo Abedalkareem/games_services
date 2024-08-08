@@ -56,10 +56,12 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
                             result: result)      
     case .loadLeaderboardScores:
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
+      let playerCentered = (arguments?["playerCentered"] as? Bool) ?? false
       let span = (arguments?["span"] as? Int) ?? 0
       let leaderboardCollection = (arguments?["leaderboardCollection"] as? Int) ?? 0
       let maxResults = (arguments?["maxResults"] as? Int) ?? 10
       leaderboards.loadLeaderboardScores(leaderboardID: leaderboardID,
+                            playerCentered: playerCentered,
                             span: span,
                             leaderboardCollection: leaderboardCollection,
                             maxResults: maxResults,

@@ -82,6 +82,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   Future<String?> loadLeaderboardScores(
       {iOSLeaderboardID = "",
       androidLeaderboardID = "",
+      bool playerCentered = false,
       required PlayerScope scope,
       required TimeScope timeScope,
       required int maxResults}) async {
