@@ -15,9 +15,9 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/games_services/darwin"
 
 SPEC CHECKSUMS:
-  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   games_services: 9d174ae29e8de7aa3f511bc00fedd7006594063f
 
 PODFILE CHECKSUM: 1d687fa337e018c706d6fe47544322b4937fa8f6
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.14.3
