@@ -1,3 +1,11 @@
+## 4.0.2
+- Add getPlayerScoreObject to retrieve rank and other score data for leaderboard and time span. by @egonbeermat
+- Add optional String token to methods that submit and retrieve score. by @egonbeermat
+- Add optional Bool showsCompletionBanner as parameter for iOS GKAchievement.report, replacing hard-coded true. Defaults to true. by @egonbeermat
+- Add resetAchievements method for iOS only, Android doesn't support this through Play Games. by @egonbeermat
+- Export for player_data.dart. by @@theLee3
+- Add logs to save game.
+
 ## 4.0.1
 - Add ability to get Play Games auth code for use with backends by @theLee3
 - Add PlayerData class to return more score holder details by @theLee3
