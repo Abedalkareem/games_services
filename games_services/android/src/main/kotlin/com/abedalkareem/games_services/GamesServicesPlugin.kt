@@ -133,7 +133,8 @@ class GamesServicesPlugin : FlutterPlugin,
       }
       Method.SubmitScore -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
-        val score = call.argument<Int>("value") ?: 0
+        val scoreValue = call.argument<Any>("value") ?: 0L
+        val score = if (scoreValue is Int) scoreValue.toLong() else scoreValue as Long
         val token = call.argument<String>("token") ?: ""
         leaderboards?.submitScore(leaderboardID, score, token, result)
       }

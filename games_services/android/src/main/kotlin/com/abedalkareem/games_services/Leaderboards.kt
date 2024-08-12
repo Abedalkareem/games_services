@@ -179,8 +179,8 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
       }
   }
 
-  fun submitScore(leaderboardID: String, score: Int, token: String, result: MethodChannel.Result) {
-    leaderboardsClient.submitScoreImmediate(leaderboardID, score.toLong(), token).addOnSuccessListener {
+  fun submitScore(leaderboardID: String, score: Long, token: String, result: MethodChannel.Result) {
+    leaderboardsClient.submitScoreImmediate(leaderboardID, score, token).addOnSuccessListener {
       result.success(null)
     }
       .addOnFailureListener {
