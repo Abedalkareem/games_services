@@ -51,7 +51,6 @@ class GamesServicesPlugin : FlutterPlugin,
 
   //region ActivityAware
   private fun disposeActivity() {
-    activityPluginBinding?.removeActivityResultListener(auth)
     activityPluginBinding = null
     leaderboards = null
     achievements = null
@@ -78,7 +77,6 @@ class GamesServicesPlugin : FlutterPlugin,
   override fun onAttachedToActivity(binding: ActivityPluginBinding) {
     activityPluginBinding = binding
     activity = binding.activity
-    binding.addActivityResultListener(auth)
     init()
   }
 
