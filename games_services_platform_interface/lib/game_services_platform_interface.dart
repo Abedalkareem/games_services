@@ -182,7 +182,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   }
 
   /// Get all saved games.
-  Future<String?> getSavedGames() async {
+  Future<String?> getSavedGames({bool forceRefresh = false}) async {
     throw UnimplementedError("not implemented.");
   }
 }

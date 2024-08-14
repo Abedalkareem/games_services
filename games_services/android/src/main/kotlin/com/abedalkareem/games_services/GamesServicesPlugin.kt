@@ -171,7 +171,8 @@ class GamesServicesPlugin : FlutterPlugin,
         saveGame?.loadGame(name, result)
       }
       Method.GetSavedGames -> {
-        saveGame?.getSavedGames(result)
+        val forceRefresh = call.argument<Boolean>("forceRefresh") ?: false
+        saveGame?.getSavedGames(forceRefresh, result)
       }
       Method.DeleteGame -> {
         val name = call.argument<String>("name") ?: ""

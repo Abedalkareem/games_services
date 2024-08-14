@@ -175,8 +175,12 @@ class GamesServices {
   }
 
   /// Get all saved games.
-  static Future<List<SavedGame>?> getSavedGames() async {
-    return await SaveGame.getSavedGames();
+  ///
+  /// The `forceRefresh` argument will invalidate the cache on Android, fetching
+  /// the latest results. It has no affect on iOS.
+  static Future<List<SavedGame>?> getSavedGames(
+      {bool forceRefresh = false}) async {
+    return await SaveGame.getSavedGames(forceRefresh: forceRefresh);
   }
 
   /// Delete game with [name].

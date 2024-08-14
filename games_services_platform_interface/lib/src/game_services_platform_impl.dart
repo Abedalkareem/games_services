@@ -188,8 +188,9 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> getSavedGames() async {
-    return await _channel.invokeMethod("getSavedGames");
+  Future<String?> getSavedGames({bool forceRefresh = false}) async {
+    return await _channel
+        .invokeMethod("getSavedGames", {"forceRefresh": forceRefresh});
   }
 
   @override
