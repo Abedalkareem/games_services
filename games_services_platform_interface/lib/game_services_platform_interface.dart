@@ -68,7 +68,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Get achievements as json data.
   /// To show the device's default achievements screen use [showAchievements].
-  Future<String?> loadAchievements() async {
+  Future<String?> loadAchievements({bool forceRefresh = false}) async {
     throw UnimplementedError("not implemented.");
   }
 

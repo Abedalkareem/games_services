@@ -107,7 +107,8 @@ class GamesServicesPlugin : FlutterPlugin,
         achievements?.showAchievements(activity, result)
       }
       Method.LoadAchievements -> {
-        achievements?.loadAchievements(activity, result)
+        val forceRefresh = call.argument<Boolean>("forceRefresh") ?: false
+        achievements?.loadAchievements(activity, forceRefresh, result)
       }
       Method.Unlock -> {
         val achievementID = call.argument<String>("achievementID") ?: ""

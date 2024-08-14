@@ -31,8 +31,12 @@ class GamesServices {
 
   /// Get achievements as a list. Use this to build a custom UI.
   /// To show the device's default achievements screen use [showAchievements].
-  static Future<List<AchievementItemData>?> loadAchievements() async {
-    return await Achievements.loadAchievements();
+  ///
+  /// The `forceRefresh` argument will invalidate the cache on Android, fetching
+  /// the latest results. It has no affect on iOS.
+  static Future<List<AchievementItemData>?> loadAchievements(
+      {bool forceRefresh = false}) async {
+    return await Achievements.loadAchievements(forceRefresh: forceRefresh);
   }
 
   /// It will reset the achievements.
