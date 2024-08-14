@@ -128,7 +128,8 @@ class GamesServicesPlugin : FlutterPlugin,
         val span = call.argument<Int>("span") ?: 0
         val leaderboardCollection = call.argument<Int>("leaderboardCollection") ?: 0
         val maxResults = call.argument<Int>("maxResults") ?: 0
-        leaderboards?.loadLeaderboardScores(activity, leaderboardID, playerCentered, span, leaderboardCollection, maxResults, result)
+        val forceRefresh = call.argument<Boolean>("forceRefresh") ?: false
+        leaderboards?.loadLeaderboardScores(activity, leaderboardID, playerCentered, span, leaderboardCollection, maxResults, forceRefresh, result)
       }
       Method.SubmitScore -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""

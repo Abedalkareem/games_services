@@ -72,18 +72,25 @@ class GamesServices {
 
   /// Get leaderboard scores as a list. Use this to build a custom UI.
   /// To show the device's default leaderboards screen use [showLeaderboards].
+  ///
+  /// The `forceRefresh` argument will invalidate the cache on Android, fetching
+  /// the latest results. It has no affect on iOS.
   static Future<List<LeaderboardScoreData>?> loadLeaderboardScores(
       {iOSLeaderboardID = "",
       androidLeaderboardID = "",
+      bool playerCentered = false,
       required PlayerScope scope,
       required TimeScope timeScope,
+      bool forceRefresh = false,
       required int maxResults}) async {
     return await Leaderboards.loadLeaderboardScores(
         iOSLeaderboardID: iOSLeaderboardID,
         androidLeaderboardID: androidLeaderboardID,
+        playerCentered: playerCentered,
         scope: scope,
         timeScope: timeScope,
-        maxResults: maxResults);
+        maxResults: maxResults,
+        forceRefresh: forceRefresh);
   }
 
   /// Submit a [score] to specific leaderboard.

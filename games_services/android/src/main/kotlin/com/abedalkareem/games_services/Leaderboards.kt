@@ -32,13 +32,14 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
     }
 
   // used to retry [loadLeaderboardScore] after being granted friends list access
-  private var leaderboardID: String? = null;
-  private var playerCentered: Boolean? = null;
-  private var span: Int? = null;
-  private var leaderboardCollection: Int? = null;
-  private var maxResults: Int? = null;
-  private var result: MethodChannel.Result? = null;
-  private var errorMessage: String? = null;
+  private var leaderboardID: String? = null
+  private var playerCentered: Boolean? = null
+  private var span: Int? = null
+  private var leaderboardCollection: Int? = null
+  private var maxResults: Int? = null
+  private var forceRefresh: Boolean? = null
+  private var result: MethodChannel.Result? = null
+  private var errorMessage: String? = null
 
   // handle result from friends list permission request
   override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
@@ -53,6 +54,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
           span!!,
           leaderboardCollection!!,
           maxResults!!,
+          forceRefresh!!,
           result!!
         )
       } else {
@@ -67,8 +69,9 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
       span = null
       leaderboardCollection = null
       maxResults = null
+      forceRefresh = null
       result = null
-      errorMessage = null;
+      errorMessage = null
       true
     } else {
       false
@@ -104,11 +107,12 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
     span: Int,
     leaderboardCollection: Int,
     maxResults: Int,
+    forceRefresh: Boolean,
     result: MethodChannel.Result
   ) {
     activity ?: return
-    (if (playerCentered) leaderboardsClient.loadPlayerCenteredScores(leaderboardID, span, leaderboardCollection, maxResults)
-        else leaderboardsClient.loadTopScores(leaderboardID, span, leaderboardCollection, maxResults))
+    (if (playerCentered) leaderboardsClient.loadPlayerCenteredScores(leaderboardID, span, leaderboardCollection, maxResults, forceRefresh)
+        else leaderboardsClient.loadTopScores(leaderboardID, span, leaderboardCollection, maxResults, forceRefresh))
       .addOnSuccessListener { annotatedData ->
         val data = annotatedData.get()
 
@@ -162,6 +166,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
           this.span = span
           this.leaderboardCollection = leaderboardCollection
           this.maxResults = maxResults
+          this.forceRefresh = forceRefresh
           this.result = result
           this.errorMessage = it.localizedMessage
           val pendingIntent = it.resolution

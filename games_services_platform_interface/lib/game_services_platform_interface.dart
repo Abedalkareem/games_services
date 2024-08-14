@@ -85,7 +85,8 @@ abstract class GamesServicesPlatform extends PlatformInterface {
       bool playerCentered = false,
       required PlayerScope scope,
       required TimeScope timeScope,
-      required int maxResults}) async {
+      required int maxResults,
+      bool forceRefresh = false}) async {
     throw UnimplementedError("not implemented.");
   }
 

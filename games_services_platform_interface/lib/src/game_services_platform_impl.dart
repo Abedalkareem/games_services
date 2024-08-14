@@ -70,14 +70,16 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
       bool playerCentered = false,
       required PlayerScope scope,
       required TimeScope timeScope,
-      required int maxResults}) async {
+      required int maxResults,
+      bool forceRefresh = false}) async {
     return await _channel.invokeMethod("loadLeaderboardScores", {
       "leaderboardID":
           Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
       "playerCentered": playerCentered,
       "leaderboardCollection": scope.value,
       "span": timeScope.value,
-      "maxResults": maxResults
+      "maxResults": maxResults,
+      "forceRefresh": forceRefresh
     });
   }
 
