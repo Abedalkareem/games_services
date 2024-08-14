@@ -20,16 +20,17 @@ abstract class Leaderboards {
   static Future<List<LeaderboardScoreData>?> loadLeaderboardScores(
       {iOSLeaderboardID = "",
       androidLeaderboardID = "",
+      bool playerCentered = false,
       required PlayerScope scope,
       required TimeScope timeScope,
       required int maxResults}) async {
     final response = await GamesServicesPlatform.instance.loadLeaderboardScores(
-      androidLeaderboardID: androidLeaderboardID,
-      iOSLeaderboardID: iOSLeaderboardID,
-      scope: scope,
-      timeScope: timeScope,
-      maxResults: maxResults,
-    );
+        androidLeaderboardID: androidLeaderboardID,
+        iOSLeaderboardID: iOSLeaderboardID,
+        playerCentered: playerCentered,
+        scope: scope,
+        timeScope: timeScope,
+        maxResults: maxResults);
     if (response != null) {
       Iterable items = json.decode(response) as List;
       return List<LeaderboardScoreData>.from(
@@ -44,13 +45,12 @@ abstract class Leaderboards {
       androidLeaderboardID = "",
       required PlayerScope scope,
       required TimeScope timeScope}) async {
-    final String? response =
-        await GamesServicesPlatform.instance.getPlayerScoreObject(
-      androidLeaderboardID: androidLeaderboardID,
-      iOSLeaderboardID: iOSLeaderboardID,
-      scope: scope,
-      timeScope: timeScope,
-    );
+    final String? response = await GamesServicesPlatform.instance
+        .getPlayerScoreObject(
+            androidLeaderboardID: androidLeaderboardID,
+            iOSLeaderboardID: iOSLeaderboardID,
+            scope: scope,
+            timeScope: timeScope);
 
     return LeaderboardScoreData.fromJson(json.decode(response ?? ""));
   }

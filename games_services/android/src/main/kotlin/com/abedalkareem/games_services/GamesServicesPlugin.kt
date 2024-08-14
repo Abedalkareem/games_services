@@ -126,10 +126,11 @@ class GamesServicesPlugin : FlutterPlugin,
       }
       Method.LoadLeaderboardScores -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
+        val playerCentered = call.argument<Boolean>("playerCentered") ?: false
         val span = call.argument<Int>("span") ?: 0
         val leaderboardCollection = call.argument<Int>("leaderboardCollection") ?: 0
         val maxResults = call.argument<Int>("maxResults") ?: 0
-        leaderboards?.loadLeaderboardScores(activity, leaderboardID, span, leaderboardCollection, maxResults, result)
+        leaderboards?.loadLeaderboardScores(activity, leaderboardID, playerCentered, span, leaderboardCollection, maxResults, result)
       }
       Method.SubmitScore -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""

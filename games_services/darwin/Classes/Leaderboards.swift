@@ -97,7 +97,7 @@ class Leaderboards: BaseGamesServices {
     }
   }
   
-  func loadLeaderboardScores(leaderboardID: String, span: Int, leaderboardCollection: Int, maxResults: Int, result: @escaping FlutterResult) {
+  func loadLeaderboardScores(leaderboardID: String, playerCentered: Bool, span: Int, leaderboardCollection: Int, maxResults: Int, result: @escaping FlutterResult) {
     if #available(iOS 14.0, *) {
       Task {
         do {
@@ -106,9 +106,22 @@ class Leaderboards: BaseGamesServices {
             result(PluginError.failedToLoadLeaderboardScores.flutterError())
             return
           }
+          var startLocation = 1
+          if (playerCentered) {
+            let response = try await leaderboard.loadEntries(for: [currentPlayer],
+                                                                  timeScope: GKLeaderboard.TimeScope(rawValue: span) ?? .allTime)
+      
+            let (localPlayerEntry, _) = response
+            if let localPlayerEntry {
+              startLocation = localPlayerEntry.rank - maxResults / 2
+              if (startLocation < 1) {
+                startLocation = 1
+              }
+            }
+          }
           let (_, scores, _) = try await leaderboard.loadEntries(for: GKLeaderboard.PlayerScope(rawValue: leaderboardCollection) ?? .global,
                                                                  timeScope: GKLeaderboard.TimeScope(rawValue: span) ?? .allTime,
-                                                                 range: NSRange(location: 1, length: maxResults))
+                                                                 range: NSRange(location: startLocation, length: maxResults))
           var items = [LeaderboardScoreData]()
           for item in scores {
             #if os(macOS)
