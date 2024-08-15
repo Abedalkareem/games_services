@@ -13,5 +13,13 @@ Sign the user into Game Center (iOS/macOS) or Google Play Games (Android). This 
 A boolean value to check if the user is currently signed into Game Center or Google Play Games.
 
 ```dart
-final isSignedIn = GameAuth.isSignedIn;
+final isSignedIn = await GameAuth.isSignedIn;
+```
+
+## Get Auth Code
+
+Retrieve a Google Play Games `server_auth_code` to be used by a backend, such as Firebase, to authenticate the user. `null` on other platforms.
+
+```dart
+final authCode = await GameAuth.getAuthCode(String clientID);
 ```

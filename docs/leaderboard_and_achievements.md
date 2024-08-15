@@ -57,6 +57,8 @@ Get leaderboard scores as a list. Use this to build a custom UI.
 final result = await Leaderboards.loadLeaderboardScores(
         iOSLeaderboardID: "ios_leaderboard_id",
         androidLeaderboardID: "android_leaderboard_id",
+        // Returns a list centered around the player's rank on the leaderboard. (Defaults to false)
+        playerCentered: false,
         scope: PlayerScope.global,
         timeScope: TimeScope.allTime,
         maxResults: 10);

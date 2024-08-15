@@ -27,7 +27,7 @@ abstract class Achievements {
     return null;
   }
 
-  /// It will reset the achievements.
+  /// It will reset the achievements. Not available on Android.
   static Future<String?> resetAchievements() async {
     return await GamesServicesPlatform.instance.resetAchievements();
   }

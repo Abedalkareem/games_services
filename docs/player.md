@@ -16,6 +16,18 @@ Get the current player's name. This returns the player's alias on iOS/macOS.
 final playerName = Player.getPlayerName();
 ```
 
+## Player icon image
+
+Get the player's icon image as a base64 encoded string.
+
+```dart
+// icon-size image
+final base64iconImage = await Player.getPlayerIconImage();
+
+// hi-res image
+final base64hiResImage = await Player.getPlayerHiResImage();
+```
+
 ## Player score
 
 Get the current player's score for a specific leaderboard.
