@@ -61,8 +61,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Open the device's default leaderboards screen. If a leaderboard ID is provided,
   /// it will display the specific leaderboard, otherwise it will show the list of all leaderboards.
-  Future<String?> showLeaderboards(
-      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+  Future<String?> showLeaderboards({iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -100,14 +99,12 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   }
 
   /// Get the current player's score for a specific leaderboard.
-  Future<int?> getPlayerScore(
-      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+  Future<int?> getPlayerScore({iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     throw UnimplementedError("not implemented.");
   }
 
   /// Check if the current player is underage (always false on Android).
-  Future<bool?> get playerIsUnderage =>
-      throw UnimplementedError("not implemented.");
+  Future<bool?> get playerIsUnderage => throw UnimplementedError("not implemented.");
 
   /// Check if the current player is restricted from joining multiplayer games (always false on Android).
   Future<bool?> get playerIsMultiplayerGamingRestricted =>
@@ -129,7 +126,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Retrieve Google Play Games [server_auth_code] to be used by an auth provider,
   /// such as Firebase, to authenticate the user. [null] on other platforms.
-  Future<String?> getAuthCode(String clientID) =>
+  Future<String?> getAuthCode(String clientID, {bool forceRefreshToken = false}) =>
       throw UnimplementedError("not implemented.");
 
   /// Show the Game Center Access Point for the current player.
