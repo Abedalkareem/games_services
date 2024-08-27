@@ -13,6 +13,6 @@ abstract class GameAuth {
 
   /// Retrieve a Google Play Games `server_auth_code` to be used by a backend,
   /// such as Firebase, to authenticate the user. `null` on other platforms.
-  static Future<String?> getAuthCode(String clientID) async =>
-      await GamesServicesPlatform.instance.getAuthCode(clientID);
+  static Future<String?> getAuthCode(String clientID, {bool forceRefreshToken = false}) =>
+      GamesServicesPlatform.instance.getAuthCode(clientID, forceRefreshToken: forceRefreshToken);
 }
