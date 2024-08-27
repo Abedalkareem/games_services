@@ -42,10 +42,10 @@ class Auth {
     }
   }
 
-  fun getAuthCode(clientID: String, activity: Activity?, result: MethodChannel.Result) {
+  fun getAuthCode(clientID: String, forceRefreshToken: Boolean, activity: Activity?, result: MethodChannel.Result) {
     activity ?: return
     val gamesSignInClient = PlayGames.getGamesSignInClient(activity)
-    gamesSignInClient.requestServerSideAccess(clientID, false).addOnSuccessListener {
+    gamesSignInClient.requestServerSideAccess(clientID, forceRefreshToken).addOnSuccessListener {
       result.success(it)
     }.addOnFailureListener {
       result.error(PluginError.FailedToGetAuthCode.errorCode(), it.message ?: "", null)
