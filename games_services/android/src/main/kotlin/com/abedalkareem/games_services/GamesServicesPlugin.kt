@@ -107,7 +107,8 @@ class GamesServicesPlugin : FlutterPlugin,
         achievements?.showAchievements(activity, result)
       }
       Method.LoadAchievements -> {
-        achievements?.loadAchievements(activity, result)
+        val forceRefresh = call.argument<Boolean>("forceRefresh") ?: false
+        achievements?.loadAchievements(activity, forceRefresh, result)
       }
       Method.Unlock -> {
         val achievementID = call.argument<String>("achievementID") ?: ""
@@ -128,7 +129,8 @@ class GamesServicesPlugin : FlutterPlugin,
         val span = call.argument<Int>("span") ?: 0
         val leaderboardCollection = call.argument<Int>("leaderboardCollection") ?: 0
         val maxResults = call.argument<Int>("maxResults") ?: 0
-        leaderboards?.loadLeaderboardScores(activity, leaderboardID, playerCentered, span, leaderboardCollection, maxResults, result)
+        val forceRefresh = call.argument<Boolean>("forceRefresh") ?: false
+        leaderboards?.loadLeaderboardScores(activity, leaderboardID, playerCentered, span, leaderboardCollection, maxResults, forceRefresh, result)
       }
       Method.SubmitScore -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
@@ -169,7 +171,8 @@ class GamesServicesPlugin : FlutterPlugin,
         saveGame?.loadGame(name, result)
       }
       Method.GetSavedGames -> {
-        saveGame?.getSavedGames(result)
+        val forceRefresh = call.argument<Boolean>("forceRefresh") ?: false
+        saveGame?.getSavedGames(forceRefresh, result)
       }
       Method.DeleteGame -> {
         val name = call.argument<String>("name") ?: ""

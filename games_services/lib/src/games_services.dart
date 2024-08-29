@@ -31,8 +31,12 @@ class GamesServices {
 
   /// Get achievements as a list. Use this to build a custom UI.
   /// To show the device's default achievements screen use [showAchievements].
-  static Future<List<AchievementItemData>?> loadAchievements() async {
-    return await Achievements.loadAchievements();
+  ///
+  /// The `forceRefresh` argument will invalidate the cache on Android, fetching
+  /// the latest results. It has no affect on iOS.
+  static Future<List<AchievementItemData>?> loadAchievements(
+      {bool forceRefresh = false}) async {
+    return await Achievements.loadAchievements(forceRefresh: forceRefresh);
   }
 
   /// It will reset the achievements.
@@ -72,18 +76,25 @@ class GamesServices {
 
   /// Get leaderboard scores as a list. Use this to build a custom UI.
   /// To show the device's default leaderboards screen use [showLeaderboards].
+  ///
+  /// The `forceRefresh` argument will invalidate the cache on Android, fetching
+  /// the latest results. It has no affect on iOS.
   static Future<List<LeaderboardScoreData>?> loadLeaderboardScores(
       {iOSLeaderboardID = "",
       androidLeaderboardID = "",
+      bool playerCentered = false,
       required PlayerScope scope,
       required TimeScope timeScope,
+      bool forceRefresh = false,
       required int maxResults}) async {
     return await Leaderboards.loadLeaderboardScores(
         iOSLeaderboardID: iOSLeaderboardID,
         androidLeaderboardID: androidLeaderboardID,
+        playerCentered: playerCentered,
         scope: scope,
         timeScope: timeScope,
-        maxResults: maxResults);
+        maxResults: maxResults,
+        forceRefresh: forceRefresh);
   }
 
   /// Submit a [score] to specific leaderboard.
@@ -164,8 +175,12 @@ class GamesServices {
   }
 
   /// Get all saved games.
-  static Future<List<SavedGame>?> getSavedGames() async {
-    return await SaveGame.getSavedGames();
+  ///
+  /// The `forceRefresh` argument will invalidate the cache on Android, fetching
+  /// the latest results. It has no affect on iOS.
+  static Future<List<SavedGame>?> getSavedGames(
+      {bool forceRefresh = false}) async {
+    return await SaveGame.getSavedGames(forceRefresh: forceRefresh);
   }
 
   /// Delete game with [name].

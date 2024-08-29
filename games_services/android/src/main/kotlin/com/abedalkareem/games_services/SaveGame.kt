@@ -21,9 +21,9 @@ class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
       return PlayGames.getSnapshotsClient(activityPluginBinding.activity)
     }
 
-  fun getSavedGames(result: MethodChannel.Result) {
+  fun getSavedGames(forceRefresh: Boolean, result: MethodChannel.Result) {
     Log.d(tag, "[GetSavedGames] Start loading all saved games")
-    snapshotsClient.load(true)
+    snapshotsClient.load(forceRefresh)
       .addOnSuccessListener { annotatedData ->
 
         val gson = Gson()

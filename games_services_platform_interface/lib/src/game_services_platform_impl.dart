@@ -54,8 +54,9 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> loadAchievements() async {
-    return await _channel.invokeMethod("loadAchievements");
+  Future<String?> loadAchievements({bool forceRefresh = false}) async {
+    return await _channel
+        .invokeMethod("loadAchievements", {"forceRefresh": forceRefresh});
   }
 
   @override
@@ -70,14 +71,16 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
       bool playerCentered = false,
       required PlayerScope scope,
       required TimeScope timeScope,
-      required int maxResults}) async {
+      required int maxResults,
+      bool forceRefresh = false}) async {
     return await _channel.invokeMethod("loadLeaderboardScores", {
       "leaderboardID":
           Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
       "playerCentered": playerCentered,
       "leaderboardCollection": scope.value,
       "span": timeScope.value,
-      "maxResults": maxResults
+      "maxResults": maxResults,
+      "forceRefresh": forceRefresh
     });
   }
 
@@ -185,8 +188,9 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> getSavedGames() async {
-    return await _channel.invokeMethod("getSavedGames");
+  Future<String?> getSavedGames({bool forceRefresh = false}) async {
+    return await _channel
+        .invokeMethod("getSavedGames", {"forceRefresh": forceRefresh});
   }
 
   @override

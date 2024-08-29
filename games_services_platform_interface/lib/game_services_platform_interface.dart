@@ -68,7 +68,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Get achievements as json data.
   /// To show the device's default achievements screen use [showAchievements].
-  Future<String?> loadAchievements() async {
+  Future<String?> loadAchievements({bool forceRefresh = false}) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -85,7 +85,8 @@ abstract class GamesServicesPlatform extends PlatformInterface {
       bool playerCentered = false,
       required PlayerScope scope,
       required TimeScope timeScope,
-      required int maxResults}) async {
+      required int maxResults,
+      bool forceRefresh = false}) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -181,7 +182,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   }
 
   /// Get all saved games.
-  Future<String?> getSavedGames() async {
+  Future<String?> getSavedGames({bool forceRefresh = false}) async {
     throw UnimplementedError("not implemented.");
   }
 }

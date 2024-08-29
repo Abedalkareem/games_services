@@ -62,10 +62,10 @@ class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
       }
   }
 
-  fun loadAchievements(activity: Activity?, result: MethodChannel.Result) {
+  fun loadAchievements(activity: Activity?, forceRefresh: Boolean, result: MethodChannel.Result) {
     activity ?: return
     achievementClient
-      .load(true)
+      .load(forceRefresh)
       .addOnSuccessListener { annotatedData ->
         val data = annotatedData.get()
 

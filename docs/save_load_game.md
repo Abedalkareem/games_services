@@ -23,12 +23,6 @@ Enable saved games support for your game in the Google Play Console:
 - Turn the `Saved Games` option to `ON`.  
 - Click `Save`.
 
-After that when you sign in make sure to set `shouldEnableSavedGame` to `true`.
-
-``` dart
- GameAuth.signIn(shouldEnableSavedGame: true);
-```  
-
 ## Save game
 
 Save a game with `data` and a unique `name`.

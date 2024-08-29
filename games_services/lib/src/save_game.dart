@@ -18,8 +18,13 @@ abstract class SaveGame {
   }
 
   /// Get all saved games.
-  static Future<List<SavedGame>?> getSavedGames() async {
-    final result = await GamesServicesPlatform.instance.getSavedGames();
+  ///
+  /// The `forceRefresh` argument will invalidate the cache on Android, fetching
+  /// the latest results. It has no affect on iOS.
+  static Future<List<SavedGame>?> getSavedGames(
+      {bool forceRefresh = false}) async {
+    final result = await GamesServicesPlatform.instance
+        .getSavedGames(forceRefresh: forceRefresh);
     if (result == null) {
       return null;
     }
