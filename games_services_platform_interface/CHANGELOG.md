@@ -1,3 +1,6 @@
+## 4.0.3
+- Add optional Bool forceRefreshToken as parameter for Android GamesSignInClient.requestServerSideAccess, replacing hard-coded false. Defaults to false. by @yukinoshita0219
+
 ## 4.0.2
 - Add getPlayerScoreObject to retrieve rank and other score data for leaderboard and time span. by @egonbeermat
 - Add optional String token to methods that submit and retrieve score. by @egonbeermat
