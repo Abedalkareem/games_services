@@ -19,20 +19,23 @@ class Auth: BaseGamesServices {
         return
       }
     #endif
-    currentPlayer.authenticateHandler = { vc, error in
-      guard error == nil else {
-        #if DEBUG
-          self.debugSignInFailed = true
-        #endif
-        result(error!.flutterError(code: .failedToAuthenticate))
-        return
-      }
-      if let vc = vc {
-        self.viewController.show(vc)
-      } else if self.currentPlayer.isAuthenticated {
-        result(nil)
-      } else {
-        result(PluginError.failedToAuthenticate.flutterError())
+
+    if (isAuthenticated) {
+      result(nil)
+    } else {
+      currentPlayer.authenticateHandler = { vc, error in
+        guard error == nil else {
+          #if DEBUG
+            self.debugSignInFailed = true
+          #endif
+          result(error!.flutterError(code: .failedToAuthenticate))
+          return
+        }
+        if let vc = vc {
+          self.viewController.show(vc)
+        } else {
+          result(PluginError.failedToAuthenticate.flutterError())
+        }
       }
     }
   }
