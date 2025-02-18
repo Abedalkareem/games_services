@@ -9,6 +9,8 @@ import com.abedalkareem.games_services.models.value
 import com.abedalkareem.games_services.util.AppImageLoader
 import com.abedalkareem.games_services.util.PluginError
 import com.abedalkareem.games_services.util.errorCode
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.gms.games.AuthenticationResult
 import com.google.android.gms.games.GamesSignInClient
 import com.google.android.gms.games.PlayGames
@@ -78,6 +80,15 @@ class Auth(private var activityPluginBinding: ActivityPluginBinding):
   }
 
   fun signIn(result: MethodChannel.Result) {
+    val apiAvailability = GoogleApiAvailability.getInstance()
+    val resultCode = apiAvailability.isGooglePlayServicesAvailable(activityPluginBinding.activity)
+    if (resultCode != ConnectionResult.SUCCESS) {
+      if (apiAvailability.isUserResolvableError(resultCode)) {
+        apiAvailability.getErrorDialog(activityPluginBinding.activity, resultCode, 1)?.show();
+      }
+      result.error(PluginError.FailedToAuthenticate.errorCode(), apiAvailability.getErrorString(resultCode), null)
+      return;
+    }
     pendingOperation = PendingOperation(Method.SignIn.value(), result, activityPluginBinding.activity)
     gamesSignInClient.signIn().addOnSuccessListener {
       it?.let { result ->
