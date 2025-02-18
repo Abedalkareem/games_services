@@ -7,45 +7,50 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.BinaryMessenger
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
 
-private const val CHANNEL_NAME = "games_services"
+private const val METHOD_CHANNEL_NAME = "games_services"
+private const val EVENT_CHANNEL_NAME = "games_services.player"
 
 class GamesServicesPlugin : FlutterPlugin,
   MethodCallHandler, ActivityAware {
 
   //region Variables
   private var activity: Activity? = null
-  private var channel: MethodChannel? = null
+  private var methodChannel: MethodChannel? = null
+  private var eventChannel: EventChannel? = null
   private var activityPluginBinding: ActivityPluginBinding? = null
   private var leaderboards: Leaderboards? = null
   private var achievements: Achievements? = null
-  private var player: Player? = null
   private var saveGame: SaveGame? = null
-  private var auth = Auth()
+  private var auth: Auth? = null
   //endregion
 
   //region FlutterPlugin
   override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    setupChannel(binding.binaryMessenger)
+    setupChannels(binding.binaryMessenger)
   }
 
   override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-    teardownChannel()
+    teardownChannels()
   }
 
-  private fun setupChannel(messenger: BinaryMessenger) {
-    channel = MethodChannel(messenger, CHANNEL_NAME)
-    channel?.setMethodCallHandler(this)
+  private fun setupChannels(messenger: BinaryMessenger) {
+    methodChannel = MethodChannel(messenger, METHOD_CHANNEL_NAME)
+    methodChannel!!.setMethodCallHandler(this)
+    eventChannel = EventChannel(messenger, EVENT_CHANNEL_NAME)
   }
 
-  private fun teardownChannel() {
-    channel?.setMethodCallHandler(null)
-    channel = null
+  private fun teardownChannels() {
+    methodChannel?.setMethodCallHandler(null)
+    eventChannel?.setStreamHandler(null)
+    methodChannel = null
+    eventChannel = null
   }
   //endregion
 
@@ -55,7 +60,7 @@ class GamesServicesPlugin : FlutterPlugin,
     leaderboards = null
     achievements = null
     saveGame = null
-    player = null
+    auth = null
   }
 
   private fun init() {
@@ -63,7 +68,10 @@ class GamesServicesPlugin : FlutterPlugin,
     leaderboards = Leaderboards(activityPluginBinding)
     achievements = Achievements(activityPluginBinding)
     saveGame = SaveGame(activityPluginBinding)
-    player = Player()
+    auth = Auth(activityPluginBinding)
+    // streamHandler is set here instead of `setupChannels` to ensure
+    // auth is initialized before being set
+    eventChannel!!.setStreamHandler(auth)
   }
 
   override fun onDetachedFromActivity() {
@@ -94,15 +102,12 @@ class GamesServicesPlugin : FlutterPlugin,
     }
     when (method) {
       Method.SignIn -> {
-        auth.signIn(activity, result)
-      }
-      Method.IsSignedIn -> {
-        auth.isSignedIn(activity, result)
+        auth?.signIn(result)
       }
       Method.GetAuthCode -> {
         val clientID = call.argument<String>("clientID") ?: ""
         val forceRefreshToken = call.argument<Boolean>("forceRefreshToken") ?: false
-        auth.getAuthCode(clientID, forceRefreshToken, activity, result)
+        auth?.getAuthCode(clientID, forceRefreshToken, result)
       }
       Method.ShowAchievements -> {
         achievements?.showAchievements(activity, result)
@@ -150,17 +155,8 @@ class GamesServicesPlugin : FlutterPlugin,
         val leaderboardCollection = call.argument<Int>("leaderboardCollection") ?: 0
         leaderboards?.getPlayerScoreObject(activity, leaderboardID, span, leaderboardCollection, result)
       }
-      Method.GetPlayerID -> {
-        player?.getPlayerID(activity, result)
-      }
-      Method.GetPlayerName -> {
-        player?.getPlayerName(activity, result)
-      }
       Method.GetPlayerHiResImage -> {
-        player?.getPlayerProfileImage(activity, result)
-      }
-      Method.GetPlayerIconImage -> {
-        player?.getPlayerProfileImage(activity, result, false)
+        auth?.getPlayerProfileImage(result)
       }
       Method.SaveGame -> {
         val data = call.argument<String>("data") ?: ""

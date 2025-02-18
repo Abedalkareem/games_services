@@ -14,7 +14,6 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   static GamesServicesPlatform _instance = MethodChannelGamesServices();
 
   /// The default instance of [GamesServicesPlatform] to use.
-  ///
   /// Defaults to [MethodChannelGamesServices].
   static GamesServicesPlatform get instance => _instance;
 
@@ -61,7 +60,8 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Open the device's default leaderboards screen. If a leaderboard ID is provided,
   /// it will display the specific leaderboard, otherwise it will show the list of all leaderboards.
-  Future<String?> showLeaderboards({iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+  Future<String?> showLeaderboards(
+      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -100,21 +100,14 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   }
 
   /// Get the current player's score for a specific leaderboard.
-  Future<int?> getPlayerScore({iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+  Future<int?> getPlayerScore(
+      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     throw UnimplementedError("not implemented.");
   }
 
-  /// Check if the current player is underage (always false on Android).
-  Future<bool?> get playerIsUnderage => throw UnimplementedError("not implemented.");
-
-  /// Check if the current player is restricted from joining multiplayer games (always false on Android).
-  Future<bool?> get playerIsMultiplayerGamingRestricted =>
-      throw UnimplementedError("not implemented.");
-
-  /// Check if the current player is restricted from using personalized communication on
-  /// the device (always false on Android).
-  Future<bool?> get playerIsPersonalizedCommunicationRestricted =>
-      throw UnimplementedError("not implemented.");
+  /// Stream of the currently authenticated player. If not null, the player
+  /// is signed in & games_services functionality is available.
+  Stream<PlayerData?> get player => throw UnimplementedError();
 
   /// Sign the user into Game Center or Google Play Games. This must be called before
   /// taking any action (such as submitting a score or unlocking an achievement).
@@ -122,12 +115,10 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
-  /// Check to see if the user is currently signed into Game Center or Google Play Games.
-  Future<bool?> get isSignedIn => throw UnimplementedError("not implemented.");
-
   /// Retrieve Google Play Games [server_auth_code] to be used by an auth provider,
   /// such as Firebase, to authenticate the user. [null] on other platforms.
-  Future<String?> getAuthCode(String clientID, {bool forceRefreshToken = false}) =>
+  Future<String?> getAuthCode(String clientID,
+          {bool forceRefreshToken = false}) =>
       throw UnimplementedError("not implemented.");
 
   /// Show the Game Center Access Point for the current player.
@@ -138,23 +129,6 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// Hide the Game Center Access Point.
   Future<String?> hideAccessPoint() async {
     throw UnimplementedError("not implemented.");
-  }
-
-  /// Get the current player's ID.
-  /// On iOS/macOS the player ID is unique for your game but not other games.
-  Future<String?> getPlayerID() async {
-    throw UnimplementedError("not implemented.");
-  }
-
-  /// Get the current player's name.
-  /// On iOS/macOS the player's alias is provided.
-  Future<String?> getPlayerName() async {
-    throw UnimplementedError("not implemented.");
-  }
-
-  /// Get the current player's icon-size profile image as a base64 encoded String.
-  Future<String?> getPlayerIconImage() async {
-    throw UnimplementedError("not implemented");
   }
 
   /// Get the current player's hi-res profile image as a base64 encoded String.

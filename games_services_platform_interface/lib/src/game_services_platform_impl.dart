@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/services.dart';
 
@@ -7,15 +8,56 @@ import 'models/access_point_location.dart';
 import 'models/achievement.dart';
 import 'models/leaderboard_scope.dart';
 import 'models/leaderboard_time_scope.dart';
+import 'models/player.dart';
 import 'models/score.dart';
 import 'util/device.dart';
 
-const MethodChannel _channel = MethodChannel("games_services");
+const MethodChannel _methodChannel = MethodChannel("games_services");
+const EventChannel _playerChannel = EventChannel("games_services.player");
 
 class MethodChannelGamesServices extends GamesServicesPlatform {
+  MethodChannelGamesServices() : super() {
+    // broadcast stream helps reduce code while remaining backwards compatible
+    // also allows the app to listen to the stream in multiple places without
+    _streamController = StreamController.broadcast(
+      onListen: () {
+        // subscribe to the platform event channel when first listener added
+        _sub ??= _playerChannel
+            .receiveBroadcastStream()
+            .map((json) =>
+                json == null ? null : PlayerData.fromJson(jsonDecode(json)))
+            .listen((player) {
+          _player = player;
+          _streamController.add(_player);
+        }, onError: (error) => _streamController.add(null));
+      },
+      onCancel: () {
+        // cancel sub to platform event channel when last listener removed
+        // new listeners added after this will recreate the subscription
+        _sub?.cancel();
+      },
+    );
+  }
+
+  late final StreamController<PlayerData?> _streamController;
+  StreamSubscription<PlayerData?>? _sub;
+
+  // stored to be added to stream for every new listener as
+  // broadcast streams lose data
+  PlayerData? _player;
+
+  @override
+  Stream<PlayerData?> get player {
+    // to maintain backwards compatibility, add latest player when
+    // listened to by plugin methods. also guarantees synced player data
+    // while listening for the user in multiple places throughout the app
+    Future(() => _streamController.add(_player));
+    return _streamController.stream;
+  }
+
   @override
   Future<String?> unlock({required Achievement achievement}) async {
-    return await _channel.invokeMethod("unlock", {
+    return await _methodChannel.invokeMethod("unlock", {
       "achievementID": achievement.id,
       "percentComplete": achievement.percentComplete,
       "showsCompletionBanner": achievement.showsCompletionBanner
@@ -24,13 +66,16 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
 
   @override
   Future<String?> submitScore({required Score score}) async {
-    return await _channel.invokeMethod("submitScore",
-        {"leaderboardID": score.leaderboardID, "value": score.value, "token": score.token});
+    return await _methodChannel.invokeMethod("submitScore", {
+      "leaderboardID": score.leaderboardID,
+      "value": score.value,
+      "token": score.token
+    });
   }
 
   @override
   Future<String?> increment({required Achievement achievement}) async {
-    return await _channel.invokeMethod("increment", {
+    return await _methodChannel.invokeMethod("increment", {
       "achievementID": achievement.id,
       "steps": achievement.steps,
     });
@@ -38,24 +83,27 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
 
   @override
   Future<String?> showAchievements() async {
-    return await _channel.invokeMethod("showAchievements");
+    return await _methodChannel.invokeMethod("showAchievements");
   }
 
   @override
-  Future<String?> showLeaderboards({iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
-    return await _channel.invokeMethod("showLeaderboards",
-        {"leaderboardID": Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID});
+  Future<String?> showLeaderboards(
+      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+    return await _methodChannel.invokeMethod("showLeaderboards", {
+      "leaderboardID":
+          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
+    });
   }
 
   @override
   Future<String?> loadAchievements({bool forceRefresh = false}) async {
-    return await _channel
+    return await _methodChannel
         .invokeMethod("loadAchievements", {"forceRefresh": forceRefresh});
   }
 
   @override
   Future<String?> resetAchievements() async {
-    return await _channel.invokeMethod("resetAchievements");
+    return await _methodChannel.invokeMethod("resetAchievements");
   }
 
   @override
@@ -67,8 +115,9 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
       required TimeScope timeScope,
       required int maxResults,
       bool forceRefresh = false}) async {
-    return await _channel.invokeMethod("loadLeaderboardScores", {
-      "leaderboardID": Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+    return await _methodChannel.invokeMethod("loadLeaderboardScores", {
+      "leaderboardID":
+          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
       "playerCentered": playerCentered,
       "leaderboardCollection": scope.value,
       "span": timeScope.value,
@@ -78,9 +127,12 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<int?> getPlayerScore({iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
-    return await _channel.invokeMethod("getPlayerScore",
-        {"leaderboardID": Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID});
+  Future<int?> getPlayerScore(
+      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+    return await _methodChannel.invokeMethod("getPlayerScore", {
+      "leaderboardID":
+          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
+    });
   }
 
   @override
@@ -89,8 +141,9 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
       androidLeaderboardID = "",
       required PlayerScope scope,
       required TimeScope timeScope}) async {
-    return await _channel.invokeMethod("getPlayerScoreObject", {
-      "leaderboardID": Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+    return await _methodChannel.invokeMethod("getPlayerScoreObject", {
+      "leaderboardID":
+          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
       "leaderboardCollection": scope.value,
       "span": timeScope.value
     });
@@ -98,92 +151,52 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
 
   @override
   Future<String?> signIn() async {
-    return await _channel.invokeMethod("signIn");
+    return await _methodChannel.invokeMethod("signIn");
   }
 
   @override
-  Future<bool?> get isSignedIn => _channel.invokeMethod("isSignedIn");
-
-  @override
-  Future<String?> getAuthCode(String clientID, {bool forceRefreshToken = false}) =>
+  Future<String?> getAuthCode(String clientID,
+          {bool forceRefreshToken = false}) =>
       Device.isPlatformAndroid
-          ? _channel.invokeMethod(
-              "getAuthCode", {"clientID": clientID, "forceRefreshToken": forceRefreshToken})
+          ? _methodChannel.invokeMethod("getAuthCode",
+              {"clientID": clientID, "forceRefreshToken": forceRefreshToken})
           : Future.value(null);
 
   @override
-  Future<bool?> get playerIsUnderage async {
-    if (Device.isPlatformAndroid) {
-      return Future.value(false);
-    }
-    return await _channel.invokeMethod("playerIsUnderage");
-  }
-
-  @override
-  Future<bool?> get playerIsMultiplayerGamingRestricted async {
-    if (Device.isPlatformAndroid) {
-      return Future.value(false);
-    }
-    return await _channel.invokeMethod("playerIsMultiplayerGamingRestricted");
-  }
-
-  @override
-  Future<bool?> get playerIsPersonalizedCommunicationRestricted async {
-    if (Device.isPlatformAndroid) {
-      return Future.value(false);
-    }
-    return await _channel.invokeMethod("playerIsPersonalizedCommunicationRestricted");
-  }
-
-  @override
   Future<String?> showAccessPoint(AccessPointLocation location) async {
-    return await _channel
-        .invokeMethod("showAccessPoint", {"location": location.toString().split(".").last});
+    return await _methodChannel.invokeMethod(
+        "showAccessPoint", {"location": location.toString().split(".").last});
   }
 
   @override
   Future<String?> hideAccessPoint() async {
-    return await _channel.invokeMethod("hideAccessPoint");
-  }
-
-  @override
-  Future<String?> getPlayerID() async {
-    return await _channel.invokeMethod("getPlayerID");
-  }
-
-  @override
-  Future<String?> getPlayerName() async {
-    return await _channel.invokeMethod("getPlayerName");
-  }
-
-  @override
-  Future<String?> getPlayerIconImage() async {
-    return await _channel.invokeMethod("getPlayerIconImage");
+    return await _methodChannel.invokeMethod("hideAccessPoint");
   }
 
   @override
   Future<String?> getPlayerHiResImage() async {
-    return await _channel.invokeMethod("getPlayerHiResImage");
+    return await _methodChannel.invokeMethod("getPlayerHiResImage");
   }
 
   @override
   Future<String?> saveGame({required String data, required String name}) async {
-    return await _channel.invokeMethod("saveGame", {"data": data, "name": name});
+    return await _methodChannel
+        .invokeMethod("saveGame", {"data": data, "name": name});
   }
 
   @override
   Future<String?> loadGame({required String name}) async {
-    return await _channel.invokeMethod("loadGame", {"name": name});
+    return await _methodChannel.invokeMethod("loadGame", {"name": name});
   }
 
   @override
   Future<String?> getSavedGames({bool forceRefresh = false}) async {
-    return await _channel
+    return await _methodChannel
         .invokeMethod("getSavedGames", {"forceRefresh": forceRefresh});
   }
 
   @override
   Future<String?> deleteGame({required String name}) async {
-    return await _channel.invokeMethod("deleteGame", {"name": name});
+    return await _methodChannel.invokeMethod("deleteGame", {"name": name});
   }
 }

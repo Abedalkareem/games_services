@@ -1,7 +1,25 @@
+import 'dart:async';
+
+import 'package:games_services/games_services.dart';
 import 'package:games_services_platform_interface/game_services_platform_interface.dart';
-import 'package:games_services_platform_interface/models.dart';
 
 abstract class Player {
+  /// Helper for retrieving current player form the Player stream
+  static Future<PlayerData?> get _currentPlayer async {
+    // resuses player stream to reduce code and platform channel communciation
+    final completer = Completer<PlayerData?>();
+    StreamSubscription? sub;
+    sub = GameAuth.player.listen((data) {
+      completer.complete(data);
+      sub?.cancel();
+    }, onError: (error) {
+      // throw auth errors to calling methods
+      completer.completeError(error);
+      sub?.cancel();
+    });
+    return completer.future;
+  }
+
   /// Show the Game Center Access Point for the current player.
   static Future<String?> showAccessPoint(AccessPointLocation location) async {
     return await GamesServicesPlatform.instance.showAccessPoint(location);
@@ -14,27 +32,22 @@ abstract class Player {
 
   /// Get the current player's ID.
   /// On iOS/macOS the player ID is unique for your game but not other games.
-  static Future<String?> getPlayerID() async {
-    return await GamesServicesPlatform.instance.getPlayerID();
-  }
+  static Future<String?> getPlayerID() async => //'';
+      (await _currentPlayer)?.playerID;
 
   /// Get the current player's name.
   /// On iOS/macOS the player's alias is provided.
-  static Future<String?> getPlayerName() async {
-    return await GamesServicesPlatform.instance.getPlayerName();
-  }
+  static Future<String?> getPlayerName() async => //'';
+      (await _currentPlayer)?.displayName;
 
   /// Get the player's icon-size profile image as a base64 encoded String.
-  static Future<String?> getPlayerIconImage() async {
-    return (await GamesServicesPlatform.instance.getPlayerIconImage())
-        ?.replaceAll("\n", "");
-  }
+  static Future<String?> getPlayerIconImage() async => //null;
+      (await _currentPlayer)?.iconImage;
 
   /// Get the player's hi-res profile image as a base64 encoded String.
-  static Future<String?> getPlayerHiResImage() async {
-    return (await GamesServicesPlatform.instance.getPlayerHiResImage())
-        ?.replaceAll("\n", "");
-  }
+  static Future<String?> getPlayerHiResImage() async =>
+      (await GamesServicesPlatform.instance.getPlayerHiResImage())
+          ?.replaceAll("\n", "");
 
   /// Get the current player's score for a specific leaderboard.
   static Future<int?> getPlayerScore(
@@ -45,20 +58,16 @@ abstract class Player {
   }
 
   /// Check if the current player is underage (always false on Android).
-  static Future<bool?> get isUnderage async {
-    return await GamesServicesPlatform.instance.playerIsUnderage;
-  }
+  static Future<bool?> get isUnderage async => //false;
+      (await _currentPlayer)?.isUnderage;
 
   /// Check if the current player is restricted from joining multiplayer games (always false on Android).
-  static Future<bool?> get isMultiplayerGamingRestricted async {
-    return await GamesServicesPlatform
-        .instance.playerIsMultiplayerGamingRestricted;
-  }
+  static Future<bool?> get isMultiplayerGamingRestricted async => //false;
+      (await _currentPlayer)?.isMultiplayerGamingRestricted;
 
   /// Check if the current player is restricted from using personalized communication on
   /// the device (always false on Android).
-  static Future<bool?> get isPersonalizedCommunicationRestricted async {
-    return await GamesServicesPlatform
-        .instance.playerIsPersonalizedCommunicationRestricted;
-  }
+  static Future<bool?>
+      get isPersonalizedCommunicationRestricted async => //false;
+          (await _currentPlayer)?.isPersonalizedCommunicationRestricted;
 }

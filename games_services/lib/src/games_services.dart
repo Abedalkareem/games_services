@@ -10,6 +10,10 @@ export 'package:games_services_platform_interface/models.dart';
 /// [Leaderboards] for anything related to Leaderboards, [Player] for anything related to Player,
 /// and [SaveGame] for anything related to game saves.
 class GamesServices {
+  /// Stream of the currently authenticated player. If not null, the player
+  /// is signed in & games_services functionality is available.
+  static Stream<PlayerData?> get player => GameAuth.player;
+
   /// Sign the user into Game Center or Google Play Games. This must be called before
   /// taking any action (such as submitting a score or unlocking an achievement).
   static Future<String?> signIn() async {

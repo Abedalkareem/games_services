@@ -1,4 +1,4 @@
-import 'package:games_services/src/models/player_data.dart';
+import 'player_data.dart';
 
 class LeaderboardScoreData {
   final int rank;
@@ -14,13 +14,14 @@ class LeaderboardScoreData {
   @Deprecated('Use scoreHolder.iconImage instead.')
   String? get scoreHolderIconImage => scoreHolder.iconImage;
 
-  const LeaderboardScoreData(
-      {required this.rank,
-      required this.displayScore,
-      required this.rawScore,
-      required this.timestampMillis,
-      required this.scoreHolder,
-      this.token});
+  const LeaderboardScoreData({
+    required this.rank,
+    required this.displayScore,
+    required this.rawScore,
+    required this.timestampMillis,
+    required this.scoreHolder,
+    this.token,
+  });
 
   factory LeaderboardScoreData.fromJson(Map<String, dynamic> json) {
     return LeaderboardScoreData(
