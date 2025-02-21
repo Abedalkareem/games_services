@@ -75,7 +75,7 @@ class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
           // Commit the operation
           snapshotsClient.commitAndClose(snapshot, metadataChange)
             .addOnSuccessListener {
-              Log.d(tag, "[SaveGame] Loaded successfully")
+              Log.d(tag, "[SaveGame] Saved successfully")
               result.success(null)
             }
             .addOnFailureListener {
