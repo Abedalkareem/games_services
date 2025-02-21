@@ -1,12 +1,11 @@
 package com.abedalkareem.games_services.util
 
 enum class PluginError {
-  FailedToSendScore, FailedToGetScore, FailedToGetPlayerId, FailedToGetPlayerName,
-  FailedToGetPlayerProfileImage, FailedToSendAchievement, FailedToShowAchievements,
-  FailedToIncrementAchievements, FailedToLoadAchievements, FailedToAuthenticate,
-  FailedToGetAuthCode, NotAuthenticated, NotSupportedForThisOSVersion, FailedToSaveGame,
-  FailedToLoadGame, FailedToGetSavedGames, LeaderboardNotFound, FailedToDeleteSavedGame,
-  FailedToLoadLeaderboardScores
+  FailedToSendScore, FailedToGetScore, FailedToGetPlayerProfileImage, FailedToSendAchievement,
+  FailedToShowAchievements, FailedToIncrementAchievements, FailedToLoadAchievements,
+  FailedToAuthenticate, FailedToGetAuthCode, NotAuthenticated, NotSupportedForThisOSVersion,
+  FailedToSaveGame, FailedToLoadGame, FailedToGetSavedGames, LeaderboardNotFound,
+  FailedToDeleteSavedGame, FailedToLoadLeaderboardScores
 }
 
 fun PluginError.errorCode(): String {
@@ -40,12 +39,6 @@ fun PluginError.errorCode(): String {
     }
     PluginError.LeaderboardNotFound -> {
       return "leaderboard_not_found"
-    }
-    PluginError.FailedToGetPlayerId -> {
-      return "failed_to_get_player_id"
-    }
-    PluginError.FailedToGetPlayerName -> {
-      return "failed_to_get_player_name"
     }
     PluginError.FailedToGetPlayerProfileImage -> {
       return "failed_to_get_player_profile_image"
@@ -105,12 +98,6 @@ fun PluginError.errorMessage(): String {
     }
     PluginError.LeaderboardNotFound -> {
       return "Leaderboard not found"
-    }
-    PluginError.FailedToGetPlayerId -> {
-      return "Failed to get player id"
-    }
-    PluginError.FailedToGetPlayerName -> {
-      return "Failed to get player name"
     }
     PluginError.FailedToGetPlayerProfileImage -> {
       return "Failed to get player profile image"

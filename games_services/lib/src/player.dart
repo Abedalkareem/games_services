@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/services.dart' show PlatformException;
 import 'package:games_services/games_services.dart';
 import 'package:games_services_platform_interface/game_services_platform_interface.dart';
 
@@ -12,13 +13,14 @@ abstract class Player {
     sub = GameAuth.player.listen((data) {
       completer.complete(data);
       sub?.cancel();
-    }, onError: (error) {
-      // throw auth errors to calling methods
-      completer.completeError(error);
-      sub?.cancel();
     });
     return completer.future;
   }
+
+  static final _notAuthenticatedError = PlatformException(
+    code: 'not_authenticated',
+    message: 'Player not signed in.',
+  );
 
   /// Show the Game Center Access Point for the current player.
   static Future<String?> showAccessPoint(AccessPointLocation location) async {
@@ -32,17 +34,35 @@ abstract class Player {
 
   /// Get the current player's ID.
   /// On iOS/macOS the player ID is unique for your game but not other games.
-  static Future<String?> getPlayerID() async => //'';
-      (await _currentPlayer)?.playerID;
+  static Future<String?> getPlayerID() async {
+    final player = await _currentPlayer;
+    if (player == null) {
+      throw _notAuthenticatedError;
+    } else {
+      return player.playerID;
+    }
+  }
 
   /// Get the current player's name.
   /// On iOS/macOS the player's alias is provided.
-  static Future<String?> getPlayerName() async => //'';
-      (await _currentPlayer)?.displayName;
+  static Future<String?> getPlayerName() async {
+    final player = await _currentPlayer;
+    if (player == null) {
+      throw _notAuthenticatedError;
+    } else {
+      return player.displayName;
+    }
+  }
 
   /// Get the player's icon-size profile image as a base64 encoded String.
-  static Future<String?> getPlayerIconImage() async => //null;
-      (await _currentPlayer)?.iconImage;
+  static Future<String?> getPlayerIconImage() async {
+    final player = await _currentPlayer;
+    if (player == null) {
+      throw _notAuthenticatedError;
+    } else {
+      return player.iconImage;
+    }
+  }
 
   /// Get the player's hi-res profile image as a base64 encoded String.
   static Future<String?> getPlayerHiResImage() async =>
@@ -58,16 +78,33 @@ abstract class Player {
   }
 
   /// Check if the current player is underage (always false on Android).
-  static Future<bool?> get isUnderage async => //false;
-      (await _currentPlayer)?.isUnderage;
+  static Future<bool?> get isUnderage async {
+    final player = await _currentPlayer;
+    if (player == null) {
+      throw _notAuthenticatedError;
+    } else {
+      return player.isUnderage;
+    }
+  }
 
   /// Check if the current player is restricted from joining multiplayer games (always false on Android).
-  static Future<bool?> get isMultiplayerGamingRestricted async => //false;
-      (await _currentPlayer)?.isMultiplayerGamingRestricted;
+  static Future<bool?> get isMultiplayerGamingRestricted async {
+    final player = await _currentPlayer;
+    if (player == null) {
+      throw _notAuthenticatedError;
+    } else {
+      return player.isMultiplayerGamingRestricted;
+    }
+  }
 
   /// Check if the current player is restricted from using personalized communication on
   /// the device (always false on Android).
-  static Future<bool?>
-      get isPersonalizedCommunicationRestricted async => //false;
-          (await _currentPlayer)?.isPersonalizedCommunicationRestricted;
+  static Future<bool?> get isPersonalizedCommunicationRestricted async {
+    final player = await _currentPlayer;
+    if (player == null) {
+      throw _notAuthenticatedError;
+    } else {
+      return player.isPersonalizedCommunicationRestricted;
+    }
+  }
 }
