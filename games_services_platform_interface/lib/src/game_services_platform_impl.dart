@@ -60,7 +60,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     return await _methodChannel.invokeMethod("unlock", {
       "achievementID": achievement.id,
       "percentComplete": achievement.percentComplete,
-      "showsCompletionBanner": achievement.showsCompletionBanner
+      "showsCompletionBanner": achievement.showsCompletionBanner,
     });
   }
 
@@ -69,7 +69,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     return await _methodChannel.invokeMethod("submitScore", {
       "leaderboardID": score.leaderboardID,
       "value": score.value,
-      "token": score.token
+      "token": score.token,
     });
   }
 
@@ -122,7 +122,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
       "leaderboardCollection": scope.value,
       "span": timeScope.value,
       "maxResults": maxResults,
-      "forceRefresh": forceRefresh
+      "forceRefresh": forceRefresh,
     });
   }
 
@@ -145,7 +145,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
       "leaderboardID":
           Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
       "leaderboardCollection": scope.value,
-      "span": timeScope.value
+      "span": timeScope.value,
     });
   }
 
@@ -158,8 +158,10 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   Future<String?> getAuthCode(String clientID,
           {bool forceRefreshToken = false}) =>
       Device.isPlatformAndroid
-          ? _methodChannel.invokeMethod("getAuthCode",
-              {"clientID": clientID, "forceRefreshToken": forceRefreshToken})
+          ? _methodChannel.invokeMethod("getAuthCode", {
+              "clientID": clientID,
+              "forceRefreshToken": forceRefreshToken,
+            })
           : Future.value(null);
 
   @override

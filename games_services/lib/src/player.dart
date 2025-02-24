@@ -70,11 +70,14 @@ abstract class Player {
           ?.replaceAll("\n", "");
 
   /// Get the current player's score for a specific leaderboard.
-  static Future<int?> getPlayerScore(
-      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+  static Future<int?> getPlayerScore({
+    String? iOSLeaderboardID = "",
+    String? androidLeaderboardID = "",
+  }) async {
     return await GamesServicesPlatform.instance.getPlayerScore(
-        iOSLeaderboardID: iOSLeaderboardID,
-        androidLeaderboardID: androidLeaderboardID);
+      iOSLeaderboardID: iOSLeaderboardID,
+      androidLeaderboardID: androidLeaderboardID,
+    );
   }
 
   /// Check if the current player is underage (always false on Android).
