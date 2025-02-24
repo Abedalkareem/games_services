@@ -49,7 +49,7 @@ abstract class Leaderboards {
   }
 
   /// Get leaderboard score data for the current player
-  static Future<LeaderboardScoreData>? getPlayerScoreObject({
+  static Future<LeaderboardScoreData?> getPlayerScoreObject({
     String? iOSLeaderboardID = "",
     String? androidLeaderboardID = "",
     required PlayerScope scope,
