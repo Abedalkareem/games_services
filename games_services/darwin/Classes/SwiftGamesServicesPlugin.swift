@@ -10,7 +10,6 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
   
   // MARK: - Properties
 
-  private let player = Player()
   private let auth = Auth()
   private let saveGame = SaveGame()
   private let achievements = Achievements()
@@ -27,8 +26,6 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     switch method {
     case .signIn:
       auth.authenticateUser(result: result)
-    case .isSignedIn:
-      result(auth.isAuthenticated)
     case .loadAchievements:
       achievements.loadAchievements(result: result)
     case .showAchievements:
@@ -72,24 +69,12 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       let token = (arguments?["token"] as? String) ?? ""
       leaderboards.report(score: score, leaderboardID: leaderboardID, token: token, result: result)
     case .hideAccessPoint:
-      player.hideAccessPoint(result: result)
+      auth.hideAccessPoint(result: result)
     case .showAccessPoint:
       let location = (arguments?["location"] as? String) ?? ""
-      player.showAccessPoint(location: location, result: result)
-    case .getPlayerID:
-      player.getPlayerID(result: result)
-    case .getPlayerName:
-      player.getPlayerName(result: result)
+      auth.showAccessPoint(location: location, result: result)
     case .getPlayerHiResImage:
-      player.getPlayerProfileImage(result: result)
-    case .getPlayerIconImage:
-      player.getPlayerProfileImage(result: result, size: GKPlayer.PhotoSize.small)
-    case .playerIsUnderage:
-      player.isUnderage(result: result)
-    case .playerIsMultiplayerGamingRestricted:
-      player.isMultiplayerGamingRestricted(result: result)
-    case .playerIsPersonalizedCommunicationRestricted:
-      player.isPersonalizedCommunicationRestricted(result: result)
+      auth.getPlayerProfileImage(result: result)
     case .saveGame:
       let data = (arguments?["data"] as? String) ?? ""
       let name = (arguments?["name"] as? String) ?? ""
@@ -114,5 +99,7 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     let channel = FlutterMethodChannel(name: "games_services", binaryMessenger: messenger)
     let instance = SwiftGamesServicesPlugin()
     registrar.addMethodCallDelegate(instance, channel: channel)
+    let eventChannel = FlutterEventChannel(name: "games_services.player", binaryMessenger: messenger)
+    eventChannel.setStreamHandler(instance.auth)
   }
 }

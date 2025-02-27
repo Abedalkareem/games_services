@@ -1,25 +1,12 @@
-class PlayerData {
-  /// Value can be `null` on Android due to privacy settings
-  final String? playerID;
-  final String displayName;
-  final String? iconImage;
+import 'package:games_services_platform_interface/models.dart';
 
-  /// only available from GameCenter
-  final String? teamPlayerID;
+import '../player.dart';
 
-  const PlayerData({
-    required this.playerID,
-    required this.displayName,
-    this.teamPlayerID,
-    this.iconImage,
-  });
+export 'package:games_services_platform_interface/models.dart' show PlayerData;
 
-  factory PlayerData.fromJson(Map<String, dynamic> json) {
-    return PlayerData(
-      playerID: json["playerID"],
-      displayName: json["displayName"],
-      teamPlayerID: json["teamPlayerID"],
-      iconImage: (json["iconImage"] as String?)?.replaceAll("\n", ""),
-    );
-  }
+// Resuse `PlayerData` class from platform interface to avoid redundancy. Adds
+// the `hiResImage` getter.
+extension PlayerDataX on PlayerData {
+  /// Retrieve player's high resolution profile photo.
+  Future<String?> get hiResImage => Player.getPlayerHiResImage();
 }

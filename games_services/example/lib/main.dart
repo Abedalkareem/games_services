@@ -28,131 +28,142 @@ class AppState extends State<App> {
           appBar: AppBar(
             title: const Text('Games Services plugin example'),
           ),
-          body: SingleChildScrollView(
-            child: Center(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Image.asset(
-                      "assets/logo.png",
-                      width: 200,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Wrap(
-                      spacing: 20,
-                      runSpacing: 10,
-                      children: <Widget>[
-                        ElevatedButton(
-                          onPressed: _signIn,
-                          child: const Text('signIn'),
+          body: StreamBuilder<PlayerData?>(
+              stream: GameAuth.player,
+              builder: (context, snapshot) {
+                final player = snapshot.data;
+                return SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Image.asset(
+                            "assets/logo.png",
+                            width: 200,
+                          ),
                         ),
-                        ElevatedButton(
-                          onPressed: _isSignedIn,
-                          child: const Text('Is signedIn'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _showAchievements,
-                          child: const Text('Show Achievements'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _showLeaderboards,
-                          child: const Text('Show Leaderboards'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _submitScore,
-                          child: const Text('Submit Score'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _unlockAchievement,
-                          child: const Text('Unlock Achievement'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _loadAchievement,
-                          child: const Text('Load Achievement'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _resetAchievement,
-                          child: const Text('Reset Achievement'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _loadLeaderboardScores,
-                          child: const Text('Load Leaderboard Scores'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _incrementAchievement,
-                          child: const Text(
-                              'Increment Achievement (Android only)'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _showAccessPoint,
-                          child: const Text('Show AccessPoint (iOS only)'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _hideAccessPoint,
-                          child: const Text('Hide AccessPoint (iOS only)'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _getPlayerID,
-                          child: const Text('Get player id'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _getPlayerScore,
-                          child: const Text('Get player score'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _getPlayerScoreObject,
-                          child: const Text('Load Player Centered Scores'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _getPlayerName,
-                          child: const Text('Get player name'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _getSavedGames,
-                          child: const Text('Get saved games'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _saveGame,
-                          child: const Text('Save game'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _loadGame,
-                          child: const Text('Load game'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _deleteGame,
-                          child: const Text('Delete saved game'),
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: player == null
+                              ? ElevatedButton(
+                                  onPressed: _signIn,
+                                  child: const Text('Sign In'),
+                                )
+                              : Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        if (player.iconImage != null)
+                                          CircleAvatar(
+                                            foregroundImage: MemoryImage(
+                                              base64Decode(player.iconImage!),
+                                            ),
+                                          )
+                                        else
+                                          CircleAvatar(
+                                            child: Text(player.displayName[0]),
+                                          ),
+                                        const SizedBox(width: 16.0),
+                                        Text('playerID: ${player.playerID}\n'
+                                            'displayName: ${player.displayName}'),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 16.0),
+                                    Wrap(
+                                      spacing: 20,
+                                      runSpacing: 10,
+                                      children: <Widget>[
+                                        ElevatedButton(
+                                          onPressed: _showAchievements,
+                                          child:
+                                              const Text('Show Achievements'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _showLeaderboards,
+                                          child:
+                                              const Text('Show Leaderboards'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _submitScore,
+                                          child: const Text('Submit Score'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _unlockAchievement,
+                                          child:
+                                              const Text('Unlock Achievement'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _loadAchievement,
+                                          child: const Text('Load Achievement'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _resetAchievement,
+                                          child:
+                                              const Text('Reset Achievement'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _loadLeaderboardScores,
+                                          child: const Text(
+                                              'Load Leaderboard Scores'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _incrementAchievement,
+                                          child: const Text(
+                                              'Increment Achievement (Android only)'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _showAccessPoint,
+                                          child: const Text(
+                                              'Show AccessPoint (iOS only)'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _hideAccessPoint,
+                                          child: const Text(
+                                              'Hide AccessPoint (iOS only)'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _getPlayerScore,
+                                          child: const Text('Get player score'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _getPlayerScoreObject,
+                                          child: const Text(
+                                              'Load Player Centered Scores'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _getSavedGames,
+                                          child: const Text('Get saved games'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _saveGame,
+                                          child: const Text('Save game'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _loadGame,
+                                          child: const Text('Load game'),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: _deleteGame,
+                                          child:
+                                              const Text('Delete saved game'),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
                         ),
                       ],
                     ),
                   ),
-                ],
-              ),
-            ),
-          )),
+                );
+              })),
     );
   }
 
   void _signIn() async {
     final result = await GameAuth.signIn();
-    print(result);
-  }
-
-  void _isSignedIn() async {
-    final result = await GameAuth.isSignedIn;
-    print(result);
-  }
-
-  void _getPlayerID() async {
-    final result = await Player.getPlayerID();
-    print(result);
-  }
-
-  void _getPlayerName() async {
-    final result = await Player.getPlayerName();
     print(result);
   }
 
@@ -224,6 +235,7 @@ class AppState extends State<App> {
 
   void _showLeaderboards() async {
     final result = await Leaderboards.showLeaderboards(
+        androidLeaderboardID: 'android_leaderboard_id',
         iOSLeaderboardID: 'ios_leaderboard_id');
     print(result);
   }

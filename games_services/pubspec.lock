@@ -13,10 +13,10 @@ packages:
     dependency: transitive
     description:
       name: collection
-      sha256: ee67cb0715911d28db6bf4af1026078bd6f0128b07a5f66fb2ed94ec6783c09a
+      sha256: a1ace0a119f20aabc852d165077c036cd864315bd99b7eaa10a60100341941bf
       url: "https://pub.dev"
     source: hosted
-    version: "1.18.0"
+    version: "1.19.0"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -33,10 +33,9 @@ packages:
   games_services_platform_interface:
     dependency: "direct main"
     description:
-      name: games_services_platform_interface
-      sha256: c108709a353b60cf136275a451ca4238b4a2081f620af82ca09eef3f4f5e4112
-      url: "https://pub.dev"
-    source: hosted
+      path: "../games_services_platform_interface"
+      relative: true
+    source: path
     version: "4.0.3"
   lints:
     dependency: transitive
@@ -74,7 +73,7 @@ packages:
     dependency: transitive
     description: flutter
     source: sdk
-    version: "0.0.99"
+    version: "0.0.0"
   vector_math:
     dependency: transitive
     description:
@@ -84,5 +83,5 @@ packages:
     source: hosted
     version: "2.1.4"
 sdks:
-  dart: ">=3.3.0-0 <4.0.0"
+  dart: ">=3.4.0 <4.0.0"
   flutter: ">=1.22.0"
