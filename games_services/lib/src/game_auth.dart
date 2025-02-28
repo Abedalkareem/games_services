@@ -18,7 +18,7 @@ abstract class GameAuth {
     // resuses player stream to reduce code and platform channel communciation
     final completer = Completer<bool>();
     StreamSubscription? sub;
-    sub = GamesServicesPlatform.instance.player.listen((data) {
+    sub = player.listen((data) {
       completer.complete(data != null);
       sub?.cancel();
     }, onError: (_) {

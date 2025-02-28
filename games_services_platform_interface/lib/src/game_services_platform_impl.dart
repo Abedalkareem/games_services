@@ -35,6 +35,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
         // cancel sub to platform event channel when last listener removed
         // new listeners added after this will recreate the subscription
         _sub?.cancel();
+        _sub = null;
       },
     );
   }
