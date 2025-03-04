@@ -7,7 +7,7 @@ abstract class GameAuth {
   /// Stream of the currently authenticated player. If not null, the player
   /// is signed in & games_services functionality is available.
   static Stream<PlayerData?> get player =>
-      GamesServicesPlatform.instance.player;
+      GamesServicesPlatform.instance.player.distinct();
 
   /// Sign the user into Game Center or Google Play Games. This must be called before
   /// taking any action (such as submitting a score or unlocking an achievement).
