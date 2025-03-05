@@ -3,14 +3,14 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'games_services'
-  s.version          = '0.0.1'
-  s.summary          = 'A new Flutter plugin to support game center and google play games services.'
+  s.version          = '4.1.0'
+  s.summary          = 'A Flutter plugin to support Game Center and Google Play Games services.'
   s.description      = <<-DESC
-A new Flutter plugin to support game center and google play games services.
+A Flutter plugin to support Game Center and Google Play Games services.
                        DESC
-  s.homepage         = 'http://example.com'
+  s.homepage         = 'https://github.com/Abedalkareem/games_services'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'Your Company' => 'email@example.com' }
+  s.author           = { '' => 'abedalkareem.omreyh@yahoo.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.public_header_files = 'Classes/**/*.h'
@@ -18,7 +18,7 @@ A new Flutter plugin to support game center and google play games services.
 
   s.ios.dependency 'Flutter'
   s.osx.dependency 'FlutterMacOS'
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '12.4'
   s.osx.deployment_target = '11.0'
 end
 

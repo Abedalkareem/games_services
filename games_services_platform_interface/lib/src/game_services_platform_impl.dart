@@ -29,12 +29,16 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
             .listen((player) {
           _player = player;
           _streamController.add(_player);
-        }, onError: (error) => _streamController.add(null));
+        }, onError: (error) {
+          _player = null;
+          _streamController.add(null);
+        });
       },
       onCancel: () {
         // cancel sub to platform event channel when last listener removed
         // new listeners added after this will recreate the subscription
         _sub?.cancel();
+        _sub = null;
       },
     );
   }
