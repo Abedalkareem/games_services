@@ -1,3 +1,9 @@
+## 4.1.0
+
+- Add `player` stream to listen to authorization changes. by @theLee3
+- Fix bug causing subsequent `signIn` calls to freeze on iOS if player not authenticated. Now throws auth error. by @theLee3
+- Handle Play Services missing/outdated issues by returning error from `signIn` and presenting native dialog allowing user to resolve the issue. by @theLee3
+
 ## 4.0.3
 - Add optional Bool forceRefreshToken as parameter for Android GamesSignInClient.requestServerSideAccess, replacing hard-coded false. Defaults to false. by @yukinoshita0219
 
