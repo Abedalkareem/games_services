@@ -17,6 +17,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.19.1"
+  cupertino_icons:
+    dependency: "direct main"
+    description:
+      name: cupertino_icons
+      sha256: ba631d1c7f7bef6b729a622b7b752645a2d076dba9976925b8f25725a30e1ee6
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.8"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -30,8 +38,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
+  games_services:
+    dependency: "direct dev"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "4.1.0"
   games_services_platform_interface:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: games_services_platform_interface
       sha256: "3138baa92f3caaa7a2a17b3c8848b88222b100f7fd88d7e583d8541353db3538"
