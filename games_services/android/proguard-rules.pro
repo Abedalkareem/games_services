@@ -1,0 +1,4 @@
+-keep class com.abedalkareem.games_services.models.AchievementItemData { <fields>; }
+-keep class com.abedalkareem.games_services.models.LeaderboardScoreData { <fields>; }
+-keep class com.abedalkareem.games_services.models.SavedGame { <fields>; }
+-keep class com.abedalkareem.games_services.models.PlayerData { <fields>; }

@@ -1,24 +1,39 @@
-# Sign in / out  
+# Authentication
 
-## Sign in  
-Sign in the user to the Game center (iOS) or Google play games services (Android).  
-If you pass [shouldEnableSavedGame], a drive scope will be added to GoogleSignInOptions. This will happed just on android as for iOS/macOS nothing is required to be sent when authenticate.  
-You should call the sign in before making any action (like sending a score or unlocking an achievement).  
+## Listen for Auth Changes
 
-``` dart
- GameAuth.signIn(shouldEnableSavedGame: true);
-```  
-
-## Is Signed In
-A boolean value to check if the user is currently signed into Game Center or Google Play Services.  
+Subscribe to the `player` stream to listen for auth changes. The data will be `null` if the player is not authenticated. When authenticated, the data will be a `PlayerData` object containing all relevant player information.
 
 ```dart
-final isSignedIn = GameAuth.isSignedIn;
-```  
+GameAuth.player.listen((player) {
+    if (player != null) {
+        // signed in
+    } else {
+        // not signed in
+    }
+});
+```
 
-## Sign out  
-To sign the user out of Goole Play Services. After calling, you can no longer make any actions on the user's account. This is available just on android. On iOS/macOS, the user can do that using device setting but there is no other way to do it.  
+## Sign In
 
-``` dart
- GameAuth.signOut();
-```  
+Sign the user into Game Center (iOS/macOS) or Google Play Games (Android). This must be called before taking any action (such as submitting a score or unlocking an achievement).
+
+```dart
+ GameAuth.signIn();
+```
+
+## Is Signed In
+
+A boolean value to check if the user is currently signed into Game Center or Google Play Games.
+
+```dart
+final isSignedIn = await GameAuth.isSignedIn;
+```
+
+## Get Auth Code
+
+Retrieve a Google Play Games `server_auth_code` to be used by a backend, such as Firebase, to authenticate the user. `null` on other platforms.
+
+```dart
+final authCode = await GameAuth.getAuthCode(String clientID);
+```

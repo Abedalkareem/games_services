@@ -102,5 +102,3 @@ ios/fastlane/Preview.html
 ios/fastlane/README.md
 ios/Runner.app.dSYM.zip
 ios/Runner.ipa
-
-pubspec.lock

@@ -1,57 +1,67 @@
 import 'dart:async';
-export 'package:games_services_platform_interface/models.dart';
+
 import '../games_services.dart';
 
-/// A helper class that has all the library functions in one class.
-/// This class to support apps that uses pre 3.0 versions.
-/// Please consider using [GameAuth] for authintication, [Achievements] for anything related to Achievements,
+export 'package:games_services_platform_interface/models.dart';
+
+/// A helper class that contains all of the library's functions.
+/// This is a support class for apps that use pre-3.0 versions of the library.
+/// Please consider using [GameAuth] for authentication, [Achievements] for anything related to Achievements,
 /// [Leaderboards] for anything related to Leaderboards, [Player] for anything related to Player,
-/// [SaveGame] for anything related to save game.
+/// and [SaveGame] for anything related to game saves.
 class GamesServices {
-  /// To sign in the user.
-  /// If you pass [shouldEnableSavedGame], a drive scope will be will be added to GoogleSignInOptions. This will happed just
-  /// android as for iOS/macOS nothing is required to be sent when authenticate.
-  /// You need to call the sign in before making any action,
-  /// (like sending a score or unlocking an achievement).
-  static Future<String?> signIn({bool shouldEnableSavedGame = false}) async {
-    return await GameAuth.signIn(shouldEnableSavedGame: shouldEnableSavedGame);
+  /// Stream of the currently authenticated player. If not null, the player
+  /// is signed in & games_services functionality is available.
+  static Stream<PlayerData?> get player => GameAuth.player;
+
+  /// Sign the user into Game Center or Google Play Games. This must be called before
+  /// taking any action (such as submitting a score or unlocking an achievement).
+  static Future<String?> signIn() async {
+    return await GameAuth.signIn();
   }
 
-  /// Check to see if the user is currently signed into
-  /// Game Center or Google Play Services
-  static Future<bool> get isSignedIn async => await GameAuth.isSignedIn;
+  /// Check to see if the user is currently signed into Game Center or Google Play Games.
+  static Future<bool> get isSignedIn => GameAuth.isSignedIn;
 
-  /// To sign the user out of Goole Play Services.
-  /// After calling, you can no longer make any actions
-  /// on the user's account.
-  static Future<String?> signOut() async {
-    return await GameAuth.signOut();
-  }
+  /// Retrieve a Google Play Games `server_auth_code` to be used by a backend,
+  /// such as Firebase, to authenticate the user. `null` on other platforms.
+  static Future<String?> getAuthCode(String clientID) async =>
+      await GameAuth.getAuthCode(clientID);
 
-  /// It will open the achievements screen.
+  /// Open the device's default achievements screen.
   static Future<String?> showAchievements() async {
     return await Achievements.showAchievements();
   }
 
-  /// Get achievements as a list. Use this to build your own custom UI.
-  /// To show the prebuilt system UI use [showAchievements]
-  static Future<List<AchievementItemData>?> loadAchievements() async {
-    return await Achievements.loadAchievements();
+  /// Get achievements as a list. Use this to build a custom UI.
+  /// To show the device's default achievements screen use [showAchievements].
+  ///
+  /// The `forceRefresh` argument will invalidate the cache on Android, fetching
+  /// the latest results. It has no affect on iOS.
+  static Future<List<AchievementItemData>?> loadAchievements(
+      {bool forceRefresh = false}) async {
+    return await Achievements.loadAchievements(forceRefresh: forceRefresh);
+  }
+
+  /// It will reset the achievements.
+  static Future<String?> resetAchievements() async {
+    return await Achievements.resetAchievements();
   }
 
   /// Unlock an [achievement].
   /// [Achievement] takes three parameters:
-  /// [androidID] the achievement id for android.
-  /// [iOSID] the achievement id for iOS.
-  /// [percentComplete] the completion percent of the achievement, this parameter is
-  /// optional in case of iOS.
+  /// [androidID] the achievement ID for Google Play Games.
+  /// [iOSID] the achievement ID for Game Center.
+  /// [percentComplete] the completion percentage of the achievement,
+  /// this parameter is optional on iOS/macOS.
+  /// [showsCompletionBanner] for iOS only, defaults to true
   static Future<String?> unlock({required Achievement achievement}) async {
     return await Achievements.unlock(achievement: achievement);
   }
 
   /// Increment an [achievement].
   /// [Achievement] takes two parameters:
-  /// [androidID] the achievement id for android.
+  /// [androidID] the achievement ID for Google Play Games.
   /// [steps] If the achievement is of the incremental type
   /// you can use this method to increment the steps.
   /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
@@ -59,7 +69,8 @@ class GamesServices {
     return await Achievements.increment(achievement: achievement);
   }
 
-  /// It will open the leaderboards screen.
+  /// Open the device's default leaderboards screen. If a leaderboard ID is provided,
+  /// it will display the specific leaderboard, otherwise it will show the list of all leaderboards.
   static Future<String?> showLeaderboards(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     return await Leaderboards.showLeaderboards(
@@ -67,38 +78,45 @@ class GamesServices {
         androidLeaderboardID: androidLeaderboardID);
   }
 
-  /// Get leaderboard scores as a list. Use this to build your own custom UI.
-  /// To show the prebuilt system screen use [showLeaderboards].
+  /// Get leaderboard scores as a list. Use this to build a custom UI.
+  /// To show the device's default leaderboards screen use [showLeaderboards].
+  ///
+  /// The `forceRefresh` argument will invalidate the cache on Android, fetching
+  /// the latest results. It has no affect on iOS.
   static Future<List<LeaderboardScoreData>?> loadLeaderboardScores(
       {iOSLeaderboardID = "",
       androidLeaderboardID = "",
+      bool playerCentered = false,
       required PlayerScope scope,
       required TimeScope timeScope,
+      bool forceRefresh = false,
       required int maxResults}) async {
     return await Leaderboards.loadLeaderboardScores(
         iOSLeaderboardID: iOSLeaderboardID,
         androidLeaderboardID: androidLeaderboardID,
+        playerCentered: playerCentered,
         scope: scope,
         timeScope: timeScope,
-        maxResults: maxResults);
+        maxResults: maxResults,
+        forceRefresh: forceRefresh);
   }
 
-  /// Submit a [score] to specific leader board.
+  /// Submit a [score] to specific leaderboard.
   /// [Score] takes three parameters:
-  /// [androidLeaderboardID] the leader board id that you want to send the score for in case of android.
-  /// [iOSLeaderboardID] the leader board id that you want to send the score for in case of iOS.
+  /// [androidLeaderboardID] the leaderboard ID for Google Play Games.
+  /// [iOSLeaderboardID] the leaderboard ID for Game Center.
   /// [value] the score.
   static Future<String?> submitScore({required Score score}) async {
     return await Leaderboards.submitScore(score: score);
   }
 
-  /// Get the player id.
-  /// On iOS the player id is unique for your game but not other games.
+  /// Get the current player's ID.
+  /// On iOS/macOS the player ID is unique for your game but not other games.
   static Future<String?> getPlayerID() async {
     return await Player.getPlayerID();
   }
 
-  /// Get player score for a specific leaderboard.
+  /// Get the current player's score for a specific leaderboard.
   static Future<int?> getPlayerScore(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     return await Player.getPlayerScore(
@@ -106,18 +124,44 @@ class GamesServices {
         androidLeaderboardID: androidLeaderboardID);
   }
 
-  /// Get the player name.
-  /// On iOS the player alias is the name used by the Player visible in the leaderboard
+  /// Get the current player's name.
+  /// On iOS/macOS the player's alias is provided.
   static Future<String?> getPlayerName() async {
     return await Player.getPlayerName();
   }
 
-  /// Show the iOS Access Point.
+  /// Get the player's icon-size profile image as a base64 encoded String.
+  static Future<String?> getPlayerIconImage() async {
+    return await Player.getPlayerIconImage();
+  }
+
+  /// Get the player's hi-res profile image as a base64 encoded String.
+  static Future<String?> getPlayerHiResImage() async {
+    return await Player.getPlayerHiResImage();
+  }
+
+  /// Check if the current player is underage (always false on Android).
+  static Future<bool?> get playerIsUnderage async {
+    return await Player.isUnderage;
+  }
+
+  /// Check if the current player is restricted from joining multiplayer games (always false on Android).
+  static Future<bool?> get playerIsMultiplayerGamingRestricted async {
+    return await Player.isMultiplayerGamingRestricted;
+  }
+
+  /// Check if the current player is restricted from using personalized communication on
+  /// the device (always false on Android).
+  static Future<bool?> get playerIsPersonalizedCommunicationRestricted async {
+    return await Player.isPersonalizedCommunicationRestricted;
+  }
+
+  /// Show the Game Center Access Point for the current player.
   static Future<String?> showAccessPoint(AccessPointLocation location) async {
     return await Player.showAccessPoint(location);
   }
 
-  /// Hide the iOS Access Point.
+  /// Hide the Game Center Access Point.
   static Future<String?> hideAccessPoint() async {
     return await Player.hideAccessPoint();
   }
@@ -135,8 +179,12 @@ class GamesServices {
   }
 
   /// Get all saved games.
-  static Future<List<SavedGame>?> getSavedGames() async {
-    return await SaveGame.getSavedGames();
+  ///
+  /// The `forceRefresh` argument will invalidate the cache on Android, fetching
+  /// the latest results. It has no affect on iOS.
+  static Future<List<SavedGame>?> getSavedGames(
+      {bool forceRefresh = false}) async {
+    return await SaveGame.getSavedGames(forceRefresh: forceRefresh);
   }
 
   /// Delete game with [name].

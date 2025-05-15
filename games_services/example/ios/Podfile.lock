@@ -2,21 +2,22 @@ PODS:
   - Flutter (1.0.0)
   - games_services (0.0.1):
     - Flutter
+    - FlutterMacOS
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
-  - games_services (from `.symlinks/plugins/games_services/ios`)
+  - games_services (from `.symlinks/plugins/games_services/darwin`)
 
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
   games_services:
-    :path: ".symlinks/plugins/games_services/ios"
+    :path: ".symlinks/plugins/games_services/darwin"
 
 SPEC CHECKSUMS:
-  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
-  games_services: 6c9a23d55bc6ae0129b24507e008643dcb02f341
+  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
+  games_services: 9d174ae29e8de7aa3f511bc00fedd7006594063f
 
-PODFILE CHECKSUM: 1d687fa337e018c706d6fe47544322b4937fa8f6
+PODFILE CHECKSUM: 3bfddf7ab13b75a4b1b9c5464509c9a6b61241ed
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.16.2

@@ -1,11 +1,11 @@
 package com.abedalkareem.games_services.util
 
 enum class PluginError {
-  FailedToSendScore, FailedToGetScore, FailedToGetPlayerId, FailedToGetPlayerName,
-  FailedToSendAchievement, FailedToShowAchievements, FailedToIncrementAchievements,
-  FailedToLoadAchievements, FailedToAuthenticate, FailedToSignOut, NotAuthenticated,
-  NotSupportedForThisOSVersion, FailedToSaveGame, FailedToLoadGame, FailedToGetSavedGames,
-  LeaderboardNotFound, FailedToDeleteSavedGame, FailedToLoadLeaderboardScores
+  FailedToSendScore, FailedToGetScore, FailedToGetPlayerProfileImage, FailedToSendAchievement,
+  FailedToShowAchievements, FailedToIncrementAchievements, FailedToLoadAchievements,
+  FailedToAuthenticate, FailedToGetAuthCode, NotAuthenticated, NotSupportedForThisOSVersion,
+  FailedToSaveGame, FailedToLoadGame, FailedToGetSavedGames, LeaderboardNotFound,
+  FailedToDeleteSavedGame, FailedToLoadLeaderboardScores
 }
 
 fun PluginError.errorCode(): String {
@@ -31,20 +31,20 @@ fun PluginError.errorCode(): String {
     PluginError.FailedToAuthenticate -> {
       return "failed_to_authenticate"
     }
+    PluginError.FailedToGetAuthCode -> {
+      return "failed_to_get_auth_code"
+    }
     PluginError.NotSupportedForThisOSVersion -> {
       return "not_supported_for_this_os_version"
     }
     PluginError.LeaderboardNotFound -> {
       return "leaderboard_not_found"
     }
-    PluginError.FailedToGetPlayerId -> {
-      return "failed_to_get_player_id"
+    PluginError.FailedToGetPlayerProfileImage -> {
+      return "failed_to_get_player_profile_image"
     }
-    PluginError.FailedToGetPlayerName -> {
-      return "failed_to_get_player_name"
-    }
-    PluginError.FailedToSignOut -> {
-      return "failed_to_sign_out"
+    PluginError.FailedToGetAuthCode -> {
+      return "failed_to_get_auth_code"
     }
     PluginError.NotAuthenticated -> {
       return "not_authenticated"
@@ -90,20 +90,20 @@ fun PluginError.errorMessage(): String {
     PluginError.FailedToAuthenticate -> {
       return "Failed to authenticate"
     }
+    PluginError.FailedToGetAuthCode -> {
+      return "Failed to get authCode"
+    }
     PluginError.NotSupportedForThisOSVersion -> {
       return "Not supported for this OS version"
     }
     PluginError.LeaderboardNotFound -> {
       return "Leaderboard not found"
     }
-    PluginError.FailedToGetPlayerId -> {
-      return "Failed to get player id"
+    PluginError.FailedToGetPlayerProfileImage -> {
+      return "Failed to get player profile image"
     }
-    PluginError.FailedToGetPlayerName -> {
-      return "Failed to get player name"
-    }
-    PluginError.FailedToSignOut -> {
-      return "Failed to sign out"
+    PluginError.FailedToGetAuthCode -> {
+      return "Failed to get server auth code"
     }
     PluginError.NotAuthenticated -> {
       return "Player not authenticated, Please make sure to call signIn() first"

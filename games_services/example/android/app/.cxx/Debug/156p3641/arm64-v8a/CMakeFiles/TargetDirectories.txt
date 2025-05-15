@@ -1,0 +1,2 @@
+/Users/lee/projects/games_services/games_services/example/android/app/.cxx/Debug/156p3641/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/lee/projects/games_services/games_services/example/android/app/.cxx/Debug/156p3641/arm64-v8a/CMakeFiles/rebuild_cache.dir

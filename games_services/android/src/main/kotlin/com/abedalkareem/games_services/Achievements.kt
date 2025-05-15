@@ -6,9 +6,8 @@ import com.abedalkareem.games_services.util.AppImageLoader
 import com.abedalkareem.games_services.util.PluginError
 import com.abedalkareem.games_services.util.errorCode
 import com.abedalkareem.games_services.util.errorMessage
-import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.games.AchievementsClient
-import com.google.android.gms.games.Games
+import com.google.android.gms.games.PlayGames
 import com.google.android.gms.games.achievement.Achievement
 import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -21,35 +20,40 @@ import kotlinx.coroutines.launch
 class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
 
   private val imageLoader = AppImageLoader()
-  private val achievementClient: AchievementsClient?
+  private val achievementClient: AchievementsClient
     get() {
-      val lastSignedInAccount =
-        GoogleSignIn.getLastSignedInAccount(activityPluginBinding.activity) ?: return null
-      return Games.getAchievementsClient(activityPluginBinding.activity, lastSignedInAccount)
+      return PlayGames.getAchievementsClient(activityPluginBinding.activity)
     }
 
   fun showAchievements(activity: Activity?, result: MethodChannel.Result) {
-    achievementClient?.achievementsIntent?.addOnSuccessListener { intent ->
+    achievementClient.achievementsIntent
+      .addOnSuccessListener { intent ->
       activity?.startActivityForResult(intent, 0)
       result.success(null)
-    }?.addOnFailureListener {
+    }
+      .addOnFailureListener {
       result.error(PluginError.FailedToShowAchievements.errorCode(), it.localizedMessage, null)
     }
   }
 
   fun unlock(achievementID: String, result: MethodChannel.Result) {
-    achievementClient?.unlockImmediate(achievementID)?.addOnSuccessListener {
+    achievementClient
+      .unlockImmediate(achievementID)
+      .addOnSuccessListener {
       result.success(null)
-    }?.addOnFailureListener {
+    }
+      .addOnFailureListener {
       result.error(PluginError.FailedToSendAchievement.errorCode(), it.localizedMessage, null)
     }
   }
 
   fun increment(achievementID: String, count: Int, result: MethodChannel.Result) {
-    achievementClient?.incrementImmediate(achievementID, count)
-      ?.addOnSuccessListener {
+    achievementClient
+      .incrementImmediate(achievementID, count)
+      .addOnSuccessListener {
         result.success(null)
-      }?.addOnFailureListener {
+      }
+      .addOnFailureListener {
         result.error(
           PluginError.FailedToIncrementAchievements.errorCode(),
           it.localizedMessage,
@@ -58,18 +62,20 @@ class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
       }
   }
 
-  fun loadAchievements(activity: Activity?, result: MethodChannel.Result) {
+  fun loadAchievements(activity: Activity?, forceRefresh: Boolean, result: MethodChannel.Result) {
     activity ?: return
-    achievementClient?.load(true)
-      ?.addOnCompleteListener { task ->
-        val data = task.result.get()
+    achievementClient
+      .load(forceRefresh)
+      .addOnSuccessListener { annotatedData ->
+        val data = annotatedData.get()
+
         if (data == null) {
           result.error(
             PluginError.FailedToLoadAchievements.errorCode(),
             PluginError.FailedToLoadAchievements.errorMessage(),
             null
           )
-          return@addOnCompleteListener
+          return@addOnSuccessListener
         }
         val handler = CoroutineExceptionHandler { _, exception ->
           result.error(
@@ -104,7 +110,7 @@ class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
           result.success(string)
         }
       }
-      ?.addOnFailureListener {
+      .addOnFailureListener {
         result.error(
           PluginError.FailedToLoadAchievements.errorCode(),
           it.localizedMessage,

@@ -1,32 +1,31 @@
 # Save/Load Game  
 
-To be able to save games you must do few things before.  
-On iOS/macOS:  
-You must provide an iCloud container ID in your xcode project to save game data to the player’s iCloud account, to do that:  
-- Open your xcode project.
-- Select Runner project.
-- Navigate to `Signing and Capabilities` 
-- Click on the plus icon.
-- Search for icloud.
-- Enter.
+## Setup
+
+### iOS/macOS
+
+You must provide an iCloud container ID in your Xcode project to save game data to the player’s iCloud account:
+
+- Open your Xcode project.
+- Select Runner.
+- Navigate to `Signing and Capabilities`.
+- Click on the plus (`+`) icon.
+- Search for iCloud.
 - Now tick the `iCloud Documents`.
-- Click on plus icon in the Containers section.
-- Enter the name of the continaer.
+- Click on the plus (`+`) icon in the `Containers` section.
+- Enter a name for the container.
 
-On Android:  
-Make sure to enable saved games support for your game in the Google Play Console, to do that:  
-- In the Google Play Console, open the game you want to turn on Saved Games for and navigate to the Play Games Services - Configuration page (Grow > Play Games Services > Setup and management > Configuration) and select Edit properties.  
-- Turn the Saved Games option to ON.  
-- Click Save. 
+### Android
 
-After that when you sign in make sure to pass `shouldEnableSavedGame` as true.
+Enable saved games support for your game in the Google Play Console:
 
-``` dart
- GameAuth.signIn(shouldEnableSavedGame: true);
-```  
+- In the Google Play Console, open the game you want to turn on Saved Games for and navigate to Play Games Services - Configuration page (Grow > Play Games Services > Setup and management > Configuration) and select Edit properties.  
+- Turn the `Saved Games` option to `ON`.  
+- Click `Save`.
 
-## Save game 
-To save a new game with `data` and a unique `name`.
+## Save game
+
+Save a game with `data` and a unique `name`.
 
 ```dart
 final data = "55";
@@ -42,9 +41,9 @@ final result = await SaveGame.saveGame(data: data, name: "slot1");
 
 *The `name` must be between 1 and 100 non-URL-reserved characters (a-z, A-Z, 0-9, or the symbols "-", ".", "_", or "~").*  
 
+## Load game
 
-## Load game  
-To load a game data with a `name`.
+Load a game save by `name`.
 
 ```dart
 final result = await SaveGame.loadGame(name: "slot1");
@@ -53,7 +52,7 @@ if (result != null) {
 }
 ```
 
-If the data you saved is a json string you can retrieve it as below:  
+If the data you saved is a json string you can retrieve it like so:  
 
 ```dart
 final result = await SaveGame.loadGame(name: "slot1");
@@ -65,15 +64,17 @@ if (result != null) {
 }
 ```
 
-## Delete game  
-To delete a saved game.
+## Delete game
+
+Delete a saved game.
 
 ```dart
 final result = await SaveGame.deleteGame(name: "slot1");
 ```
 
-## Get saved games 
-To get all saved games as a list of `SavedGame`.
+## Get saved games
+
+Get all saved games as a list of `SavedGame`.
 
 ```dart
 final result = await SaveGame.getSavedGames();

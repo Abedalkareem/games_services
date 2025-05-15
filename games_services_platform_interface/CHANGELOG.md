@@ -1,3 +1,44 @@
+## 4.1.1
+
+- Fixes delay in some results after sign in. by @theLee3
+
+## 4.1.0
+
+- Add `player` stream to listen to authorization changes. by @theLee3
+- Fix bug causing subsequent `signIn` calls to freeze on iOS if player not authenticated. Now throws auth error. by @theLee3
+- Handle Play Services missing/outdated issues by returning error from `signIn` and presenting native dialog allowing user to resolve the issue. by @theLee3
+
+## 4.0.3
+- Add optional Bool forceRefreshToken as parameter for Android GamesSignInClient.requestServerSideAccess, replacing hard-coded false. Defaults to false. by @yukinoshita0219
+
+## 4.0.2
+- Add getPlayerScoreObject to retrieve rank and other score data for leaderboard and time span. by @egonbeermat
+- Add optional String token to methods that submit and retrieve score. by @egonbeermat
+- Add optional Bool showsCompletionBanner as parameter for iOS GKAchievement.report, replacing hard-coded true. Defaults to true. by @egonbeermat
+- Add resetAchievements method for iOS only, Android doesn't support this through Play Games. by @egonbeermat
+- Export for player_data.dart. by @@theLee3
+- Add logs to save game.
+
+## 4.0.1
+- Add ability to get Play Games auth code for use with backends by @theLee3
+- Add PlayerData class to return more score holder details by @theLee3
+- Add isAuthenticated check alongside DEBUG signInFailed by @theLee3
+- Add signInFailed check to prevent hanging on hot reload by @theLee3
+- Handle consent exception when calling loadLeaderboardScores with Scope.friendsOnly by @theLee3
+- Ensure all task exceptions are handled, to prevent crashes. by @Erfa
+
+## 4.0.0
+- migrate to google play games services 2.0.0.
+- use darwin folder for iOS and macOS.
+
+## 3.0.3
+- add getPlayer by @theLee3
+
+## 3.0.1
+- add playerIsUnderage
+- add playerIsMultiplayerGamingRestricted
+- add playerIsPersonalizedCommunicationRestricted
+
 ## 3.0.0
 - Rearrange classes to group features. `GameAuth` for authintication, `Achievements` for anything related to Achievements, `Leaderboards` for anything related to Leaderboards, `Player` for anything related to Player, and `SaveGame` for anything related to save game.
 

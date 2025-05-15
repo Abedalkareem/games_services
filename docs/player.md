@@ -1,41 +1,59 @@
-# Player  
+# Player
 
-## Player id  
-To get the current player id.
+## Player ID
+
+Get the current player's ID.
 
 ```dart
 final playerID = Player.getPlayerID();
 ```
 
-## Player name  
-To get the current player name.
+## Player name
+
+Get the current player's name. This returns the player's alias on iOS/macOS.
 
 ```dart
 final playerName = Player.getPlayerName();
 ```
 
-## Player score  
-To get the current player score.
+## Player icon image
+
+Get the player's icon image as a base64 encoded string.
 
 ```dart
-final playerScore = Player.getPlayerScore();
+// icon-size image
+final base64iconImage = await Player.getPlayerIconImage();
+
+// hi-res image
+final base64hiResImage = await Player.getPlayerHiResImage();
 ```
 
-## Show AccessPoint (iOS Only)  
-To show the access point you can call the following function.
+## Player score
+
+Get the current player's score for a specific leaderboard.
+
+```dart
+final playerScore = Player.getPlayerScore(
+    iOSLeaderboardID = 'ios_leaderboard_id',
+    androidLeaderboardID = 'android_leaderboard_id',
+);
+```
+
+## Show AccessPoint (iOS Only)
+
+Show the Game Center Access Point for the current player.
 
 ```dart
 Player.showAccessPoint(AccessPointLocation.topLeading);
-```  
+```
 
-This feature support only on the iOS, on Android there is nothing like this supported natively.  
-The `AccessPointLocation` specifies the corner of the screen to display the access point. If you pass `topLeading` the access point will be shown on the top left corner in case of LTR layout.   
+This feature is only available on iOS.
+`AccessPointLocation` specifies the corner of the screen to display the access point. If you pass `topLeading` the access point will be shown on the top left corner in case of LTR layout.
 
-## Hide AccessPoint (iOS Only)  
-To hide the access point.
+## Hide AccessPoint (iOS Only)
+
+Hide the Game Center Access Point.
 
 ```dart
 Player.hideAccessPoint();
-```  
-
-This feature support only on the iOS, on Android there is nothing like this supported natively.  
+```

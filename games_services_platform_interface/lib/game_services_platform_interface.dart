@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:games_services_platform_interface/models.dart';
-import 'src/game_services_platform_impl.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+
+import 'src/game_services_platform_impl.dart';
 
 abstract class GamesServicesPlatform extends PlatformInterface {
   /// Constructs a GamesServicesPlatform.
@@ -12,7 +14,6 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   static GamesServicesPlatform _instance = MethodChannelGamesServices();
 
   /// The default instance of [GamesServicesPlatform] to use.
-  ///
   /// Defaults to [MethodChannelGamesServices].
   static GamesServicesPlatform get instance => _instance;
 
@@ -25,7 +26,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Increment an [achievement].
   /// [Achievement] takes two parameters:
-  /// [androidID] the achievement id for android.
+  /// [androidID] the achievement ID for Google Play Games.
   /// [steps] If the achievement is of the incremental type
   /// you can use this method to increment the steps.
   /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
@@ -35,96 +36,103 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Unlock an [achievement].
   /// [Achievement] takes three parameters:
-  /// [androidID] the achievement id for android.
-  /// [iOSID] the achievement id for iOS.
-  /// [percentComplete] the completion percent of the achievement, this parameter is
-  /// optional in case of iOS.
+  /// [androidID] the achievement ID for Google Play Games.
+  /// [iOSID] the achievement ID for Game Center.
+  /// [percentComplete] the completion percentage of the achievement,
+  /// this parameter is optional on iOS/macOS.
   Future<String?> unlock({required Achievement achievement}) async {
     throw UnimplementedError("not implemented.");
   }
 
-  /// Submit a [score] to specific leader board.
+  /// Submit a [score] to a specific leaderboard.
   /// [Score] takes three parameters:
-  /// [androidLeaderboardID] the leader board id that you want to send the score for in case of android.
-  /// [iOSLeaderboardID] the leader board id that you want to send the score for in case of iOS.
+  /// [androidLeaderboardID] the leaderboard ID for Google Play Games.
+  /// [iOSLeaderboardID] the leaderboard ID for Game Center.
   /// [value] the score.
   Future<String?> submitScore({required Score score}) async {
     throw UnimplementedError("not implemented.");
   }
 
-  /// It will open the achievements screen.
+  /// Open the device's default achievements screen.
   Future<String?> showAchievements() async {
     throw UnimplementedError("not implemented.");
   }
 
-  /// It will open the leaderboards screen.
+  /// Open the device's default leaderboards screen. If a leaderboard ID is provided,
+  /// it will display the specific leaderboard, otherwise it will show the list of all leaderboards.
   Future<String?> showLeaderboards(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     throw UnimplementedError("not implemented.");
   }
 
   /// Get achievements as json data.
-  /// To show the prebuilt system screen use [showAchievements].
-  Future<String?> loadAchievements() async {
+  /// To show the device's default achievements screen use [showAchievements].
+  Future<String?> loadAchievements({bool forceRefresh = false}) async {
     throw UnimplementedError("not implemented.");
   }
 
-  /// Get leaderboard scores as a json data.
-  /// To show the prebuilt system screen use [showLeaderboards].
+  /// Reset achievements.
+  Future<String?> resetAchievements() async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Get leaderboard scores as json data.
+  /// To show the device's default leaderboards screen use [showLeaderboards].
   Future<String?> loadLeaderboardScores(
       {iOSLeaderboardID = "",
       androidLeaderboardID = "",
+      bool playerCentered = false,
       required PlayerScope scope,
       required TimeScope timeScope,
-      required int maxResults}) async {
+      required int maxResults,
+      bool forceRefresh = false}) async {
     throw UnimplementedError("not implemented.");
   }
 
-  /// Get player score for a specific leaderboard.
+  /// Get leaderboard scores as a json data for current player.
+  /// To show the prebuilt system screen use [showLeaderboards].
+  Future<String?> getPlayerScoreObject(
+      {iOSLeaderboardID = "",
+      androidLeaderboardID = "",
+      required PlayerScope scope,
+      required TimeScope timeScope}) async {
+    throw UnimplementedError("not implemented.");
+  }
+
+  /// Get the current player's score for a specific leaderboard.
   Future<int?> getPlayerScore(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
     throw UnimplementedError("not implemented.");
   }
 
-  /// To sign in the user.
-  /// If you pass [shouldEnableSavedGame], a drive scope will be will be added to GoogleSignInOptions. This will happed just
-  /// android as for iOS/macOS nothing is required to be sent when authenticate.
-  /// You need to call the sign in before making any action,
-  /// (like sending a score or unlocking an achievement).
-  Future<String?> signIn({bool shouldEnableSavedGame = false}) async {
+  /// Stream of the currently authenticated player. If not null, the player
+  /// is signed in & games_services functionality is available.
+  Stream<PlayerData?> get player => throw UnimplementedError();
+
+  /// Sign the user into Game Center or Google Play Games. This must be called before
+  /// taking any action (such as submitting a score or unlocking an achievement).
+  Future<String?> signIn() async {
     throw UnimplementedError("not implemented.");
   }
 
-  /// Check to see if the user is currently signed into
-  /// Game Center or Google Play Services
-  Future<bool?> get isSignedIn => throw UnimplementedError("not implemented.");
+  /// Retrieve Google Play Games [server_auth_code] to be used by an auth provider,
+  /// such as Firebase, to authenticate the user. [null] on other platforms.
+  Future<String?> getAuthCode(String clientID,
+          {bool forceRefreshToken = false}) =>
+      throw UnimplementedError("not implemented.");
 
-  /// To sign the user out of Google Play Services.
-  /// After calling, you can no longer make any actions
-  /// on the user's account.
-  Future<String?> signOut() async {
-    throw UnimplementedError("not implemented.");
-  }
-
-  /// Show the iOS Access Point.
+  /// Show the Game Center Access Point for the current player.
   Future<String?> showAccessPoint(AccessPointLocation location) async {
     throw UnimplementedError("not implemented.");
   }
 
-  /// Hide the iOS Access Point.
+  /// Hide the Game Center Access Point.
   Future<String?> hideAccessPoint() async {
     throw UnimplementedError("not implemented.");
   }
 
-  /// Get the player id.
-  /// On iOS the player id is unique for your game but not other games.
-  Future<String?> getPlayerID() async {
-    throw UnimplementedError("not implemented.");
-  }
-
-  /// Get the player name.
-  /// On iOS the player alias is the name of the player.
-  Future<String?> getPlayerName() async {
+  /// Get the current player's hi-res profile image as a base64 encoded String.
+  Future<String?> getPlayerHiResImage() async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -145,7 +153,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   }
 
   /// Get all saved games.
-  Future<String?> getSavedGames() async {
+  Future<String?> getSavedGames({bool forceRefresh = false}) async {
     throw UnimplementedError("not implemented.");
   }
 }

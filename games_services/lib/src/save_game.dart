@@ -6,8 +6,10 @@ import 'package:games_services_platform_interface/game_services_platform_interfa
 abstract class SaveGame {
   /// Save game with [data] and a unique [name].
   /// The [name] must be between 1 and 100 non-URL-reserved characters (a-z, A-Z, 0-9, or the symbols "-", ".", "_", or "~").
-  static Future<String?> saveGame(
-      {required String data, required String name}) async {
+  static Future<String?> saveGame({
+    required String data,
+    required String name,
+  }) async {
     return await GamesServicesPlatform.instance
         .saveGame(data: data, name: name);
   }
@@ -18,8 +20,14 @@ abstract class SaveGame {
   }
 
   /// Get all saved games.
-  static Future<List<SavedGame>?> getSavedGames() async {
-    final result = await GamesServicesPlatform.instance.getSavedGames();
+  ///
+  /// The `forceRefresh` argument will invalidate the cache on Android, fetching
+  /// the latest results. It has no affect on iOS.
+  static Future<List<SavedGame>?> getSavedGames({
+    bool forceRefresh = false,
+  }) async {
+    final result = await GamesServicesPlatform.instance
+        .getSavedGames(forceRefresh: forceRefresh);
     if (result == null) {
       return null;
     }

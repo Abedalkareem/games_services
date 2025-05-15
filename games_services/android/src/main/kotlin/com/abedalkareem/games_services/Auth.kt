@@ -2,132 +2,164 @@ package com.abedalkareem.games_services
 
 import android.app.Activity
 import android.content.Intent
-import android.util.Log
-import android.view.Gravity
 import com.abedalkareem.games_services.models.Method
 import com.abedalkareem.games_services.models.PendingOperation
+import com.abedalkareem.games_services.models.PlayerData
 import com.abedalkareem.games_services.models.value
+import com.abedalkareem.games_services.util.AppImageLoader
 import com.abedalkareem.games_services.util.PluginError
 import com.abedalkareem.games_services.util.errorCode
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.drive.Drive
-import com.google.android.gms.games.Games
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
+import com.google.android.gms.games.AuthenticationResult
+import com.google.android.gms.games.GamesSignInClient
+import com.google.android.gms.games.PlayGames
+import com.google.android.gms.games.PlayersClient
+import com.google.android.gms.tasks.Task
+import com.google.gson.Gson
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugin.common.PluginRegistry
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 private const val RC_SIGN_IN = 9000
 
-class Auth : PluginRegistry.ActivityResultListener {
+class Auth(private var activityPluginBinding: ActivityPluginBinding):
+  EventChannel.StreamHandler {
 
-  private var googleSignInClient: GoogleSignInClient? = null
+  private val gamesSignInClient: GamesSignInClient
+    get() {
+      return PlayGames.getGamesSignInClient(activityPluginBinding.activity)
+    }
+
+  private val playersClient: PlayersClient
+    get() {
+      return PlayGames.getPlayersClient(activityPluginBinding.activity)
+    }
+
+  private val gson = Gson()
   private var pendingOperation: PendingOperation? = null
+  private var eventSink: EventChannel.EventSink? = null
 
-  fun isSignedIn(
-    activity: Activity?,
-    result: MethodChannel.Result
-  ) {
-    val value = activity?.let { GoogleSignIn.getLastSignedInAccount(it) } != null
-    result.success(value)
-  }
-
-  fun silentSignIn(
-    activity: Activity?,
-    shouldEnableSavedGame: Boolean,
-    result: MethodChannel.Result
-  ) {
-    activity ?: return
-    val signInOption = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-
-    if (shouldEnableSavedGame) {
-      signInOption
-        .requestScopes(Drive.SCOPE_APPFOLDER)
-    }
-
-    googleSignInClient = activity.let { GoogleSignIn.getClient(it, signInOption.build()) }
-    googleSignInClient?.silentSignIn()?.addOnCompleteListener { task ->
-      pendingOperation = PendingOperation(Method.SilentSignIn.value(), result, activity)
-      if (task.isSuccessful) {
-        val googleSignInAccount = task.result ?: return@addOnCompleteListener
-        handleSignInResult(activity, googleSignInAccount)
+  override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+    eventSink = events
+    gamesSignInClient.isAuthenticated.addOnCompleteListener { isAuthenticatedTask: Task<AuthenticationResult> ->
+      val isAuthenticated = isAuthenticatedTask.isSuccessful &&
+        isAuthenticatedTask.result.isAuthenticated
+      if (isAuthenticated) {
+        playersClient.currentPlayer.addOnSuccessListener { player ->
+          var playerData = PlayerData(
+            player.displayName,
+            player.playerId,
+            null
+          )
+          val handler = CoroutineExceptionHandler { _, exception ->
+            events!!.success(gson.toJson(playerData) ?: "")
+          }
+          CoroutineScope(Dispatchers.Main + handler).launch {
+            val image = player.iconImageUri?.let {
+              AppImageLoader().loadImageFromUri(activityPluginBinding.activity, it)
+            }
+            playerData = playerData.copy(iconImage = image)
+            events!!.success(gson.toJson(playerData) ?: "")
+          }
+        }.addOnFailureListener {
+          events!!.error(PluginError.FailedToAuthenticate.errorCode(), "", null)
+        }
       } else {
-        Log.e("Error", "signInError", task.exception)
-        Log.i("ExplicitSignIn", "Trying explicit sign in")
-        explicitSignIn(activity, shouldEnableSavedGame)
+        events!!.error(PluginError.FailedToAuthenticate.errorCode(), "", null)
       }
     }
   }
 
-  private fun explicitSignIn(activity: Activity?, shouldEnableSavedGame: Boolean) {
-    activity ?: return
-    val signInOption = GoogleSignInOptions.Builder(
-      GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN
-    )
-      .requestEmail()
-
-    if (shouldEnableSavedGame) {
-      signInOption
-        .requestScopes(Drive.SCOPE_APPFOLDER)
-    }
-
-    googleSignInClient = GoogleSignIn.getClient(activity, signInOption.build())
-    activity.startActivityForResult(googleSignInClient?.signInIntent, RC_SIGN_IN)
+  override fun onCancel(arguments: Any?) {
+    eventSink = null
   }
 
-  private fun handleSignInResult(activity: Activity?, googleSignInAccount: GoogleSignInAccount) {
-    activity ?: return
-    // Set the popups view.
-    val gamesClient = Games.getGamesClient(activity, googleSignInAccount)
-    gamesClient.setViewForPopups(activity.findViewById(android.R.id.content))
-    gamesClient.setGravityForPopups(Gravity.TOP or Gravity.CENTER_HORIZONTAL)
-
-    finishPendingOperationWithSuccess()
-  }
-
-  fun signOut(result: MethodChannel.Result) {
-    googleSignInClient?.signOut()?.addOnCompleteListener { task ->
-      if (task.isSuccessful) {
-        result.success(null)
-      } else {
-        result.error(PluginError.FailedToSignOut.errorCode(), task.exception?.localizedMessage, null)
+  fun signIn(result: MethodChannel.Result) {
+    val apiAvailability = GoogleApiAvailability.getInstance()
+    val resultCode = apiAvailability.isGooglePlayServicesAvailable(activityPluginBinding.activity)
+    if (resultCode != ConnectionResult.SUCCESS) {
+      if (apiAvailability.isUserResolvableError(resultCode)) {
+        apiAvailability.getErrorDialog(activityPluginBinding.activity, resultCode, 1)?.show();
       }
+      result.error(PluginError.FailedToAuthenticate.errorCode(), apiAvailability.getErrorString(resultCode), null)
+      return;
     }
+    pendingOperation = PendingOperation(Method.SignIn.value(), result, activityPluginBinding.activity)
+    gamesSignInClient.signIn().addOnSuccessListener {
+      it?.let { result ->
+        if (result.isAuthenticated) {
+          playersClient.currentPlayer.addOnSuccessListener { player ->
+            var playerData = PlayerData(
+              player.displayName,
+              player.playerId,
+              null
+            )
+            val handler = CoroutineExceptionHandler { _, exception ->
+              eventSink?.success(gson.toJson(playerData) ?: "")
+              finishPendingOperationWithSuccess()
+            }
+            CoroutineScope(Dispatchers.Main + handler).launch {
+              val image = player.iconImageUri?.let {
+                AppImageLoader().loadImageFromUri(activityPluginBinding.activity, it)
+              }
+              playerData = playerData.copy(iconImage = image)
+              eventSink?.success(gson.toJson(playerData) ?: "")
+              finishPendingOperationWithSuccess()
+            }
+          }.addOnFailureListener {
+            finishPendingOperationWithError(PluginError.FailedToAuthenticate.errorCode(), it.message ?: "")
+          }
+        } else {
+          finishPendingOperationWithError(PluginError.FailedToAuthenticate.errorCode(), "")
+        }
+      }
+    }.addOnFailureListener {
+      finishPendingOperationWithError(PluginError.FailedToAuthenticate.errorCode(), it.message ?: "")
+    }
+  }
+
+  fun getAuthCode(clientID: String, forceRefreshToken: Boolean, result: MethodChannel.Result) {
+    gamesSignInClient.requestServerSideAccess(clientID, forceRefreshToken).addOnSuccessListener {
+      result.success(it)
+    }.addOnFailureListener {
+      result.error(PluginError.FailedToGetAuthCode.errorCode(), it.message ?: "", null)
+    }
+  }
+
+  fun getPlayerProfileImage(result: MethodChannel.Result) {
+    playersClient.currentPlayer.addOnSuccessListener { player ->
+        val handler = CoroutineExceptionHandler { _, exception ->
+          result.error(
+            PluginError.FailedToGetPlayerProfileImage.errorCode(),
+            exception.localizedMessage,
+            null
+          )
+        }
+        CoroutineScope(Dispatchers.Main + handler).launch {
+          val image = player.hiResImageUri
+              ?.let { AppImageLoader().loadImageFromUri(activityPluginBinding.activity, it) }
+          result.success(image)
+        }
+      }.addOnFailureListener {
+        result.error(PluginError.FailedToGetPlayerProfileImage.errorCode(), it.localizedMessage, null)
+      }
   }
 
   //region PendingOperation
   private fun finishPendingOperationWithSuccess() {
-    Log.i(pendingOperation?.method, "success")
     pendingOperation?.result?.success(null)
     pendingOperation = null
   }
 
   private fun finishPendingOperationWithError(errorCode: String, errorMessage: String) {
-    Log.i(pendingOperation?.method, "error")
+    eventSink?.error(PluginError.FailedToAuthenticate.errorCode(), errorMessage, null)
     pendingOperation?.result?.error(errorCode, errorMessage, null)
     pendingOperation = null
-  }
-  //endregion
-
-  //region ActivityResultListener
-  override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
-    if (requestCode == RC_SIGN_IN) {
-      val result = data?.let { Auth.GoogleSignInApi.getSignInResultFromIntent(it) }
-      val signInAccount = result?.signInAccount
-      if (result?.isSuccess == true && signInAccount != null) {
-        handleSignInResult(pendingOperation?.activity, signInAccount)
-      } else {
-        var message = result?.status?.statusMessage ?: ""
-        if (message.isEmpty()) {
-          message = "Something went wrong " + result?.status
-        }
-        finishPendingOperationWithError(PluginError.FailedToAuthenticate.errorCode(), message)
-      }
-      return true
-    }
-    return false
   }
   //endregion
 }
