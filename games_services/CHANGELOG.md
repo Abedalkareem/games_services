@@ -1,3 +1,7 @@
+## 4.1.1
+
+- Fixes delay in some results after sign in. by @theLee3
+
 ## 4.1.0
 
 - Add `player` stream to listen to authorization changes. by @theLee3
