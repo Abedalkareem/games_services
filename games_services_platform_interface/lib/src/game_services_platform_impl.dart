@@ -52,10 +52,13 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
 
   @override
   Stream<PlayerData?> get player {
-    // to maintain backwards compatibility, add latest player when
-    // listened to by plugin methods. also guarantees synced player data
+    // In order to maintain backwards compatibility, if the channel stream is
+    // already subscribed to, add the latest player data listeners from legacy
+    // plugin methods. This also guarantees synced player data
     // while listening for the user in multiple places throughout the app
-    Future(() => _streamController.add(_player));
+    if (_sub != null) {
+      Future(() => _streamController.add(_player));
+    }
     return _streamController.stream;
   }
 
