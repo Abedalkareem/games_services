@@ -16,6 +16,8 @@ Get achievements as a list. Use this to build a custom UI.
 final result = await Achievements.loadAchievements();
 ```
 
+Note: Loading achievements may take time. It is recommended to use a background thread for better performance.
+
 ## Unlock achievement
 
 Unlock an ```Achievement```.
@@ -75,6 +77,6 @@ The ```Score``` class takes three parameters:
 
 ``` dart
 Leaderboards.submitScore(score: Score(androidLeaderboardID: 'android_leaderboard_id',
-                                       iOSLeaderboardID: 'ios_leaderboard_id',
+                                       iOSID: 'ios_id',
                                        value: 5));
 ```

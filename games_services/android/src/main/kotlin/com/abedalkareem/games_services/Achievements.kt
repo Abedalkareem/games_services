@@ -16,6 +16,7 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
 
@@ -84,7 +85,7 @@ class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
             null
           )
         }
-        CoroutineScope(Dispatchers.Main + handler).launch {
+        CoroutineScope(Dispatchers.IO + handler).launch {
           val achievements = mutableListOf<AchievementItemData>()
           for (item in data) {
             val lockedImage =
@@ -107,7 +108,9 @@ class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
           val gson = Gson()
           val string = gson.toJson(achievements) ?: ""
           data.release()
-          result.success(string)
+          withContext(Dispatchers.Main) {
+            result.success(string)
+          }
         }
       }
       .addOnFailureListener {
