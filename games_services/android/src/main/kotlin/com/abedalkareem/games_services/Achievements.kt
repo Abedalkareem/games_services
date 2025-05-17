@@ -1,6 +1,8 @@
 package com.abedalkareem.games_services
 
 import android.app.Activity
+import android.os.Handler
+import android.os.Looper
 import com.abedalkareem.games_services.models.AchievementItemData
 import com.abedalkareem.games_services.util.AppImageLoader
 import com.abedalkareem.games_services.util.PluginError
@@ -88,10 +90,12 @@ class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
         CoroutineScope(Dispatchers.IO + handler).launch {
           val achievements = mutableListOf<AchievementItemData>()
           for (item in data) {
-            val lockedImage =
+            val lockedImage = withContext(Dispatchers.Main) {
               item.revealedImageUri?.let { imageLoader.loadImageFromUri(activity, it) }
-            val unlockedImage =
+            }
+            val unlockedImage = withContext(Dispatchers.Main) {
               item.unlockedImageUri?.let { imageLoader.loadImageFromUri(activity, it) }
+            }
             achievements.add(
               AchievementItemData(
                 item.achievementId,
