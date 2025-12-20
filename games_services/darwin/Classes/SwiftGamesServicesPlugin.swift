@@ -94,6 +94,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     case .deleteGame:
       let name = (arguments?["name"] as? String) ?? ""
       saveGame.deleteGame(name: name, result: result)
+    case .fetchIdentityVerificationSignature:
+      auth.fetchIdentityVerificationSignature(result: result)
     }
   }
   

@@ -34,4 +34,16 @@ abstract class GameAuth {
           {bool forceRefreshToken = false}) =>
       GamesServicesPlatform.instance
           .getAuthCode(clientID, forceRefreshToken: forceRefreshToken);
+
+  /// Fetch identity verification signature from Game Center (iOS and MacOS).
+  /// Returns identity verification data including:
+  /// - `publicKeyURL`: URL to the public key
+  /// - `signature`: Base64 encoded signature
+  /// - `salt`: Base64 encoded salt
+  /// - `timestamp`: Timestamp value
+  ///
+  /// Only available on (iOS and MacOS), returns `null` on other platforms or versions.
+  static Future<IdentityVerificationSignature?>
+      fetchIdentityVerificationSignature() =>
+          GamesServicesPlatform.instance.fetchIdentityVerificationSignature();
 }

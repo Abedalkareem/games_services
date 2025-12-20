@@ -19,4 +19,5 @@ enum Method: String {
   case resetAchievements = "resetAchievements"
   case loadLeaderboardScores = "loadLeaderboardScores"
   case loadPreviousOccurrence = "loadPreviousOccurrence"
+  case fetchIdentityVerificationSignature = "fetchIdentityVerificationSignature"
 }

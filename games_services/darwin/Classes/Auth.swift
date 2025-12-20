@@ -109,6 +109,24 @@ class Auth: BaseGamesServices {
     }
   }
   
+  func fetchIdentityVerificationSignature(result: @escaping FlutterResult) {
+    currentPlayer.fetchItems(forIdentityVerificationSignature: { (publicKeyURL, signature, salt, timestamp, error) in
+      guard error == nil else {
+        result(error?.flutterError(code: .failedToFetchIdentityVerification))
+        return
+      }
+      
+      let verificationData: [String: Any] = [
+        "publicKeyURL": publicKeyURL?.absoluteString ?? "",
+        "signature": signature?.base64EncodedString() ?? "",
+        "salt": salt?.base64EncodedString() ?? "",
+        "timestamp": timestamp
+      ]
+      
+      result(verificationData)
+    })
+  }
+  
   // MARK: - Private Methods
   
   private func triggerNewPlayerEvent(shouldUpdateResults: Bool = false) {
