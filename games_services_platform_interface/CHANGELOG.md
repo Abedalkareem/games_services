@@ -5,6 +5,8 @@
 - Update minimum support for iOS and Android.
 - Fix the example.
 - Add loadPreviousOccurrence method for iOS to retrieve the previous occurrence of a player's score from a leaderboard.
+- Add ignoreImages to loadAchievements, offloading blocking loading images to IO threads pool.
+- Add support for GKLocalPlayer.fetchItems.
 
 ## 4.1.1
 

@@ -169,4 +169,12 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   Future<String?> getSavedGames({bool forceRefresh = false}) async {
     throw UnimplementedError("not implemented.");
   }
+
+  /// Fetch identity verification signature from Game Center (iOS and MacOS).
+  /// Returns identity verification data including public key URL, signature, salt, and timestamp.
+  /// Only available on iOS and MacOS, returns null on other platforms.
+  Future<IdentityVerificationSignature?>
+      fetchIdentityVerificationSignature() async {
+    throw UnimplementedError("not implemented.");
+  }
 }

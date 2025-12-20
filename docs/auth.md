@@ -37,3 +37,27 @@ Retrieve a Google Play Games `server_auth_code` to be used by a backend, such as
 ```dart
 final authCode = await GameAuth.getAuthCode(String clientID);
 ```
+
+## Fetch Identity Verification Signature (iOS and macOS)
+
+Fetch the identity verification signature from Game Center. This can be used to verify the player's identity with your backend server.
+
+Returns an `IdentityVerificationSignature` object containing:
+- `publicKeyURL`: URL to the public key for verifying the signature
+- `signature`: Base64 encoded signature
+- `salt`: Base64 encoded salt
+- `timestamp`: Timestamp value
+
+Returns `null` on platforms other than macOS and iOS.
+
+```dart
+final signature = await GameAuth.fetchIdentityVerificationSignature();
+if (signature != null) {
+  print('Public Key URL: ${signature.publicKeyURL}');
+  print('Signature: ${signature.signature}');
+  print('Salt: ${signature.salt}');
+  print('Timestamp: ${signature.timestamp}');
+  
+  // Send to your backend for verification
+}
+```

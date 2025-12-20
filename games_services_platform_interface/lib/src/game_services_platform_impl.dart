@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import '../game_services_platform_interface.dart';
 import 'models/access_point_location.dart';
 import 'models/achievement.dart';
+import 'models/identity_verification_signature.dart';
 import 'models/leaderboard_scope.dart';
 import 'models/leaderboard_time_scope.dart';
 import 'models/player.dart';
@@ -220,5 +221,20 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   @override
   Future<String?> deleteGame({required String name}) async {
     return await _methodChannel.invokeMethod("deleteGame", {"name": name});
+  }
+
+  @override
+  Future<IdentityVerificationSignature?>
+      fetchIdentityVerificationSignature() async {
+    if (!Device.isPlatformIOS && !Device.isPlatformMacOS) {
+      return null;
+    }
+    final result = await _methodChannel.invokeMethod<Map<Object?, Object?>?>(
+        "fetchIdentityVerificationSignature");
+    if (result == null) {
+      return null;
+    }
+    return IdentityVerificationSignature.fromJson(
+        result.cast<String, dynamic>());
   }
 }
