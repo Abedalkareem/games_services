@@ -39,8 +39,9 @@ class GamesServices {
   /// The `forceRefresh` argument will invalidate the cache on Android, fetching
   /// the latest results. It has no affect on iOS.
   static Future<List<AchievementItemData>?> loadAchievements(
-      {bool forceRefresh = false}) async {
-    return await Achievements.loadAchievements(forceRefresh: forceRefresh);
+      {bool forceRefresh = false, bool ignoreImages = false}) async {
+    return await Achievements.loadAchievements(
+        forceRefresh: forceRefresh, ignoreImages: ignoreImages);
   }
 
   /// It will reset the achievements.

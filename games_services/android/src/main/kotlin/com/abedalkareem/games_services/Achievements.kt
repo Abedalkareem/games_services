@@ -16,7 +16,9 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
 
@@ -74,7 +76,7 @@ class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
       }
   }
 
-  fun loadAchievements(activity: Activity?, forceRefresh: Boolean, result: MethodChannel.Result) {
+  fun loadAchievements(activity: Activity?, forceRefresh: Boolean, ignoreImages: Boolean, result: MethodChannel.Result) {
     activity ?: return
     achievementClient
       .load(forceRefresh)
@@ -97,23 +99,10 @@ class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
           )
         }
         CoroutineScope(Dispatchers.Main + handler).launch {
-          val achievements = mutableListOf<AchievementItemData>()
-          for (item in data) {
-            val lockedImage =
-              item.revealedImageUri?.let {
-                imageLoader.loadImageFromUri(
-                  activity,
-                  it
-                )
-              }
-            val unlockedImage =
-              item.unlockedImageUri?.let {
-                imageLoader.loadImageFromUri(
-                  activity,
-                  it
-                )
-              }
-            achievements.add(
+          val achievements = withContext(Dispatchers.IO) {
+            data.map { item ->
+              val lockedImage = if (!ignoreImages) item.revealedImageUri?.let { imageLoader.loadImageFromUri(activity, it) } else null
+              val unlockedImage = if (!ignoreImages) item.unlockedImageUri?.let { imageLoader.loadImageFromUri(activity, it) } else null
               AchievementItemData(
                 item.achievementId,
                 item.name,
@@ -124,7 +113,7 @@ class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
                 if (item.type == Achievement.TYPE_INCREMENTAL) item.totalSteps else 0,
                 item.state == Achievement.STATE_UNLOCKED,
               )
-            )
+            }
           }
           val gson = Gson()
           val string = gson.toJson(achievements) ?: ""

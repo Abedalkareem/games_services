@@ -27,7 +27,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     case .signIn:
       auth.authenticateUser(result: result)
     case .loadAchievements:
-      achievements.loadAchievements(result: result)
+      let ignoreImages = (arguments?["ignoreImages"] as? Bool) ?? false
+      achievements.loadAchievements(ignoreImages: ignoreImages, result: result)
     case .showAchievements:
       achievements.showAchievements(result: result)
     case .resetAchievements:
