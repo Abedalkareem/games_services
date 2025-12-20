@@ -64,6 +64,21 @@ final result = await Leaderboards.loadLeaderboardScores(
         maxResults: 10);
 ```
 
+## Load previous occurrence (iOS only)
+
+Load the previous occurrence of the player's score from a leaderboard. This returns the score data that precedes the player's current best score, which is useful for tracking score progression over time.
+
+``` dart
+final previousScore = await Leaderboards.loadPreviousOccurrence(
+        iOSLeaderboardID: "ios_leaderboard_id",
+        timeScope: TimeScope.allTime);
+
+if (previousScore != null) {
+  print('Previous score: ${previousScore.rawScore}');
+  print('Achieved on: ${DateTime.fromMillisecondsSinceEpoch(previousScore.timestampMillis)}');
+}
+```
+
 ## Submit score
 
 Submit a ```Score``` to specific leaderboard.

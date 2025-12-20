@@ -157,6 +157,18 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
+  Future<String?> loadPreviousOccurrence(
+      {iOSLeaderboardID = "",
+      androidLeaderboardID = "",
+      required TimeScope timeScope}) async {
+    return await _methodChannel.invokeMethod("loadPreviousOccurrence", {
+      "leaderboardID":
+          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+      "span": timeScope.value,
+    });
+  }
+
+  @override
   Future<String?> signIn() async {
     return await _methodChannel.invokeMethod("signIn");
   }

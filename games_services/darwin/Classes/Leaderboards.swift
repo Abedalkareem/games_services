@@ -8,10 +8,10 @@ import FlutterMacOS
 class Leaderboards: BaseGamesServices {
   
   func showLeaderboardWith(identifier: String, result: @escaping FlutterResult) {
-      let viewController = GKGameCenterViewController(leaderboardID: identifier, playerScope: .global, timeScope: .allTime)
-      viewController.gameCenterDelegate = self
-      self.viewController?.show(viewController)
-      result(Messages.success)
+    let viewController = GKGameCenterViewController(leaderboardID: identifier, playerScope: .global, timeScope: .allTime)
+    viewController.gameCenterDelegate = self
+    self.viewController?.show(viewController)
+    result(Messages.success)
   }
   
   func report(score: Int, leaderboardID: String, token: String, result: @escaping FlutterResult) {
@@ -51,7 +51,7 @@ class Leaderboards: BaseGamesServices {
       result(PluginError.notSupportedForThisOSVersion.flutterError())
     }
   }
-
+  
   func getPlayerScoreObject(leaderboardID: String, span: Int, leaderboardCollection: Int, result: @escaping FlutterResult) {
     if #available(iOS 14.0, *) {
       Task {
@@ -62,28 +62,28 @@ class Leaderboards: BaseGamesServices {
             return
           }
           let response = try await leaderboard.loadEntries(for: [currentPlayer],
-                                                                 timeScope: GKLeaderboard.TimeScope(rawValue: span) ?? .allTime)
-     
+                                                           timeScope: GKLeaderboard.TimeScope(rawValue: span) ?? .allTime)
+          
           let (localPlayerEntry, _) = response
           
           if let localPlayerEntry {
-            #if os(macOS)
+#if os(macOS)
             let imageData = try? await localPlayerEntry.player.loadPhoto(for: .normal).tiffRepresentation
-            #else
+#else
             let imageData = try? await localPlayerEntry.player.loadPhoto(for: .normal).pngData()
-            #endif
+#endif
             let scoreHolderIconImage = imageData?.base64EncodedString()
             let score = LeaderboardScoreData(rank: localPlayerEntry.rank,
-                                              displayScore: localPlayerEntry.formattedScore,
-                                              rawScore: localPlayerEntry.score,
-                                              timestampMillis: Int(localPlayerEntry.date.timeIntervalSince1970),
-                                              scoreHolder: PlayerData(
-                                                displayName: localPlayerEntry.player.displayName,
-                                                playerID: localPlayerEntry.player.gamePlayerID,
-                                                teamPlayerID: localPlayerEntry.player.teamPlayerID,
-                                                iconImage: scoreHolderIconImage
-                                              ),
-                                              token: String(localPlayerEntry.context))
+                                             displayScore: localPlayerEntry.formattedScore,
+                                             rawScore: localPlayerEntry.score,
+                                             timestampMillis: Int(localPlayerEntry.date.timeIntervalSince1970),
+                                             scoreHolder: PlayerData(
+                                              displayName: localPlayerEntry.player.displayName,
+                                              playerID: localPlayerEntry.player.gamePlayerID,
+                                              teamPlayerID: localPlayerEntry.player.teamPlayerID,
+                                              iconImage: scoreHolderIconImage
+                                             ),
+                                             token: String(localPlayerEntry.context))
             
             if let data = try? JSONEncoder().encode(score) {
               let string = String(data: data, encoding: String.Encoding.utf8)
@@ -115,8 +115,8 @@ class Leaderboards: BaseGamesServices {
           var startLocation = 1
           if (playerCentered) {
             let response = try await leaderboard.loadEntries(for: [currentPlayer],
-                                                                  timeScope: GKLeaderboard.TimeScope(rawValue: span) ?? .allTime)
-      
+                                                             timeScope: GKLeaderboard.TimeScope(rawValue: span) ?? .allTime)
+            
             let (localPlayerEntry, _) = response
             if let localPlayerEntry {
               startLocation = localPlayerEntry.rank - maxResults / 2
@@ -130,19 +130,19 @@ class Leaderboards: BaseGamesServices {
                                                                  range: NSRange(location: startLocation, length: maxResults))
           var items = [LeaderboardScoreData]()
           for item in scores {
-            #if os(macOS)
+#if os(macOS)
             let imageData = try? await item.player.loadPhoto(for: .normal).tiffRepresentation
-            #else
+#else
             let imageData = try? await item.player.loadPhoto(for: .normal).pngData()
-            #endif
+#endif
             let scoreHolderIconImage = imageData?.base64EncodedString()
             items.append(LeaderboardScoreData(rank: item.rank,
                                               displayScore: item.formattedScore,
                                               rawScore: item.score,
                                               timestampMillis: Int(item.date.timeIntervalSince1970),
                                               scoreHolder: PlayerData(
-                                                displayName: item.player.displayName, 
-                                                playerID: item.player.gamePlayerID, 
+                                                displayName: item.player.displayName,
+                                                playerID: item.player.gamePlayerID,
                                                 teamPlayerID: item.player.teamPlayerID,
                                                 iconImage: scoreHolderIconImage
                                               ),
@@ -157,6 +157,60 @@ class Leaderboards: BaseGamesServices {
           
         } catch {
           result(error.flutterError(code: .failedToLoadLeaderboardScores))
+        }
+      }
+    } else {
+      result(PluginError.notSupportedForThisOSVersion.flutterError())
+    }
+  }
+  
+  func loadPreviousOccurrence(leaderboardID: String, span: Int, result: @escaping FlutterResult) {
+    if #available(iOS 14.0, *) {
+      Task {
+        do {
+          let leaderboards = try await GKLeaderboard.loadLeaderboards(IDs: [leaderboardID])
+          guard let leaderboard = try await leaderboards.first?.loadPreviousOccurrence() else {
+            result(PluginError.failedToLoadPreviousOccurrence.flutterError())
+            return
+          }
+          
+          let response = try await leaderboard.loadEntries(for: [currentPlayer],
+                                                           timeScope: GKLeaderboard.TimeScope(rawValue: span) ?? .allTime)
+          
+          let (previousEntry, _) = response
+          
+          if let previousEntry {
+            // Load the previous occurrence of the score
+#if os(macOS)
+            let imageData = try? await previousEntry.player.loadPhoto(for: .normal).tiffRepresentation
+#else
+            let imageData = try? await previousEntry.player.loadPhoto(for: .normal).pngData()
+#endif
+            let scoreHolderIconImage = imageData?.base64EncodedString()
+            let score = LeaderboardScoreData(rank: previousEntry.rank,
+                                             displayScore: previousEntry.formattedScore,
+                                             rawScore: previousEntry.score,
+                                             timestampMillis: Int(previousEntry.date.timeIntervalSince1970),
+                                             scoreHolder: PlayerData(
+                                              displayName: previousEntry.player.displayName,
+                                              playerID: previousEntry.player.gamePlayerID,
+                                              teamPlayerID: previousEntry.player.teamPlayerID,
+                                              iconImage: scoreHolderIconImage
+                                             ),
+                                             token: String(previousEntry.context))
+            
+            if let data = try? JSONEncoder().encode(score) {
+              let string = String(data: data, encoding: String.Encoding.utf8)
+              result(string)
+            } else {
+              result(PluginError.failedToLoadPreviousOccurrence.flutterError())
+            }
+            
+          } else {
+            result(PluginError.failedToLoadPreviousOccurrence.flutterError())
+          }
+        } catch {
+          result(error.flutterError(code: .failedToLoadPreviousOccurrence))
         }
       }
     } else {
