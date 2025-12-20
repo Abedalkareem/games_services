@@ -4,6 +4,7 @@
 - Migrate Gamekit deprecated usage of methods.
 - Update minimum support for iOS and Android.
 - Fix the example.
+- Add loadPreviousOccurrence method for iOS to retrieve the previous occurrence of a player's score from a leaderboard.
 
 ## 4.1.1
 

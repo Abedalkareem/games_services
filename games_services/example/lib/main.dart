@@ -157,6 +157,11 @@ class AppState extends State<App> {
                                                 'Load Player Centered Scores'),
                                           ),
                                           ElevatedButton(
+                                            onPressed: _loadPreviousOccurrence,
+                                            child: const Text(
+                                                'Load Previous Occurrence (iOS only)'),
+                                          ),
+                                          ElevatedButton(
                                             onPressed: _getSavedGames,
                                             child:
                                                 const Text('Get saved games'),
@@ -205,6 +210,24 @@ class AppState extends State<App> {
         scope: PlayerScope.global,
         timeScope: TimeScope.allTime);
     print(result);
+  }
+
+  void _loadPreviousOccurrence() async {
+    final result = await Leaderboards.loadPreviousOccurrence(
+        iOSLeaderboardID: "ios_leaderboard_id",
+        androidLeaderboardID: "android_leaderboard_id",
+        timeScope: TimeScope.allTime);
+    if (result != null) {
+      print('Previous score found:');
+      print('  Score: ${result.rawScore}');
+      print('  Rank: ${result.rank}');
+      print('  Display Score: ${result.displayScore}');
+      print(
+          '  Timestamp: ${DateTime.fromMillisecondsSinceEpoch(result.timestampMillis)}');
+      print('  Player: ${result.scoreHolder.displayName}');
+    } else {
+      print('No previous occurrence found');
+    }
   }
 
   void _showAccessPoint() async {

@@ -99,6 +99,18 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
+  /// Load the previous occurrence of the player's score from a leaderboard.
+  /// Returns the score data that precedes the player's current best score.
+  /// [iOSLeaderboardID] the leaderboard ID for Game Center.
+  /// [androidLeaderboardID] the leaderboard ID for Google Play Games.
+  /// [timeScope] the time scope for the leaderboard.
+  Future<String?> loadPreviousOccurrence(
+      {iOSLeaderboardID = "",
+      androidLeaderboardID = "",
+      required TimeScope timeScope}) async {
+    throw UnimplementedError("not implemented.");
+  }
+
   /// Get the current player's score for a specific leaderboard.
   Future<int?> getPlayerScore(
       {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {

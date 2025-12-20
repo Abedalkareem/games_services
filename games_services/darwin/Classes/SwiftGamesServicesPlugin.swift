@@ -63,6 +63,12 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
                             leaderboardCollection: leaderboardCollection,
                             maxResults: maxResults,
                             result: result)
+    case .loadPreviousOccurrence:
+      let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
+      let span = (arguments?["span"] as? Int) ?? 0
+      leaderboards.loadPreviousOccurrence(leaderboardID: leaderboardID,
+                            span: span,
+                            result: result)
     case .submitScore:
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       let score = (arguments?["value"] as? Int) ?? 0

@@ -66,6 +66,30 @@ abstract class Leaderboards {
     return LeaderboardScoreData.fromJson(json.decode(response ?? ""));
   }
 
+  /// Load the previous occurrence of the player's score from a leaderboard.
+  /// Returns the score data that precedes the player's current best score.
+  ///
+  /// This is useful for tracking score progression over time.
+  /// Currently only supported on iOS 14.0+ and macOS 11.0+.
+  static Future<LeaderboardScoreData?> loadPreviousOccurrence({
+    String? iOSLeaderboardID = "",
+    String? androidLeaderboardID = "",
+    required TimeScope timeScope,
+  }) async {
+    final String? response =
+        await GamesServicesPlatform.instance.loadPreviousOccurrence(
+      androidLeaderboardID: androidLeaderboardID,
+      iOSLeaderboardID: iOSLeaderboardID,
+      timeScope: timeScope,
+    );
+
+    if (response == null) {
+      return null;
+    }
+
+    return LeaderboardScoreData.fromJson(json.decode(response));
+  }
+
   /// Submit a [score] to specific leaderboard.
   /// [Score] takes three parameters:
   /// [androidLeaderboardID] the leaderboard ID for Google Play Games.
