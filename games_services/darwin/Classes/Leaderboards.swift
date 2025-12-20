@@ -8,24 +8,30 @@ import FlutterMacOS
 class Leaderboards: BaseGamesServices {
   
   func showLeaderboardWith(identifier: String, result: @escaping FlutterResult) {
-    let viewController = GKGameCenterViewController()
-    viewController.gameCenterDelegate = self
-    viewController.viewState = .leaderboards
-    viewController.leaderboardIdentifier = identifier
-    self.viewController.show(viewController)
-    result(nil)
+      let viewController = GKGameCenterViewController(leaderboardID: identifier, playerScope: .global, timeScope: .allTime)
+      viewController.gameCenterDelegate = self
+      self.viewController?.show(viewController)
+      result(Messages.success)
   }
   
   func report(score: Int, leaderboardID: String, token: String, result: @escaping FlutterResult) {
-    let reportedScore = GKScore(leaderboardIdentifier: leaderboardID)
-    reportedScore.value = Int64(score)
-    reportedScore.context = UInt64(token) ?? 0
-    GKScore.report([reportedScore]) { (error) in
+    GKLeaderboard.loadLeaderboards(IDs: [leaderboardID]) { leaderboards, error in
       guard error == nil else {
         result(error?.flutterError(code: .failedToSendScore))
         return
       }
-      result(nil)
+      guard let leaderboard = leaderboards?.first else {
+        log("[Report score] No leaderboard found")
+        result(PluginError.leaderboardNotFound.flutterError())
+        return
+      }
+      leaderboard.submitScore(score, context: Int(token) ?? 0, player: GKLocalPlayer.local) { error in
+        guard error == nil else {
+          result(error?.flutterError(code: .failedToSendScore))
+          return
+        }
+        result(Messages.success)
+      }
     }
   }
   

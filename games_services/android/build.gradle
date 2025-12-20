@@ -2,16 +2,16 @@ group 'com.abedalkareem.games_services'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.9.0'
+    ext.kotlin_version = '2.2.0'
     repositories {
         google()
         mavenCentral()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:8.5.2'
+        classpath 'com.android.tools.build:gradle:8.13.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.google.gms:google-services:4.4.2'
+        classpath 'com.google.gms:google-services:4.4.4'
     }
 }
 
@@ -33,7 +33,7 @@ android {
     }
 
     defaultConfig {
-        compileSdk 34
+        compileSdkVersion 34
         minSdkVersion 19
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "proguard-rules.pro"
@@ -55,6 +55,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation 'com.google.code.gson:gson:2.10.1'
-    implementation "com.google.android.gms:play-services-games-v2:20.1.2"
+    implementation 'com.google.code.gson:gson:2.13.2'
+    implementation "com.google.android.gms:play-services-games-v2:21.0.0"
 }

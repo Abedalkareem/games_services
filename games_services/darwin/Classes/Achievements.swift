@@ -8,11 +8,10 @@ import FlutterMacOS
 class Achievements: BaseGamesServices {
   
   func showAchievements(result: @escaping FlutterResult) {
-    let viewController = GKGameCenterViewController()
+    let viewController = GKGameCenterViewController(state: .achievements)
     viewController.gameCenterDelegate = self
-    viewController.viewState = .achievements
-    self.viewController.show(viewController)
-    result(nil)
+    self.viewController?.show(viewController)
+    result(Messages.success)
   }
   
   func report(achievementID: String, percentComplete: Double, showsCompletionBanner: Bool, result: @escaping FlutterResult) {
@@ -24,7 +23,7 @@ class Achievements: BaseGamesServices {
         result(error?.flutterError(code: .failedToSendAchievement))
         return
       }
-      result(nil)
+      result(Messages.success)
     }
   }
   
@@ -86,7 +85,7 @@ class Achievements: BaseGamesServices {
       Task {
         do {
           try await GKAchievement.resetAchievements()
-          result(nil)
+          result(Messages.success)
           } catch {
           result(error.flutterError(code: .failedToResetAchievements))
         }

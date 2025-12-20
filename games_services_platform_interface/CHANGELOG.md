@@ -1,3 +1,10 @@
+## 5.0.0
+
+- Return success instead of null in case of success.
+- Migrate Gamekit deprecated usage of methods.
+- Update minimum support for iOS and Android.
+- Fix the example.
+
 ## 4.1.1
 
 - Fixes delay in some results after sign in. by @theLee3

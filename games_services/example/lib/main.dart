@@ -18,7 +18,10 @@ class AppState extends State<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(color: Colors.black),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
           backgroundColor: Colors.black,
@@ -48,6 +51,11 @@ class AppState extends State<App> {
                           child: player == null
                               ? ElevatedButton(
                                   onPressed: _signIn,
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: const Size(150, 40),
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                  ),
                                   child: const Text('Sign In'),
                                 )
                               : Column(
@@ -66,90 +74,108 @@ class AppState extends State<App> {
                                             child: Text(player.displayName[0]),
                                           ),
                                         const SizedBox(width: 16.0),
-                                        Text('playerID: ${player.playerID}\n'
-                                            'displayName: ${player.displayName}'),
+                                        Expanded(
+                                          child: Text(
+                                              'playerID: ${player.playerID}\n'
+                                              'displayName: ${player.displayName}'),
+                                        ),
                                       ],
                                     ),
                                     const SizedBox(height: 16.0),
-                                    Wrap(
-                                      spacing: 20,
-                                      runSpacing: 10,
-                                      children: <Widget>[
-                                        ElevatedButton(
-                                          onPressed: _showAchievements,
-                                          child:
-                                              const Text('Show Achievements'),
+                                    Theme(
+                                      data: ThemeData(
+                                        elevatedButtonTheme:
+                                            ElevatedButtonThemeData(
+                                          style: ElevatedButton.styleFrom(
+                                            minimumSize: const Size(150, 40),
+                                            backgroundColor: Colors.black,
+                                            foregroundColor: Colors.white,
+                                          ),
                                         ),
-                                        ElevatedButton(
-                                          onPressed: _showLeaderboards,
-                                          child:
-                                              const Text('Show Leaderboards'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _submitScore,
-                                          child: const Text('Submit Score'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _unlockAchievement,
-                                          child:
-                                              const Text('Unlock Achievement'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _loadAchievement,
-                                          child: const Text('Load Achievement'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _resetAchievement,
-                                          child:
-                                              const Text('Reset Achievement'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _loadLeaderboardScores,
-                                          child: const Text(
-                                              'Load Leaderboard Scores'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _incrementAchievement,
-                                          child: const Text(
-                                              'Increment Achievement (Android only)'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _showAccessPoint,
-                                          child: const Text(
-                                              'Show AccessPoint (iOS only)'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _hideAccessPoint,
-                                          child: const Text(
-                                              'Hide AccessPoint (iOS only)'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _getPlayerScore,
-                                          child: const Text('Get player score'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _getPlayerScoreObject,
-                                          child: const Text(
-                                              'Load Player Centered Scores'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _getSavedGames,
-                                          child: const Text('Get saved games'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _saveGame,
-                                          child: const Text('Save game'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _loadGame,
-                                          child: const Text('Load game'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _deleteGame,
-                                          child:
-                                              const Text('Delete saved game'),
-                                        ),
-                                      ],
+                                      ),
+                                      child: Wrap(
+                                        spacing: 20,
+                                        runSpacing: 10,
+                                        children: <Widget>[
+                                          ElevatedButton(
+                                            onPressed: _showAchievements,
+                                            child:
+                                                const Text('Show Achievements'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _showLeaderboards,
+                                            child:
+                                                const Text('Show Leaderboards'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _submitScore,
+                                            child: const Text('Submit Score'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _unlockAchievement,
+                                            child: const Text(
+                                                'Unlock Achievement'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _loadAchievement,
+                                            child:
+                                                const Text('Load Achievement'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _resetAchievement,
+                                            child:
+                                                const Text('Reset Achievement'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _loadLeaderboardScores,
+                                            child: const Text(
+                                                'Load Leaderboard Scores'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _incrementAchievement,
+                                            child: const Text(
+                                                'Increment Achievement (Android only)'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _showAccessPoint,
+                                            child: const Text(
+                                                'Show AccessPoint (iOS only)'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _hideAccessPoint,
+                                            child: const Text(
+                                                'Hide AccessPoint (iOS only)'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _getPlayerScore,
+                                            child:
+                                                const Text('Get player score'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _getPlayerScoreObject,
+                                            child: const Text(
+                                                'Load Player Centered Scores'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _getSavedGames,
+                                            child:
+                                                const Text('Get saved games'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _saveGame,
+                                            child: const Text('Save game'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _loadGame,
+                                            child: const Text('Load game'),
+                                          ),
+                                          ElevatedButton(
+                                            onPressed: _deleteGame,
+                                            child:
+                                                const Text('Delete saved game'),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
