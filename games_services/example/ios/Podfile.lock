@@ -1,6 +1,6 @@
 PODS:
   - Flutter (1.0.0)
-  - games_services (0.0.1):
+  - games_services (4.1.0):
     - Flutter
     - FlutterMacOS
 
@@ -15,9 +15,9 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/games_services/darwin"
 
 SPEC CHECKSUMS:
-  Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
-  games_services: 9d174ae29e8de7aa3f511bc00fedd7006594063f
+  Flutter: cabc95a1d2626b1b06e7179b784ebcf0c0cde467
+  games_services: e25399dbf88c5b8af386acd011f0accb1af57720
 
-PODFILE CHECKSUM: 3bfddf7ab13b75a4b1b9c5464509c9a6b61241ed
+PODFILE CHECKSUM: 13f1392a9da0305327530d625c26b4e9c3b78982
 
 COCOAPODS: 1.16.2

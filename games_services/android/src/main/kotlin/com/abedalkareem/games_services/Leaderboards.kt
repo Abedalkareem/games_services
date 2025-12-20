@@ -19,12 +19,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import android.util.Log
+import com.abedalkareem.games_services.util.Messages
 import com.google.android.gms.games.FriendsResolutionRequiredException
 import io.flutter.plugin.common.PluginRegistry
 
 class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   PluginRegistry.ActivityResultListener {
 
+  //region Variables
   private val imageLoader = AppImageLoader()
   private val leaderboardsClient: LeaderboardsClient
     get() {
@@ -40,48 +42,13 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   private var forceRefresh: Boolean? = null
   private var result: MethodChannel.Result? = null
   private var errorMessage: String? = null
+  //endregion
 
-  // handle result from friends list permission request
-  override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
-    activityPluginBinding.removeActivityResultListener(this)
-    return if (requestCode == 26703) {
-      // retry loadLeaderboard if permission granted, otherwise throw the original error
-      if (resultCode == -1 && leaderboardID != null) {
-        loadLeaderboardScores(
-          activityPluginBinding.activity,
-          leaderboardID!!,
-          playerCentered!!,
-          span!!,
-          leaderboardCollection!!,
-          maxResults!!,
-          forceRefresh!!,
-          result!!
-        )
-      } else {
-        result?.error(
-          PluginError.FailedToLoadLeaderboardScores.errorCode(),
-          errorMessage,
-          null,
-        )
-      }
-      leaderboardID = null
-      playerCentered = null
-      span = null
-      leaderboardCollection = null
-      maxResults = null
-      forceRefresh = null
-      result = null
-      errorMessage = null
-      true
-    } else {
-      false
-    }
-  }
-
+  //region Public Methods
   fun showLeaderboards(activity: Activity?, leaderboardID: String, result: MethodChannel.Result) {
     val onSuccessListener: ((Intent) -> Unit) = { intent ->
       activity?.startActivityForResult(intent, 0)
-      result.success(null)
+      result.success(Messages.SUCCESS)
     }
     val onFailureListener: ((Exception) -> Unit) = {
       result.error(PluginError.LeaderboardNotFound.errorCode(), it.message, null)
@@ -98,8 +65,6 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
     }
   }
 
-//  private
-
   fun loadLeaderboardScores(
     activity: Activity?,
     leaderboardID: String,
@@ -111,8 +76,20 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
     result: MethodChannel.Result
   ) {
     activity ?: return
-    (if (playerCentered) leaderboardsClient.loadPlayerCenteredScores(leaderboardID, span, leaderboardCollection, maxResults, forceRefresh)
-        else leaderboardsClient.loadTopScores(leaderboardID, span, leaderboardCollection, maxResults, forceRefresh))
+    (if (playerCentered) leaderboardsClient.loadPlayerCenteredScores(
+      leaderboardID,
+      span,
+      leaderboardCollection,
+      maxResults,
+      forceRefresh
+    )
+    else leaderboardsClient.loadTopScores(
+      leaderboardID,
+      span,
+      leaderboardCollection,
+      maxResults,
+      forceRefresh
+    ))
       .addOnSuccessListener { annotatedData ->
         val data = annotatedData.get()
 
@@ -192,11 +169,11 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
 
   fun submitScore(leaderboardID: String, score: Long, token: String, result: MethodChannel.Result) {
     leaderboardsClient.submitScoreImmediate(leaderboardID, score, token).addOnSuccessListener {
-      result.success(null)
+      result.success(Messages.SUCCESS)
     }
       .addOnFailureListener {
-      result.error(PluginError.FailedToSendScore.errorCode(), it.localizedMessage, null)
-    }
+        result.error(PluginError.FailedToSendScore.errorCode(), it.localizedMessage, null)
+      }
   }
 
   fun getPlayerScore(leaderboardID: String, result: MethodChannel.Result) {
@@ -222,7 +199,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
         result.error(PluginError.FailedToGetScore.errorCode(), it.localizedMessage, null)
       }
   }
-  
+
   fun getPlayerScoreObject(
     activity: Activity?,
     leaderboardID: String,
@@ -231,8 +208,8 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
     result: MethodChannel.Result
   ) {
     activity ?: return
-    leaderboardsClient?.loadCurrentPlayerLeaderboardScore(leaderboardID, span, leaderboardCollection)
-      ?.addOnSuccessListener { snapshotResult ->
+    leaderboardsClient.loadCurrentPlayerLeaderboardScore(leaderboardID, span, leaderboardCollection)
+      .addOnSuccessListener { snapshotResult ->
         val data = snapshotResult.get()
         if (data == null) {
           result.error(
@@ -255,30 +232,80 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
             data.scoreHolderIconImageUri.let { imageLoader.loadImageFromUri(activity, it) }
 
           val score = LeaderboardScoreData(
-              data.rank,
-              data.displayScore,
-              data.rawScore,
-              data.timestampMillis,
-              PlayerData(
-                  data.scoreHolderDisplayName,
-                  data.scoreHolder?.playerId,
-                  scoreHolderIconImage
-              ),
-              data.scoreTag
-            )
-                   
+            data.rank,
+            data.displayScore,
+            data.rawScore,
+            data.timestampMillis,
+            PlayerData(
+              data.scoreHolderDisplayName,
+              data.scoreHolder?.playerId,
+              scoreHolderIconImage
+            ),
+            data.scoreTag
+          )
+
           val gson = Gson()
           val string = gson.toJson(score) ?: ""
-          
+
           result.success(string)
         }
       }
-      ?.addOnFailureListener {
+      .addOnFailureListener {
         result.error(
           PluginError.FailedToGetScore.errorCode(),
           it.localizedMessage,
           null
         )
       }
-  }  
+  }
+
+  //region onActivityResult for showLeaderboards Method
+  // handle result from friends list permission request
+  override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
+    activityPluginBinding.removeActivityResultListener(this)
+    return if (requestCode == 26703) {
+      // retry loadLeaderboard if permission granted, otherwise throw the original error
+      if (resultCode == -1) {
+        val id = leaderboardID
+        val centered = playerCentered
+        val timeSpan = span
+        val collection = leaderboardCollection
+        val max = maxResults
+        val refresh = forceRefresh
+        val res = result
+
+        if (id != null && centered != null && timeSpan != null && collection != null && max != null && refresh != null && res != null) {
+          loadLeaderboardScores(
+            activityPluginBinding.activity,
+            id,
+            centered,
+            timeSpan,
+            collection,
+            max,
+            refresh,
+            res
+          )
+        }
+      } else {
+        result?.error(
+          PluginError.FailedToLoadLeaderboardScores.errorCode(),
+          errorMessage,
+          null,
+        )
+      }
+      leaderboardID = null
+      playerCentered = null
+      span = null
+      leaderboardCollection = null
+      maxResults = null
+      forceRefresh = null
+      result = null
+      errorMessage = null
+      true
+    } else {
+      false
+    }
+  }
+  //endregion
+  //endregion
 }

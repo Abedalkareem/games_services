@@ -2,6 +2,7 @@ package com.abedalkareem.games_services
 
 import android.util.Log
 import com.abedalkareem.games_services.models.SavedGame
+import com.abedalkareem.games_services.util.Messages
 import com.abedalkareem.games_services.util.PluginError
 import com.abedalkareem.games_services.util.errorCode
 import com.abedalkareem.games_services.util.errorMessage
@@ -14,13 +15,16 @@ import io.flutter.plugin.common.MethodChannel
 
 class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
 
+  //region Variables
   private val tag = "SaveGame"
 
   private val snapshotsClient: SnapshotsClient
     get() {
       return PlayGames.getSnapshotsClient(activityPluginBinding.activity)
     }
+  //endregion
 
+  //region Public Methods
   fun getSavedGames(forceRefresh: Boolean, result: MethodChannel.Result) {
     Log.d(tag, "[GetSavedGames] Start loading all saved games")
     snapshotsClient.load(forceRefresh)
@@ -76,7 +80,7 @@ class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
           snapshotsClient.commitAndClose(snapshot, metadataChange)
             .addOnSuccessListener {
               Log.d(tag, "[SaveGame] Saved successfully")
-              result.success(null)
+              result.success(Messages.SUCCESS)
             }
             .addOnFailureListener {
               Log.d(tag, "[SaveGame] Something went wrong while commit ${it.localizedMessage}")
@@ -147,7 +151,10 @@ class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
     // Open the saved game using its name.
     snapshotsClient.open(name, false, SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED)
       .addOnFailureListener {
-        Log.d(tag, "[LoadGame] Failed to open a game with name ${name}, error ${it.localizedMessage}")
+        Log.d(
+          tag,
+          "[LoadGame] Failed to open a game with name ${name}, error ${it.localizedMessage}"
+        )
         result.error(
           PluginError.FailedToLoadGame.errorCode(),
           it.localizedMessage ?: "",
@@ -181,4 +188,5 @@ class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
         }
       }
   }
+  //endregion
 }

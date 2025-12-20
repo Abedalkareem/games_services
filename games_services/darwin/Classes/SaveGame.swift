@@ -8,6 +8,7 @@ import FlutterMacOS
 class SaveGame: BaseGamesServices {
   
   func saveGame(name: String, data: String, result: @escaping FlutterResult) {
+    log("[SaveGame] Please add the iCloud capability to your project and enable iCloud Documents. If you already have done that please ignore this message.")
     log("[SaveGame] Start saving game")
     guard let data = data.data(using: .utf8) else {
       log("[SaveGame] failed to get data from a string \(data)")
@@ -24,11 +25,12 @@ class SaveGame: BaseGamesServices {
       }
       
       log("[SaveGame] Saved successfully")
-      result(nil)
+      result(Messages.success)
     }
   }
   
   func getSavedGames(result: @escaping FlutterResult) {
+    log("[GetSavedGames] Please add the iCloud capability to your project and enable iCloud Documents. If you already have done that please ignore this message.")
     currentPlayer.fetchSavedGames(completionHandler: { savedGames, error in
       log("[GetSavedGames] Start loading all saved games")
       guard error == nil else {
@@ -52,6 +54,7 @@ class SaveGame: BaseGamesServices {
   }
   
   func loadGame(name: String, result: @escaping FlutterResult) {
+    log("[LoadGame] Please add the iCloud capability to your project and enable iCloud Documents. If you already have done that please ignore this message.")
     log("[LoadGame] Start loading the saved games")
     currentPlayer.fetchSavedGames(completionHandler: { savedGames, error in
       log("[LoadGame] Got saved games result")
@@ -83,6 +86,7 @@ class SaveGame: BaseGamesServices {
   }
   
   func deleteGame(name: String, result: @escaping FlutterResult) {
+    log("[DeleteGame] Please add the iCloud capability to your project and enable iCloud Documents. If you already have done that please ignore this message.")
     log("[DeleteGame] Start deleting game")
     currentPlayer.deleteSavedGames(withName: name) { error in
       guard error == nil else {
@@ -91,7 +95,7 @@ class SaveGame: BaseGamesServices {
         return
       }
       log("[DeleteGame] Deleted successfully")
-      result(nil)
+      result(Messages.success)
     }
   }
   

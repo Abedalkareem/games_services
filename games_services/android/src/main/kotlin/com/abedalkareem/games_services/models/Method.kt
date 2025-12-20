@@ -11,5 +11,5 @@ fun Method.value(): String {
 }
 
 fun methodsFrom(string: String): Method? {
-  return Method.values().firstOrNull { it.value() == string.lowercase() }
+  return Method.entries.firstOrNull { it.value() == string.lowercase() }
 }

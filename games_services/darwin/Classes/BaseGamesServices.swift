@@ -9,13 +9,21 @@ public class BaseGamesServices: NSObject {
   
   // MARK: - Properties
   
-  var viewController: ViewController {
 #if os(iOS) || os(tvOS)
-    UIApplication.shared.windows.first!.rootViewController!
-#else
-    NSApplication.shared.windows.first!.contentViewController!
-#endif
+  var viewController: UIViewController? {
+    let scenes = UIApplication.shared.connectedScenes
+      .compactMap { $0 as? UIWindowScene }
+    let window = scenes
+      .flatMap { $0.windows }
+      .first { $0.isKeyWindow }
+    return window?.rootViewController
   }
+#else
+  var viewController: NSViewController? {
+    return NSApp.keyWindow?.contentViewController
+    ?? NSApp.mainWindow?.contentViewController
+  }
+#endif
   
   var currentPlayer: GKLocalPlayer {
     GKLocalPlayer.local
