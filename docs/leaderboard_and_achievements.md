@@ -16,6 +16,19 @@ Get achievements as a list. Use this to build a custom UI.
 final result = await Achievements.loadAchievements();
 ```
 
+**Optional Parameters:**
+- `forceRefresh` (default: `false`): Forces a refresh from the server instead of using cached data.
+- `ignoreImages` (default: `false`): When set to `true`, skips loading achievement images for better performance.
+
+**Example with parameters:**
+
+``` dart
+final result = await Achievements.loadAchievements(
+  forceRefresh: true,
+  ignoreImages: true, // Skip image loading for better performance
+);
+```
+
 ## Unlock achievement
 
 Unlock an ```Achievement```.

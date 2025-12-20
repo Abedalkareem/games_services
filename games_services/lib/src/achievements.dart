@@ -17,11 +17,12 @@ abstract class Achievements {
   /// the latest results. It has no affect on iOS.
   static Future<List<AchievementItemData>?> loadAchievements({
     bool forceRefresh = false,
+    bool ignoreImages = false,
   }) async {
-    final response = await GamesServicesPlatform.instance
-        .loadAchievements(forceRefresh: forceRefresh);
-    if (response != null) {
-      Iterable items = json.decode(response) as List;
+    String? result = await GamesServicesPlatform.instance.loadAchievements(
+        forceRefresh: forceRefresh, ignoreImages: ignoreImages);
+    if (result != null) {
+      Iterable items = json.decode(result) as List;
       return List<AchievementItemData>.from(
           items.map((model) => AchievementItemData.fromJson(model)).toList());
     }

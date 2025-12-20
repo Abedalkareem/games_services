@@ -117,7 +117,8 @@ class GamesServicesPlugin : FlutterPlugin,
 
       Method.LoadAchievements -> {
         val forceRefresh = call.argument<Boolean>("forceRefresh") ?: false
-        achievements?.loadAchievements(activity, forceRefresh, result)
+        val ignoreImages = call.argument<Boolean>("ignoreImages") ?: false
+        achievements?.loadAchievements(activity, forceRefresh, ignoreImages, result)
       }
 
       Method.Unlock -> {
