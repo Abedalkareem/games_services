@@ -48,9 +48,10 @@ packages:
   games_services_platform_interface:
     dependency: transitive
     description:
-      path: "../../games_services_platform_interface"
-      relative: true
-    source: path
+      name: games_services_platform_interface
+      sha256: e05528712f33d2e6026d9e1c084eccaf03f04549b91f7fd73c2a220db0f30909
+      url: "https://pub.dev"
+    source: hosted
     version: "5.0.0"
   lints:
     dependency: transitive
