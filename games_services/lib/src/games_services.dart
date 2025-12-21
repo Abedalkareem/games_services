@@ -14,6 +14,22 @@ class GamesServices {
   /// is signed in & games_services functionality is available.
   static Stream<PlayerData?> get player => GameAuth.player;
 
+  /// Check if the current player is underage (always false on Android).
+  static Future<bool?> get playerIsUnderage async {
+    return await Player.isUnderage;
+  }
+
+  /// Check if the current player is restricted from joining multiplayer games (always false on Android).
+  static Future<bool?> get playerIsMultiplayerGamingRestricted async {
+    return await Player.isMultiplayerGamingRestricted;
+  }
+
+  /// Check if the current player is restricted from using personalized communication on
+  /// the device (always false on Android).
+  static Future<bool?> get playerIsPersonalizedCommunicationRestricted async {
+    return await Player.isPersonalizedCommunicationRestricted;
+  }
+
   /// Sign the user into Game Center or Google Play Games. This must be called before
   /// taking any action (such as submitting a score or unlocking an achievement).
   static Future<String?> signIn() async {
@@ -38,8 +54,10 @@ class GamesServices {
   ///
   /// The `forceRefresh` argument will invalidate the cache on Android, fetching
   /// the latest results. It has no affect on iOS.
-  static Future<List<AchievementItemData>?> loadAchievements(
-      {bool forceRefresh = false, bool ignoreImages = false}) async {
+  static Future<List<AchievementItemData>?> loadAchievements({
+    bool forceRefresh = false,
+    bool ignoreImages = false,
+  }) async {
     return await Achievements.loadAchievements(
         forceRefresh: forceRefresh, ignoreImages: ignoreImages);
   }
@@ -51,19 +69,19 @@ class GamesServices {
 
   /// Unlock an [achievement].
   /// [Achievement] takes three parameters:
-  /// [androidID] the achievement ID for Google Play Games.
-  /// [iOSID] the achievement ID for Game Center.
-  /// [percentComplete] the completion percentage of the achievement,
+  /// [Achievement.androidID] the achievement ID for Google Play Games.
+  /// [Achievement.iOSID] the achievement ID for Game Center.
+  /// [Achievement.percentComplete] the completion percentage of the achievement,
   /// this parameter is optional on iOS/macOS.
-  /// [showsCompletionBanner] for iOS only, defaults to true
+  /// [Achievement.showsCompletionBanner] for iOS only, defaults to true
   static Future<String?> unlock({required Achievement achievement}) async {
     return await Achievements.unlock(achievement: achievement);
   }
 
   /// Increment an [achievement].
   /// [Achievement] takes two parameters:
-  /// [androidID] the achievement ID for Google Play Games.
-  /// [steps] If the achievement is of the incremental type
+  /// [Achievement.androidID] the achievement ID for Google Play Games.
+  /// [Achievement.steps] If the achievement is of the incremental type
   /// you can use this method to increment the steps.
   /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
   static Future<String?> increment({required Achievement achievement}) async {
@@ -72,8 +90,10 @@ class GamesServices {
 
   /// Open the device's default leaderboards screen. If a leaderboard ID is provided,
   /// it will display the specific leaderboard, otherwise it will show the list of all leaderboards.
-  static Future<String?> showLeaderboards(
-      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+  static Future<String?> showLeaderboards({
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
+  }) async {
     return await Leaderboards.showLeaderboards(
         iOSLeaderboardID: iOSLeaderboardID,
         androidLeaderboardID: androidLeaderboardID);
@@ -84,14 +104,15 @@ class GamesServices {
   ///
   /// The `forceRefresh` argument will invalidate the cache on Android, fetching
   /// the latest results. It has no affect on iOS.
-  static Future<List<LeaderboardScoreData>?> loadLeaderboardScores(
-      {iOSLeaderboardID = "",
-      androidLeaderboardID = "",
-      bool playerCentered = false,
-      required PlayerScope scope,
-      required TimeScope timeScope,
-      bool forceRefresh = false,
-      required int maxResults}) async {
+  static Future<List<LeaderboardScoreData>?> loadLeaderboardScores({
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
+    bool playerCentered = false,
+    required PlayerScope scope,
+    required TimeScope timeScope,
+    bool forceRefresh = false,
+    required int maxResults,
+  }) async {
     return await Leaderboards.loadLeaderboardScores(
         iOSLeaderboardID: iOSLeaderboardID,
         androidLeaderboardID: androidLeaderboardID,
@@ -104,9 +125,9 @@ class GamesServices {
 
   /// Submit a [score] to specific leaderboard.
   /// [Score] takes three parameters:
-  /// [androidLeaderboardID] the leaderboard ID for Google Play Games.
-  /// [iOSLeaderboardID] the leaderboard ID for Game Center.
-  /// [value] the score.
+  /// [Score.androidID] the leaderboard ID for Google Play Games.
+  /// [Score.iOSID] the leaderboard ID for Game Center.
+  /// [Score.value] the score.
   static Future<String?> submitScore({required Score score}) async {
     return await Leaderboards.submitScore(score: score);
   }
@@ -118,8 +139,10 @@ class GamesServices {
   }
 
   /// Get the current player's score for a specific leaderboard.
-  static Future<int?> getPlayerScore(
-      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+  static Future<int?> getPlayerScore({
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
+  }) async {
     return await Player.getPlayerScore(
         iOSLeaderboardID: iOSLeaderboardID,
         androidLeaderboardID: androidLeaderboardID);
@@ -139,22 +162,6 @@ class GamesServices {
   /// Get the player's hi-res profile image as a base64 encoded String.
   static Future<String?> getPlayerHiResImage() async {
     return await Player.getPlayerHiResImage();
-  }
-
-  /// Check if the current player is underage (always false on Android).
-  static Future<bool?> get playerIsUnderage async {
-    return await Player.isUnderage;
-  }
-
-  /// Check if the current player is restricted from joining multiplayer games (always false on Android).
-  static Future<bool?> get playerIsMultiplayerGamingRestricted async {
-    return await Player.isMultiplayerGamingRestricted;
-  }
-
-  /// Check if the current player is restricted from using personalized communication on
-  /// the device (always false on Android).
-  static Future<bool?> get playerIsPersonalizedCommunicationRestricted async {
-    return await Player.isPersonalizedCommunicationRestricted;
   }
 
   /// Show the Game Center Access Point for the current player.

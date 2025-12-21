@@ -95,8 +95,10 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> showLeaderboards(
-      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+  Future<String?> showLeaderboards({
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
+  }) async {
     return await _methodChannel.invokeMethod("showLeaderboards", {
       "leaderboardID":
           Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
@@ -104,8 +106,10 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> loadAchievements(
-      {bool forceRefresh = false, bool ignoreImages = false}) async {
+  Future<String?> loadAchievements({
+    bool forceRefresh = false,
+    bool ignoreImages = false,
+  }) async {
     return await _methodChannel.invokeMethod("loadAchievements",
         {"forceRefresh": forceRefresh, "ignoreImages": ignoreImages});
   }
@@ -116,14 +120,15 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> loadLeaderboardScores(
-      {iOSLeaderboardID = "",
-      androidLeaderboardID = "",
-      bool playerCentered = false,
-      required PlayerScope scope,
-      required TimeScope timeScope,
-      required int maxResults,
-      bool forceRefresh = false}) async {
+  Future<String?> loadLeaderboardScores({
+    required PlayerScope scope,
+    required TimeScope timeScope,
+    required int maxResults,
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
+    bool playerCentered = false,
+    bool forceRefresh = false,
+  }) async {
     return await _methodChannel.invokeMethod("loadLeaderboardScores", {
       "leaderboardID":
           Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
@@ -137,7 +142,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
 
   @override
   Future<int?> getPlayerScore(
-      {iOSLeaderboardID = "", androidLeaderboardID = ""}) async {
+      {String iOSLeaderboardID = "", String androidLeaderboardID = ""}) async {
     return await _methodChannel.invokeMethod("getPlayerScore", {
       "leaderboardID":
           Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
@@ -145,11 +150,12 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> getPlayerScoreObject(
-      {iOSLeaderboardID = "",
-      androidLeaderboardID = "",
-      required PlayerScope scope,
-      required TimeScope timeScope}) async {
+  Future<String?> getPlayerScoreObject({
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
+    required PlayerScope scope,
+    required TimeScope timeScope,
+  }) async {
     return await _methodChannel.invokeMethod("getPlayerScoreObject", {
       "leaderboardID":
           Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
@@ -159,10 +165,11 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> loadPreviousOccurrence(
-      {iOSLeaderboardID = "",
-      androidLeaderboardID = "",
-      required TimeScope timeScope}) async {
+  Future<String?> loadPreviousOccurrence({
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
+    required TimeScope timeScope,
+  }) async {
     return await _methodChannel.invokeMethod("loadPreviousOccurrence", {
       "leaderboardID":
           Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
@@ -176,8 +183,10 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> getAuthCode(String clientID,
-          {bool forceRefreshToken = false}) =>
+  Future<String?> getAuthCode(
+    String clientID, {
+    bool forceRefreshToken = false,
+  }) =>
       Device.isPlatformAndroid
           ? _methodChannel.invokeMethod("getAuthCode", {
               "clientID": clientID,
