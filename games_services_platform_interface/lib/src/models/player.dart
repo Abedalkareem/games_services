@@ -1,13 +1,17 @@
 class PlayerData {
-  /// Value can be `null` on Android due to privacy settings
+  /// Value can be `null` on Android due to privacy settings or in the case of a
+  /// GameCenter configuration issue, as GameCenter will provide a temporary ID
+  /// which will not persist between game sessions.
   final String? playerID;
   final String displayName;
   final String? iconImage;
 
-  /// only available from GameCenter
+  /// Only available from GameCenter.
+  /// May be null if there is GameCenter configuration issue, as GameCenter will
+  /// provide a temporary ID which will not persist between game sessions.
   final String? teamPlayerID;
 
-  /// only available from GameCenter
+  /// Only available from GameCenter.
   final bool? isUnderage,
       isMultiplayerGamingRestricted,
       isPersonalizedCommunicationRestricted;

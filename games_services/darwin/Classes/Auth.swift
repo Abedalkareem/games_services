@@ -130,10 +130,11 @@ class Auth: BaseGamesServices {
   // MARK: - Private Methods
   
   private func triggerNewPlayerEvent(shouldUpdateResults: Bool = false) {
+    let isPersistent = self.currentPlayer.scopedIDsArePersistent()
     var player = PlayerData(
       displayName: self.currentPlayer.alias,
-      playerID: self.currentPlayer.gamePlayerID,
-      teamPlayerID: self.currentPlayer.teamPlayerID,
+      playerID: isPersistent ? self.currentPlayer.gamePlayerID : nil,
+      teamPlayerID: isPersistent ? self.currentPlayer.teamPlayerID : nil,
       isUnderage: self.currentPlayer.isUnderage
     )
     if #available(iOS 13.0, *) {

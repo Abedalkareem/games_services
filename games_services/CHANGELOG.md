@@ -1,3 +1,7 @@
+## 5.0.1
+
+- Return `null` for `playerID` and `teamPlayerID` when GameCenter configuration errors lead to temporary IDs. by @theLee3
+
 ## 5.0.0
 
 - Return success instead of null in case of success.
