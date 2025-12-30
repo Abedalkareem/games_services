@@ -43,6 +43,7 @@ final authCode = await GameAuth.getAuthCode(String clientID);
 Fetch the identity verification signature from Game Center. This can be used to verify the player's identity with your backend server.
 
 Returns an `IdentityVerificationSignature` object containing:
+
 - `publicKeyURL`: URL to the public key for verifying the signature
 - `signature`: Base64 encoded signature
 - `salt`: Base64 encoded salt
