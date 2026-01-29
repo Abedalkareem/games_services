@@ -43,6 +43,7 @@ final authCode = await GameAuth.getAuthCode(String clientID);
 Fetch the identity verification signature from Game Center. This can be used to verify the player's identity with your backend server.
 
 Returns an `IdentityVerificationSignature` object containing:
+
 - `publicKeyURL`: URL to the public key for verifying the signature
 - `signature`: Base64 encoded signature
 - `salt`: Base64 encoded salt
@@ -60,4 +61,17 @@ if (signature != null) {
   
   // Send to your backend for verification
 }
+```
+
+## Prevent auto sign-in on Android
+
+While the default and suggested behavior is to allow Play Games Services to automatically sign the user in on app launch, this can be prevented if desired. To do so, make the following changes in `android/app/src/main/AndroidManifest.xml`:
+
+```xml
+<!-- Add the tools namespace via the manifest tag -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+<!-- Add the following provider tag inside the <application> tag -->
+<provider tools:node="remove" android:name="com.google.android.gms.games.provider.PlayGamesInitProvider" />
 ```
