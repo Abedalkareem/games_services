@@ -65,7 +65,7 @@ if (signature != null) {
 
 ## Prevent auto sign-in on Android
 
-While the default and suggested behavior is to allow Play Games Services to automatically sign the user in on app launch, this can be prevented if desired. To do so, make the following changes in `android/app/src/main/AndroidManifest.xml`:
+While the default and suggested behavior is to allow Play Games Services to automatically sign the user in on app launch, this can be prevented if desired. To do so, first, make the following changes in `AndroidManifest.xml`:
 
 ```xml
 <!-- Add the tools namespace via the manifest tag -->
@@ -74,4 +74,22 @@ While the default and suggested behavior is to allow Play Games Services to auto
 
 <!-- Add the following provider tag inside the <application> tag -->
 <provider tools:node="remove" android:name="com.google.android.gms.games.provider.PlayGamesInitProvider" />
+```
+
+Then, add the following to `MainActivity.kt`:
+
+```kotlin
+import android.os.Bundle
+// imort the PlayGames SDK
+import com.google.android.gms.games.PlayGamesSdk
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity : FlutterActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // initialize the play games SDK
+        PlayGamesSdk.initialize(this)
+    }
+}
 ```
