@@ -16,9 +16,7 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
 
@@ -99,21 +97,19 @@ class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
           )
         }
         CoroutineScope(Dispatchers.Main + handler).launch {
-          val achievements = withContext(Dispatchers.IO) {
-            data.map { item ->
-              val lockedImage = if (!ignoreImages) item.revealedImageUri?.let { imageLoader.loadImageFromUri(activity, it) } else null
-              val unlockedImage = if (!ignoreImages) item.unlockedImageUri?.let { imageLoader.loadImageFromUri(activity, it) } else null
-              AchievementItemData(
-                item.achievementId,
-                item.name,
-                item.description,
-                lockedImage,
-                unlockedImage,
-                if (item.type == Achievement.TYPE_INCREMENTAL) item.currentSteps else 0,
-                if (item.type == Achievement.TYPE_INCREMENTAL) item.totalSteps else 0,
-                item.state == Achievement.STATE_UNLOCKED,
-              )
-            }
+          val achievements = data.map { item ->
+            val lockedImage = if (!ignoreImages) item.revealedImageUri?.let { imageLoader.loadImageFromUri(activity, it) } else null
+            val unlockedImage = if (!ignoreImages) item.unlockedImageUri?.let { imageLoader.loadImageFromUri(activity, it) } else null
+            AchievementItemData(
+              item.achievementId,
+              item.name,
+              item.description,
+              lockedImage,
+              unlockedImage,
+              if (item.type == Achievement.TYPE_INCREMENTAL) item.currentSteps else 0,
+              if (item.type == Achievement.TYPE_INCREMENTAL) item.totalSteps else 0,
+              item.state == Achievement.STATE_UNLOCKED,
+            )
           }
           val gson = Gson()
           val string = gson.toJson(achievements) ?: ""
