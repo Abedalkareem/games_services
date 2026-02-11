@@ -17,6 +17,7 @@ final result = await Achievements.loadAchievements();
 ```
 
 **Optional Parameters:**
+
 - `forceRefresh` (default: `false`): Forces a refresh from the server instead of using cached data.
 - `ignoreImages` (default: `false`): When set to `true`, skips loading achievement images for better performance.
 
