@@ -33,16 +33,15 @@ class AchievementItemData {
     required this.unlocked,
   });
 
-  factory AchievementItemData.fromJson(Map<String, dynamic> json) {
-    return AchievementItemData(
-      id: json["id"],
-      name: json["name"],
-      description: json["description"],
-      unlockedImage: (json["unlockedImage"] as String?)?.replaceAll("\n", ""),
-      lockedImage: (json["lockedImage"] as String?)?.replaceAll("\n", ""),
-      totalSteps: json["totalSteps"],
-      completedSteps: json["completedSteps"],
-      unlocked: json["unlocked"],
-    );
-  }
+  factory AchievementItemData.fromJson(Map<String, dynamic> json) =>
+      AchievementItemData(
+        id: json["id"],
+        name: json["name"],
+        description: json["description"],
+        unlockedImage: (json["unlockedImage"] as String?)?.replaceAll("\n", ""),
+        lockedImage: (json["lockedImage"] as String?)?.replaceAll("\n", ""),
+        totalSteps: json["totalSteps"],
+        completedSteps: json["completedSteps"],
+        unlocked: json["unlocked"],
+      );
 }

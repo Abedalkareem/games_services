@@ -9,15 +9,12 @@ abstract class SaveGame {
   static Future<String?> saveGame({
     required String data,
     required String name,
-  }) async {
-    return await GamesServicesPlatform.instance
-        .saveGame(data: data, name: name);
-  }
+  }) =>
+      GamesServicesPlatform.instance.saveGame(data: data, name: name);
 
   /// Load game with [name].
-  static Future<String?> loadGame({required String name}) async {
-    return await GamesServicesPlatform.instance.loadGame(name: name);
-  }
+  static Future<String?> loadGame({required String name}) =>
+      GamesServicesPlatform.instance.loadGame(name: name);
 
   /// Get all saved games.
   ///
@@ -28,17 +25,12 @@ abstract class SaveGame {
   }) async {
     final result = await GamesServicesPlatform.instance
         .getSavedGames(forceRefresh: forceRefresh);
-    if (result == null) {
-      return null;
-    }
-    final List jsonArray = jsonDecode(result);
-    final savedGames =
-        jsonArray.map((json) => SavedGame.fromJson(json)).toList();
-    return savedGames;
+    if (result == null) return null;
+    final items = jsonDecode(result) as List;
+    return items.map((json) => SavedGame.fromJson(json)).toList();
   }
 
   /// Delete game with [name].
-  static Future<String?> deleteGame({required String name}) async {
-    return await GamesServicesPlatform.instance.deleteGame(name: name);
-  }
+  static Future<String?> deleteGame({required String name}) =>
+      GamesServicesPlatform.instance.deleteGame(name: name);
 }

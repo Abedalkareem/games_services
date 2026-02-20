@@ -18,21 +18,18 @@ class IdentityVerificationSignature {
     required this.timestamp,
   });
 
-  factory IdentityVerificationSignature.fromJson(Map<String, dynamic> json) {
-    return IdentityVerificationSignature(
-      publicKeyURL: json["publicKeyURL"] as String,
-      signature: json["signature"] as String,
-      salt: json["salt"] as String,
-      timestamp: json["timestamp"] as int,
-    );
-  }
+  factory IdentityVerificationSignature.fromJson(Map<String, dynamic> json) =>
+      IdentityVerificationSignature(
+        publicKeyURL: json["publicKeyURL"] as String,
+        signature: json["signature"] as String,
+        salt: json["salt"] as String,
+        timestamp: json["timestamp"] as int,
+      );
 
-  Map<String, dynamic> toJson() {
-    return {
-      "publicKeyURL": publicKeyURL,
-      "signature": signature,
-      "salt": salt,
-      "timestamp": timestamp,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        "publicKeyURL": publicKeyURL,
+        "signature": signature,
+        "salt": salt,
+        "timestamp": timestamp,
+      };
 }

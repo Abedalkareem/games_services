@@ -23,14 +23,12 @@ abstract class Player {
   );
 
   /// Show the Game Center Access Point for the current player.
-  static Future<String?> showAccessPoint(AccessPointLocation location) async {
-    return await GamesServicesPlatform.instance.showAccessPoint(location);
-  }
+  static Future<String?> showAccessPoint(AccessPointLocation location) =>
+      GamesServicesPlatform.instance.showAccessPoint(location);
 
   /// Hide the Game Center Access Point.
-  static Future<String?> hideAccessPoint() async {
-    return await GamesServicesPlatform.instance.hideAccessPoint();
-  }
+  static Future<String?> hideAccessPoint() =>
+      GamesServicesPlatform.instance.hideAccessPoint();
 
   /// Get the current player's ID.
   /// On iOS/macOS the player ID is unique for your game but not other games.
@@ -71,14 +69,13 @@ abstract class Player {
 
   /// Get the current player's score for a specific leaderboard.
   static Future<int?> getPlayerScore({
-    String? iOSLeaderboardID = "",
-    String? androidLeaderboardID = "",
-  }) async {
-    return await GamesServicesPlatform.instance.getPlayerScore(
-      iOSLeaderboardID: iOSLeaderboardID,
-      androidLeaderboardID: androidLeaderboardID,
-    );
-  }
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
+  }) =>
+      GamesServicesPlatform.instance.getPlayerScore(
+        iOSLeaderboardID: iOSLeaderboardID,
+        androidLeaderboardID: androidLeaderboardID,
+      );
 
   /// Check if the current player is underage (always false on Android).
   static Future<bool?> get isUnderage async {

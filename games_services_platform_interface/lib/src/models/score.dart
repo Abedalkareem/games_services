@@ -6,9 +6,12 @@ class Score {
   int? value;
   String? token;
 
-  String? get leaderboardID {
-    return Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID;
-  }
+  String? get leaderboardID =>
+      Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID;
 
-  Score({this.iOSLeaderboardID, this.androidLeaderboardID, this.value, this.token});
+  Score(
+      {this.iOSLeaderboardID,
+      this.androidLeaderboardID,
+      this.value,
+      this.token});
 }

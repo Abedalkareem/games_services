@@ -259,8 +259,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
       }
   }
 
-  //region onActivityResult for showLeaderboards Method
-  // handle result from friends list permission request
+  // handle result from friends list permission request and [showLeaderboards] method
   override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
     activityPluginBinding.removeActivityResultListener(this)
     return if (requestCode == 26703) {
@@ -306,6 +305,5 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
       false
     }
   }
-  //endregion
   //endregion
 }
