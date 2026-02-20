@@ -28,6 +28,7 @@ class GamesServicesPlugin : FlutterPlugin,
   private var leaderboards: Leaderboards? = null
   private var achievements: Achievements? = null
   private var saveGame: SaveGame? = null
+  private var friends: Friends? = null
   private var auth: Auth? = null
   //endregion
 
@@ -60,6 +61,7 @@ class GamesServicesPlugin : FlutterPlugin,
     leaderboards = null
     achievements = null
     saveGame = null
+    friends = null
     auth = null
   }
 
@@ -68,6 +70,7 @@ class GamesServicesPlugin : FlutterPlugin,
     leaderboards = Leaderboards(activityPluginBinding)
     achievements = Achievements(activityPluginBinding)
     saveGame = SaveGame(activityPluginBinding)
+    friends = Friends(activityPluginBinding)
     auth = Auth(activityPluginBinding)
     // streamHandler is set here instead of `setupChannels` to ensure
     // auth is initialized before being set
@@ -205,6 +208,27 @@ class GamesServicesPlugin : FlutterPlugin,
       Method.DeleteGame -> {
         val name = call.argument<String>("name") ?: ""
         saveGame?.deleteGame(name, result)
+      }
+
+      Method.GetFriendsAccessStatus -> {
+        friends?.getFriendsAccessStatus(result)
+      }
+
+      Method.LoadFriends -> {
+        val maxResults = call.argument<Int>("pageSize") ?: 0
+        val forceRefresh = call.argument<Boolean>("forceRefresh") ?: false
+        friends?.loadFriends(activity, maxResults, forceRefresh, result)
+      }
+
+      Method.ViewPlayerProfile -> {
+        val playerId = call.argument<String>("playerID") ?: ""
+        val playerInGameName = call.argument<String>("playerInGameName") ?: ""
+        val localInGameName = call.argument<String>("localInGameName") ?: ""
+        friends?.viewPlayerProfile(activity, playerId, playerInGameName, localInGameName, result)
+      }
+
+      Method.SearchForPlayer -> {
+        friends?.searchForPlayer(activity, result)
       }
     }
   }

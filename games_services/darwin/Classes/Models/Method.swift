@@ -20,4 +20,9 @@ enum Method: String {
   case loadLeaderboardScores = "loadLeaderboardScores"
   case loadPreviousOccurrence = "loadPreviousOccurrence"
   case fetchIdentityVerificationSignature = "fetchIdentityVerificationSignature"
+  case showFriendsList = "showFriendsList"
+  case getFriendsAccessStatus = "getFriendsAccessStatus"
+  case loadFriends = "loadFriends"
+  case viewPlayerProfile = "viewPlayerProfile"
+  case sendFriendRequest = "sendFriendRequest"
 }

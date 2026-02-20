@@ -5,7 +5,8 @@ enum class PluginError {
   FailedToShowAchievements, FailedToIncrementAchievements, FailedToLoadAchievements,
   FailedToAuthenticate, FailedToGetAuthCode, NotAuthenticated, NotSupportedForThisOSVersion,
   FailedToSaveGame, FailedToLoadGame, FailedToGetSavedGames, LeaderboardNotFound,
-  FailedToDeleteSavedGame, FailedToLoadLeaderboardScores
+  FailedToDeleteSavedGame, FailedToLoadLeaderboardScores, FailedToLoadFriends, FailedToLoadPlayer,
+  FailedToLaunchPlayerSearch
 }
 
 fun PluginError.errorCode(): String {
@@ -81,6 +82,18 @@ fun PluginError.errorCode(): String {
     PluginError.FailedToLoadLeaderboardScores -> {
       return "failed_to_load_leaderboard_scores"
     }
+
+    PluginError.FailedToLoadFriends -> {
+      return "failed_to_load_friends"
+    }
+
+    PluginError.FailedToLoadPlayer -> {
+      return "failed_to_load_player"
+    }
+
+    PluginError.FailedToLaunchPlayerSearch -> {
+      return "failed_to_launch_player_search"
+    }
   }
 }
 
@@ -131,7 +144,7 @@ fun PluginError.errorMessage(): String {
     }
 
     PluginError.NotAuthenticated -> {
-      return "Player not authenticated, Please make sure to call signIn() first"
+      return "Player not authenticated. Please make sure to call signIn() first"
     }
 
     PluginError.FailedToSaveGame -> {
@@ -152,6 +165,18 @@ fun PluginError.errorMessage(): String {
 
     PluginError.FailedToLoadLeaderboardScores -> {
       return "Failed to load leaderboard scores"
+    }
+
+    PluginError.FailedToLoadFriends -> {
+      return "Failed to load friends"
+    }
+
+    PluginError.FailedToLoadPlayer -> {
+      return "Failed to find player by ID"
+    }
+
+    PluginError.FailedToLaunchPlayerSearch -> {
+      return "Failed to launch player search"
     }
   }
 }

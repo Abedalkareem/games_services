@@ -3,7 +3,9 @@ package com.abedalkareem.games_services.models
 enum class Method {
   Unlock, Increment, SubmitScore, ShowLeaderboards, ShowAchievements,
   LoadAchievements, SignIn, GetAuthCode, GetPlayerHiResImage, GetPlayerScore,
-  GetPlayerScoreObject, SaveGame, LoadGame, GetSavedGames, DeleteGame, LoadLeaderboardScores
+  GetPlayerScoreObject, SaveGame, LoadGame, GetSavedGames, DeleteGame,
+  LoadLeaderboardScores, GetFriendsAccessStatus, LoadFriends, ViewPlayerProfile,
+  SearchForPlayer
 }
 
 fun Method.value(): String {

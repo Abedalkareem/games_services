@@ -14,6 +14,7 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
   private let saveGame = SaveGame()
   private let achievements = Achievements()
   private let leaderboards = Leaderboards()
+  private let friends = Friends()
 
   // MARK: - FlutterPlugin
   
@@ -96,6 +97,17 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       saveGame.deleteGame(name: name, result: result)
     case .fetchIdentityVerificationSignature:
       auth.fetchIdentityVerificationSignature(result: result)
+    case .showFriendsList:
+      friends.showFriendsList(result: result)
+    case .getFriendsAccessStatus:
+      friends.getFriendsAccessStatus(result: result)
+    case .loadFriends:
+      friends.loadFriends(result: result)
+    case .viewPlayerProfile:
+      let playerID = (arguments?["playerID"] as? String) ?? ""
+      friends.viewPlayerProfile(playerID: playerID, result: result)
+    case .sendFriendRequest:
+      friends.sendFriendRequest(result: result)
     }
   }
   
