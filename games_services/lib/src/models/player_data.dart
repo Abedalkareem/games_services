@@ -9,4 +9,7 @@ export 'package:games_services_platform_interface/models.dart' show PlayerData;
 extension PlayerDataX on PlayerData {
   /// Retrieve player's high resolution profile photo.
   Future<String?> get hiResImage => Player.getPlayerHiResImage();
+
+  /// View the current player's profile.
+  Future<String?> viewProfile() => Player.viewProfile();
 }

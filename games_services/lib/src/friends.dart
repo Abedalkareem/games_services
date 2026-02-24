@@ -39,8 +39,7 @@ abstract class Friends {
     return null;
   }
 
-  /// View a player's profile. Passing in the current player's ID will display
-  /// their profile.
+  /// View a player's profile.
   ///
   /// On Android, this presents a player comparison profile
   /// between the current player and the player identified by the `playerID`. The
@@ -48,8 +47,7 @@ abstract class Friends {
   /// allow in game nicknames to carry over to Google Play Games, and any friend
   /// request sent from this view will include the `localInGameName`.
   ///
-  /// Local player profile supported on all platforms.
-  /// Other profiles supported on Android, iOS 18.0+ and macOS 15.0+.
+  /// Supported on Android, iOS 18.0+ and macOS 15.0+.
   static Future<String?> viewPlayerProfile({
     required String playerID,
     String? playerInGameName,

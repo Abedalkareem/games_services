@@ -187,8 +187,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   }) =>
       throw UnimplementedError(_unimplementedMessage);
 
-  /// View a player's profile. Passing in the current player's ID will display
-  /// their profile.
+  /// View a player's profile.
   ///
   /// On Android, this presents a player comparison profile
   /// between the current player and the player identified by the `playerID`. The
