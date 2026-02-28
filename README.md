@@ -10,21 +10,21 @@ A Flutter plugin to support game center and google play games services.
 
 ## Screenshot  
 
-#### iOS
+#### iOS  
 
-<img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot1.png" width="200" alt="Game Center"/> <img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot2.png" width="200" alt="iOS Achievements"/> <img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot3.png" width="200" alt="iOS Leaderboards"/>
+<img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot1.png" width="200"/> <img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot2.png" width="200"/> <img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot3.png" width="200"/>  
 
-#### Android
+#### Android  
 
-<img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot5.png" width="200" alt="Android Achievements"/> <img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot4.png" width="200" alt="Android Leaderboards"/>  
+<img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot4.png" width="200"/> <img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot5.png" width="200"/>  
 
-#### macOS
+#### macOS  
 
-<img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot7.png" width="300" alt="MacOS Achievements"/> <img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot8.png" width="300" alt="MacOS Leaderboards"/>  
+<img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot7.png" width="300"/> <img src="https://raw.githubusercontent.com/Abedalkareem/games_services/master/screenshots/screenshot8.png" width="300"/>  
 
 ## Tutorials
 
-[Written tutorial](https://bit.ly/flutter_games_services)
+[Written tutorial](https://medium.com/@lp3/add-game-center-play-games-features-to-your-flutter-game-621858698dcb)
 
 Video tutorial *will be added soon.*
 
