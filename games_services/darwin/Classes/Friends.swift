@@ -108,7 +108,7 @@ class Friends: BaseGamesServices {
                 result(PluginError.failedToSendFriendRequest.flutterError())
                 return
             }
-            try await GKLocalPlayer.local.presentFriendRequestCreator(from: viewController)
+            try GKLocalPlayer.local.presentFriendRequestCreator(from: viewController)
             result(Messages.success)
         } catch {
             result(PluginError.failedToSendFriendRequest.flutterError())
