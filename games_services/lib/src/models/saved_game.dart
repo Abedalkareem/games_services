@@ -11,10 +11,8 @@ class SavedGame {
 
   SavedGame(this.name, this.modificationDate, this.deviceName);
 
-  factory SavedGame.fromJson(Map json) {
-    return SavedGame(
-        json["name"], json["modificationDate"], json["deviceName"]);
-  }
+  factory SavedGame.fromJson(Map json) =>
+      SavedGame(json["name"], json["modificationDate"], json["deviceName"]);
 
   Map toJson() => {
         "name": name,

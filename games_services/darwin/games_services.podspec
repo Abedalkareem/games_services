@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'games_services'
-  s.version          = '4.1.0'
+  s.version          = '5.1.0'
   s.summary          = 'A Flutter plugin to support Game Center and Google Play Games services.'
   s.description      = <<-DESC
 A Flutter plugin to support Game Center and Google Play Games services.

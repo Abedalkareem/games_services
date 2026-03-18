@@ -17,38 +17,46 @@ enum PluginError: String {
   
   var errorDescription: String? {
     switch self {
-    case .failedToSendScore:
-      return "Failed to send the score"
-    case .failedToGetScore:
-      return "Failed to get the score"
-    case .failedToSendAchievement:
-      return "Failed to send the achievement"
-    case .failedToAuthenticate:
-      return "Failed to authenticate"
-    case .failedToGetPlayerProfileImage:
-      return "Failed to get player profile image"
-    case .notSupportedForThisOSVersion:
-      return "Not supported for this OS version"
-    case .leaderboardNotFound:
-      return "Leaderboard not found"
-    case .failedToSaveGame:
-      return "Failed to save game"
-    case .failedToLoadGame:
-      return "Failed to load game"
-    case .failedToGetSavedGames:
-      return "Failed to get saved games"
-    case .failedToDeleteSavedGame:
-      return "Failed to delete saved game"
-    case  .failedToLoadAchievements:
-      return "Failed to get the achievements list"
-    case .failedToResetAchievements: 
-      return "Failed to reset achievements"      
-    case .failedToLoadLeaderboardScores:
-      return "Failed to load leaderboard scores"
-    case .failedToLoadPreviousOccurrence:
-      return "Failed to load previous occurrence"
-    case .failedToFetchIdentityVerification:
-      return "Failed to fetch identity verification signature"
+      case .failedToSendScore:
+        return "Failed to send the score"
+      case .failedToGetScore:
+        return "Failed to get the score"
+      case .failedToSendAchievement:
+        return "Failed to send the achievement"
+      case .failedToAuthenticate:
+        return "Failed to authenticate"
+      case .failedToGetPlayerProfileImage:
+        return "Failed to get player profile image"
+      case .notSupportedForThisOSVersion:
+        return "Not supported for this OS version"
+      case .leaderboardNotFound:
+        return "Leaderboard not found"
+      case .failedToSaveGame:
+        return "Failed to save game"
+      case .failedToLoadGame:
+        return "Failed to load game"
+      case .failedToGetSavedGames:
+        return "Failed to get saved games"
+      case .failedToDeleteSavedGame:
+        return "Failed to delete saved game"
+      case  .failedToLoadAchievements:
+        return "Failed to get the achievements list"
+      case .failedToResetAchievements: 
+        return "Failed to reset achievements"      
+      case .failedToLoadLeaderboardScores:
+        return "Failed to load leaderboard scores"
+      case .failedToLoadPreviousOccurrence:
+        return "Failed to load previous occurrence"
+      case .failedToFetchIdentityVerification:
+        return "Failed to fetch identity verification signature"
+      case .missingDescriptionKey:
+        return "Please add the NSGKFriendListUsageDescription key in Info.plist"
+      case .failedToLoadFriends:
+        return "Failed to load friends"
+      case .failedToLoadPlayer:
+        return "Failed to find player by ID"
+      case .failedToSendFriendRequest:
+        return "Failed to send friend request"
     }
   }
   
@@ -68,6 +76,10 @@ enum PluginError: String {
   case failedToLoadLeaderboardScores = "failed_to_load_leaderboard_scores"
   case failedToLoadPreviousOccurrence = "failed_to_load_previous_occurrence"
   case failedToFetchIdentityVerification = "failed_to_fetch_identity_verification"
+  case missingDescriptionKey = "missing_description_key"
+  case failedToLoadFriends = "failed_to_load_friends"
+  case failedToLoadPlayer = "failed_to_load_player"
+  case failedToSendFriendRequest = "failed_to_send_friend_request"
 
   func flutterError() -> FlutterError {
     return FlutterError(code: rawValue,

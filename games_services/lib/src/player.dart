@@ -23,45 +23,34 @@ abstract class Player {
   );
 
   /// Show the Game Center Access Point for the current player.
-  static Future<String?> showAccessPoint(AccessPointLocation location) async {
-    return await GamesServicesPlatform.instance.showAccessPoint(location);
-  }
+  static Future<String?> showAccessPoint(AccessPointLocation location) =>
+      GamesServicesPlatform.instance.showAccessPoint(location);
 
   /// Hide the Game Center Access Point.
-  static Future<String?> hideAccessPoint() async {
-    return await GamesServicesPlatform.instance.hideAccessPoint();
-  }
+  static Future<String?> hideAccessPoint() =>
+      GamesServicesPlatform.instance.hideAccessPoint();
 
   /// Get the current player's ID.
   /// On iOS/macOS the player ID is unique for your game but not other games.
   static Future<String?> getPlayerID() async {
     final player = await _currentPlayer;
-    if (player == null) {
-      throw _notAuthenticatedError;
-    } else {
-      return player.playerID;
-    }
+    if (player == null) throw _notAuthenticatedError;
+    return player.playerID;
   }
 
   /// Get the current player's name.
   /// On iOS/macOS the player's alias is provided.
   static Future<String?> getPlayerName() async {
     final player = await _currentPlayer;
-    if (player == null) {
-      throw _notAuthenticatedError;
-    } else {
-      return player.displayName;
-    }
+    if (player == null) throw _notAuthenticatedError;
+    return player.displayName;
   }
 
   /// Get the player's icon-size profile image as a base64 encoded String.
   static Future<String?> getPlayerIconImage() async {
     final player = await _currentPlayer;
-    if (player == null) {
-      throw _notAuthenticatedError;
-    } else {
-      return player.iconImage;
-    }
+    if (player == null) throw _notAuthenticatedError;
+    return player.iconImage;
   }
 
   /// Get the player's hi-res profile image as a base64 encoded String.
@@ -71,43 +60,41 @@ abstract class Player {
 
   /// Get the current player's score for a specific leaderboard.
   static Future<int?> getPlayerScore({
-    String? iOSLeaderboardID = "",
-    String? androidLeaderboardID = "",
-  }) async {
-    return await GamesServicesPlatform.instance.getPlayerScore(
-      iOSLeaderboardID: iOSLeaderboardID,
-      androidLeaderboardID: androidLeaderboardID,
-    );
-  }
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
+  }) =>
+      GamesServicesPlatform.instance.getPlayerScore(
+        iOSLeaderboardID: iOSLeaderboardID,
+        androidLeaderboardID: androidLeaderboardID,
+      );
 
   /// Check if the current player is underage (always false on Android).
   static Future<bool?> get isUnderage async {
     final player = await _currentPlayer;
-    if (player == null) {
-      throw _notAuthenticatedError;
-    } else {
-      return player.isUnderage;
-    }
+    if (player == null) throw _notAuthenticatedError;
+    return player.isUnderage;
   }
 
   /// Check if the current player is restricted from joining multiplayer games (always false on Android).
   static Future<bool?> get isMultiplayerGamingRestricted async {
     final player = await _currentPlayer;
-    if (player == null) {
-      throw _notAuthenticatedError;
-    } else {
-      return player.isMultiplayerGamingRestricted;
-    }
+    if (player == null) throw _notAuthenticatedError;
+    return player.isMultiplayerGamingRestricted;
   }
 
   /// Check if the current player is restricted from using personalized communication on
   /// the device (always false on Android).
   static Future<bool?> get isPersonalizedCommunicationRestricted async {
     final player = await _currentPlayer;
-    if (player == null) {
-      throw _notAuthenticatedError;
-    } else {
-      return player.isPersonalizedCommunicationRestricted;
-    }
+    if (player == null) throw _notAuthenticatedError;
+    return player.isPersonalizedCommunicationRestricted;
+  }
+
+  /// View the current player's profile.
+  static Future<String?> viewProfile() async {
+    final player = await _currentPlayer;
+    if (player == null) throw _notAuthenticatedError;
+    return GamesServicesPlatform.instance
+        .viewPlayerProfile(playerID: player.playerID ?? '');
   }
 }

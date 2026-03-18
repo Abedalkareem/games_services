@@ -26,16 +26,14 @@ class PlayerData {
     this.isPersonalizedCommunicationRestricted,
   });
 
-  factory PlayerData.fromJson(Map<String, dynamic> json) {
-    return PlayerData(
-      playerID: json["playerID"],
-      displayName: json["displayName"],
-      iconImage: (json["iconImage"] as String?)?.replaceAll("\n", ""),
-      teamPlayerID: json["teamPlayerID"],
-      isUnderage: json["isUnderage"],
-      isMultiplayerGamingRestricted: json["isMultiplayerGamingRestricted"],
-      isPersonalizedCommunicationRestricted:
-          json["isPersonalizedCommunicationRestricted"],
-    );
-  }
+  factory PlayerData.fromJson(Map<String, dynamic> json) => PlayerData(
+        playerID: json["playerID"],
+        displayName: json["displayName"],
+        iconImage: (json["iconImage"] as String?)?.replaceAll("\n", ""),
+        teamPlayerID: json["teamPlayerID"],
+        isUnderage: json["isUnderage"],
+        isMultiplayerGamingRestricted: json["isMultiplayerGamingRestricted"],
+        isPersonalizedCommunicationRestricted:
+            json["isPersonalizedCommunicationRestricted"],
+      );
 }

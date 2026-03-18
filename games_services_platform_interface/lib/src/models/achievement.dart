@@ -7,9 +7,7 @@ class Achievement {
   double percentComplete;
   int steps;
 
-  String get id {
-    return Device.isPlatformAndroid ? androidID : iOSID;
-  }
+  String get id => Device.isPlatformAndroid ? androidID : iOSID;
 
   Achievement({
     this.androidID = "",

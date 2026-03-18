@@ -4,7 +4,7 @@
 
 Display the device's default achievements screen.
 
-``` dart
+```dart
 Achievements.showAchievements();
 ```  
 
@@ -12,7 +12,7 @@ Achievements.showAchievements();
 
 Get achievements as a list. Use this to build a custom UI.
 
-``` dart
+```dart
 final result = await Achievements.loadAchievements();
 ```
 
@@ -23,7 +23,7 @@ final result = await Achievements.loadAchievements();
 
 **Example with parameters:**
 
-``` dart
+```dart
 final result = await Achievements.loadAchievements(
   forceRefresh: true,
   ignoreImages: true, // Skip image loading for better performance
@@ -32,18 +32,20 @@ final result = await Achievements.loadAchievements(
 
 ## Unlock achievement
 
-Unlock an ```Achievement```.
-The ```Achievement``` takes three parameters:
+Unlock an `Achievement`.
+The `Achievement` takes three parameters:
 
-- ```androidID``` the achievement id for Google Play Games.
-- ```iOSID``` the achievement id for Game Center.
-- ```percentComplete``` the completion percentage of the achievement, this parameter is optional on iOS/macOS.
-- ```steps``` the achievement steps for Google Play Games (as seen in the next section).
+- `androidID` the achievement id for Google Play Games.
+- `iOSID` the achievement id for Game Center.
+- `percentComplete` the completion percentage of the achievement, this parameter is optional on iOS/macOS.
+- `steps` the achievement steps for Google Play Games (as seen in the next section).
 
-``` dart
-Achievements.unlock(achievement: Achievement(androidID: 'android_id',
-                                              iOSID: 'ios_id',
-                                              percentComplete: 100));
+```dart
+Achievements.unlock(achievement: Achievement(
+  androidID: 'android_id',
+  iOSID: 'ios_id',
+  percentComplete: 100,
+));
 ```  
 
 ## Increment (Android Only)
@@ -51,59 +53,89 @@ Achievements.unlock(achievement: Achievement(androidID: 'android_id',
 Increment the steps for a Google Play Games achievement.
 
 ```dart
-final result = await Achievements.increment(achievement: Achievement(androidID: 'android_id', steps: 50));
-print(result);
+final result = await Achievements.increment(
+  achievement: Achievement(androidID: 'android_id', steps: 50),
+);
 ```
 
 ## Show leaderboards
 
 Display the device's default leaderboards screen. If a leaderboard ID is provided, it will display the specific leaderboard, otherwise it will show the list of all leaderboards.
 
-``` dart
- Leaderboards.showLeaderboards(iOSLeaderboardID: 'ios_leaderboard_id', androidLeaderboardID: 'android_leaderboard_id');
+```dart
+Leaderboards.showLeaderboards(
+  iOSLeaderboardID: 'ios_leaderboard_id',
+  androidLeaderboardID: 'android_leaderboard_id',
+);
 ```
 
 ## Load leaderboard scores
 
 Get leaderboard scores as a list. Use this to build a custom UI.
 
-``` dart
+```dart
 final result = await Leaderboards.loadLeaderboardScores(
-        iOSLeaderboardID: "ios_leaderboard_id",
-        androidLeaderboardID: "android_leaderboard_id",
-        // Returns a list centered around the player's rank on the leaderboard. (Defaults to false)
-        playerCentered: false,
-        scope: PlayerScope.global,
-        timeScope: TimeScope.allTime,
-        maxResults: 10);
+  iOSLeaderboardID: "ios_leaderboard_id",
+  androidLeaderboardID: "android_leaderboard_id",
+  // Returns a list centered around the player's rank on the leaderboard.
+  // Defaults to false
+  playerCentered: false,
+  scope: PlayerScope.global,
+  timeScope: TimeScope.allTime,
+  maxResults: 10,
+);
 ```
 
 ## Load previous occurrence (iOS only)
 
 Load the previous occurrence of the player's score from a leaderboard. This returns the score data that precedes the player's current best score, which is useful for tracking score progression over time.
 
-``` dart
+```dart
 final previousScore = await Leaderboards.loadPreviousOccurrence(
-        iOSLeaderboardID: "ios_leaderboard_id",
-        timeScope: TimeScope.allTime);
+  iOSLeaderboardID: 'ios_leaderboard_id',
+  timeScope: TimeScope.allTime
+);
 
 if (previousScore != null) {
   print('Previous score: ${previousScore.rawScore}');
-  print('Achieved on: ${DateTime.fromMillisecondsSinceEpoch(previousScore.timestampMillis)}');
+  final timestamp = DateTime.fromMillisecondsSinceEpoch(
+    previousScore.timestampMillis,
+  );
+  print('Achieved on: $timestamp');
 }
 ```
 
 ## Submit score
 
-Submit a ```Score``` to specific leaderboard.
-The ```Score``` class takes three parameters:
+Submit a `Score` to specific leaderboard.
+The `Score` class takes three parameters:
 
-- ```androidLeaderboardID```: the leaderboard ID for Google Play Games.
-- ```iOSLeaderboardID``` the leaderboard ID for Game Center.
-- ```value``` the score.
+- `androidLeaderboardID`: the leaderboard ID for Google Play Games.
+- `iOSLeaderboardID` the leaderboard ID for Game Center.
+- `value` the score.
 
-``` dart
-Leaderboards.submitScore(score: Score(androidLeaderboardID: 'android_leaderboard_id',
-                                       iOSLeaderboardID: 'ios_leaderboard_id',
-                                       value: 5));
+```dart
+Leaderboards.submitScore(score: Score(
+  androidLeaderboardID: 'android_leaderboard_id',
+  iOSLeaderboardID: 'ios_leaderboard_id',
+  value: 5,
+));
+```
+
+## Handling private profiles (Android only)
+
+On Google Play Games, a player's profile may be marked private, keeping their scores from appearing on public leaderboards. In fact, this is the default setting for new accounts. Fortunately, we can determine if this is the case and handle it appropriately.
+
+If a `ScoreObject` for the player exists but the `ScoreObject.rank` == -1, then the score is not visible on the public leaderboard. We can adjust our UI accordingly, as well as guide the player to their profile to adjust their privacy settings.
+
+```dart
+final score = await Leaderboards.getPlayerScoreObject(
+  scope: PlayerScope.global,
+  timeScope: TimeScope.allTime,
+  androidLeaderboardID: leaderboardID,
+);
+
+if (score != null && score.rank == -1) {
+  Player.viewProfile();
+} 
 ```

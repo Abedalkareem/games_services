@@ -34,8 +34,8 @@ Get the current player's score for a specific leaderboard.
 
 ```dart
 final playerScore = Player.getPlayerScore(
-    iOSLeaderboardID = 'ios_leaderboard_id',
-    androidLeaderboardID = 'android_leaderboard_id',
+  iOSLeaderboardID: 'ios_leaderboard_id',
+  androidLeaderboardID: 'android_leaderboard_id',
 );
 ```
 

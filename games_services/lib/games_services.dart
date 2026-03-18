@@ -1,6 +1,7 @@
 export 'package:games_services_platform_interface/models.dart';
 
 export 'src/achievements.dart';
+export 'src/friends.dart';
 export 'src/game_auth.dart';
 export 'src/games_services.dart';
 export 'src/leaderboards.dart';
