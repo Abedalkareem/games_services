@@ -64,6 +64,15 @@ class Auth(private var activityPluginBinding: ActivityPluginBinding) :
       it?.let { result ->
         if (result.isAuthenticated) {
           playersClient.currentPlayer.addOnSuccessListener { player ->
+            // player can be null due to project configuration issues
+            if (player == null) {
+              finishPendingOperationWithError(
+                PluginError.FailedToAuthenticate.errorCode(),
+                "Player is null. Please ensure that your project is configured correctly."
+              )
+              return@addOnSuccessListener
+            }
+
             var playerData = PlayerData(
               player.displayName,
               player.playerId,
