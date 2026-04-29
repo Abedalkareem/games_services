@@ -8,8 +8,8 @@ abstract class Leaderboards {
   /// Open the device's default leaderboards screen. If a leaderboard ID is provided,
   /// it will display the specific leaderboard, otherwise it will show the list of all leaderboards.
   static Future<String?> showLeaderboards({
-    String? iOSLeaderboardID = "",
-    String? androidLeaderboardID = "",
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
   }) async {
     return await GamesServicesPlatform.instance.showLeaderboards(
       iOSLeaderboardID: iOSLeaderboardID,
@@ -23,8 +23,8 @@ abstract class Leaderboards {
   /// The `forceRefresh` argument will invalidate the cache on Android, fetching
   /// the latest results. It has no affect on iOS.
   static Future<List<LeaderboardScoreData>?> loadLeaderboardScores({
-    String? iOSLeaderboardID = "",
-    String? androidLeaderboardID = "",
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
     bool playerCentered = false,
     required PlayerScope scope,
     required TimeScope timeScope,
@@ -50,8 +50,8 @@ abstract class Leaderboards {
 
   /// Get leaderboard score data for the current player
   static Future<LeaderboardScoreData?> getPlayerScoreObject({
-    String? iOSLeaderboardID = "",
-    String? androidLeaderboardID = "",
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
     required PlayerScope scope,
     required TimeScope timeScope,
   }) async {
@@ -72,8 +72,8 @@ abstract class Leaderboards {
   /// This is useful for tracking score progression over time.
   /// Currently only supported on iOS 14.0+ and macOS 11.0+.
   static Future<LeaderboardScoreData?> loadPreviousOccurrence({
-    String? iOSLeaderboardID = "",
-    String? androidLeaderboardID = "",
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
     required TimeScope timeScope,
   }) async {
     final String? response =
