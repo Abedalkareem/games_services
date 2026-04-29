@@ -22,7 +22,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     // also allows the app to listen to the stream in multiple places without
     _streamController = StreamController.broadcast(
       onListen: () {
-        // subscribe to the platform event channel when first listener added
+        // subscribe to the platform event channel when first listener is added
         _sub ??= _playerChannel
             .receiveBroadcastStream()
             .map((json) =>
@@ -32,7 +32,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
           _streamController.add(_player);
         }, onError: (error) {
           _player = null;
-          _streamController.add(null);
+          _streamController.add(_player);
         });
       },
       onCancel: () {
@@ -42,26 +42,19 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
         _sub = null;
       },
     );
+    _streamView = _PlayerStreamView(_streamController.stream.distinct(),
+        () => _streamController.add(_player));
   }
 
   late final StreamController<PlayerData?> _streamController;
+  late final _PlayerStreamView _streamView;
   StreamSubscription<PlayerData?>? _sub;
 
-  // stored to be added to stream for every new listener as
-  // broadcast streams lose data
+  // cache player data to send when a new listener is added
   PlayerData? _player;
 
   @override
-  Stream<PlayerData?> get player {
-    // In order to maintain backwards compatibility, if the channel stream is
-    // already subscribed to, add the latest player data listeners from legacy
-    // plugin methods. This also guarantees synced player data
-    // while listening for the user in multiple places throughout the app
-    if (_sub != null) {
-      Future(() => _streamController.add(_player));
-    }
-    return _streamController.stream;
-  }
+  Stream<PlayerData?> get player => _streamView;
 
   @override
   Future<String?> unlock({required Achievement achievement}) async {
@@ -245,5 +238,23 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     }
     return IdentityVerificationSignature.fromJson(
         result.cast<String, dynamic>());
+  }
+}
+
+class _PlayerStreamView extends StreamView<PlayerData?> {
+  _PlayerStreamView(Stream<PlayerData?> stream, this.emit) : super(stream);
+
+  VoidCallback emit;
+
+  @override
+  StreamSubscription<PlayerData?> listen(
+      void Function(PlayerData? value)? onData,
+      {Function? onError,
+      void Function()? onDone,
+      bool? cancelOnError}) {
+    final sub = super.listen(onData,
+        onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+    emit();
+    return sub;
   }
 }
