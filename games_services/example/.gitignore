@@ -102,3 +102,8 @@ ios/fastlane/Preview.html
 ios/fastlane/README.md
 ios/Runner.app.dSYM.zip
 ios/Runner.ipa
+
+
+# SPM related
+**/.build
+**/.swiftpm
