@@ -71,8 +71,8 @@ abstract class Player {
 
   /// Get the current player's score for a specific leaderboard.
   static Future<int?> getPlayerScore({
-    String? iOSLeaderboardID = "",
-    String? androidLeaderboardID = "",
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
   }) async {
     return await GamesServicesPlatform.instance.getPlayerScore(
       iOSLeaderboardID: iOSLeaderboardID,
