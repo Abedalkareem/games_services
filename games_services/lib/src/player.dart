@@ -7,13 +7,19 @@ import 'package:games_services_platform_interface/game_services_platform_interfa
 abstract class Player {
   /// Helper for retrieving current player form the Player stream
   static Future<PlayerData?> get _currentPlayer async {
-    // resuses player stream to reduce code and platform channel communciation
+    // resuses player stream to reduce code and platform channel communication
     final completer = Completer<PlayerData?>();
     StreamSubscription? sub;
-    sub = GameAuth.player.listen((data) {
-      completer.complete(data);
-      sub?.cancel();
-    });
+    sub = GameAuth.player.listen(
+      (data) {
+        completer.complete(data);
+        sub?.cancel();
+      },
+      onError: (_) {
+        completer.complete(null);
+        sub?.cancel();
+      },
+    );
     return completer.future;
   }
 
