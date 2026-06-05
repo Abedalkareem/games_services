@@ -6,6 +6,11 @@
 //
 
 import Foundation
+#if canImport(UIKit)
+import UIKit
+#else
+import AppKit
+#endif
 
 #if os(iOS) || os(tvOS)
 typealias ViewController = UIViewController

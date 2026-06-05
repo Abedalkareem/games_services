@@ -65,7 +65,14 @@ if (signature != null) {
 
 ## Prevent auto sign-in on Android
 
-While the default and suggested behavior is to allow Play Games Services to automatically sign the user in on app launch, this can be prevented if desired. To do so, first, make the following changes in `AndroidManifest.xml`:
+While the default and suggested behavior is to allow Play Games Services to automatically sign the user in on app launch, this can be prevented if desired. To do so, first, add `play-services-games-v2` to your `dependencies` in `android/app/build.gradle`.
+
+```gradle
+implementation "com.google.android.gms:play-services-games-v2:21.0.0" // or latest version
+```
+
+
+Next, make the following changes in `AndroidManifest.xml` to prevent the auto sign in:
 
 ```xml
 <!-- Add the tools namespace via the manifest tag -->
@@ -76,7 +83,7 @@ While the default and suggested behavior is to allow Play Games Services to auto
 <provider tools:node="remove" android:name="com.google.android.gms.games.provider.PlayGamesInitProvider" />
 ```
 
-Then, add the following to `MainActivity.kt`:
+Then, add the following to `MainActivity.kt` to initialize the Play Games SDK:
 
 ```kotlin
 import android.os.Bundle
