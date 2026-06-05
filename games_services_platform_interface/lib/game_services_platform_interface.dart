@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:games_services_platform_interface/models.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -162,7 +163,17 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Save game with [data] and a unique [name].
   /// The [name] must be between 1 and 100 non-URL-reserved characters (a-z, A-Z, 0-9, or the symbols "-", ".", "_", or "~").
-  Future<String?> saveGame({required String data, required String name}) async {
+  ///
+  /// [coverImage], [description] and [playedTime] are optional snapshot
+  /// metadata used by Google Play Games Services on Android. They are ignored
+  /// on iOS/macOS (Game Center).
+  Future<String?> saveGame({
+    required String data,
+    required String name,
+    Uint8List? coverImage,
+    String? description,
+    Duration? playedTime,
+  }) async {
     throw UnimplementedError("not implemented.");
   }
 

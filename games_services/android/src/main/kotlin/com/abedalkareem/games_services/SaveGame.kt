@@ -1,5 +1,6 @@
 package com.abedalkareem.games_services
 
+import android.graphics.BitmapFactory
 import android.util.Log
 import com.abedalkareem.games_services.models.SavedGame
 import com.abedalkareem.games_services.util.Messages
@@ -61,12 +62,30 @@ class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
   }
 
   fun saveGame(
-    data: String, desc: String, name: String, result: MethodChannel.Result
+    data: String,
+    desc: String?,
+    name: String,
+    coverImage: ByteArray?,
+    playedTimeMillis: Long?,
+    result: MethodChannel.Result
   ) {
     Log.d(tag, "[SaveGame] Start saving game")
-    val metadataChange = SnapshotMetadataChange.Builder()
-      .setDescription(desc)
-      .build()
+    val metadataChangeBuilder = SnapshotMetadataChange.Builder()
+    if (desc != null) {
+      metadataChangeBuilder.setDescription(desc)
+    }
+    if (playedTimeMillis != null) {
+      metadataChangeBuilder.setPlayedTimeMillis(playedTimeMillis)
+    }
+    if (coverImage != null) {
+      val bitmap = BitmapFactory.decodeByteArray(coverImage, 0, coverImage.size)
+      if (bitmap != null) {
+        metadataChangeBuilder.setCoverImage(bitmap)
+      } else {
+        Log.d(tag, "[SaveGame] Failed to decode the cover image bytes, skipping it")
+      }
+    }
+    val metadataChange = metadataChangeBuilder.build()
     snapshotsClient.open(name, true, SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED)
       .addOnSuccessListener { annotatedData ->
         val snapshot = annotatedData.data

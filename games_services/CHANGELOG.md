@@ -1,3 +1,8 @@
+## 5.1.0
+
+- Add optional `coverImage`, `description`, and `playedTime` parameters to `SaveGame.saveGame`. On Android these are set as the snapshot metadata (cover image required to pass Google's Play Games Services quality checklist). Ignored on iOS/macOS. (#228)
+- Fix Android `saveGame` using the unique name as the snapshot description; the description is now only set when provided. (#228)
+
 ## 5.0.1
 
 - Return `null` for `playerID` and `teamPlayerID` when GameCenter configuration errors lead to temporary IDs. by @theLee3

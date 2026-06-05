@@ -189,7 +189,10 @@ class GamesServicesPlugin : FlutterPlugin,
       Method.SaveGame -> {
         val data = call.argument<String>("data") ?: ""
         val name = call.argument<String>("name") ?: ""
-        saveGame?.saveGame(data, name, name, result)
+        val description = call.argument<String>("description")
+        val coverImage = call.argument<ByteArray>("coverImage")
+        val playedTime = call.argument<Number>("playedTime")?.toLong()
+        saveGame?.saveGame(data, description, name, coverImage, playedTime, result)
       }
 
       Method.LoadGame -> {

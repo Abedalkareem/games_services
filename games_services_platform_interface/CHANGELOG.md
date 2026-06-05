@@ -1,3 +1,7 @@
+## 5.1.0
+
+- Add optional `coverImage`, `description`, and `playedTime` parameters to `saveGame`. (#228)
+
 ## 5.0.1
 
 - Return `null` for `playerID` and `teamPlayerID` when GameCenter configuration errors lead to temporary IDs. by @theLee3
