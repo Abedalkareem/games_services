@@ -29,6 +29,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
                 json == null ? null : PlayerData.fromJson(jsonDecode(json)))
             .listen((player) {
           _player = player;
+          if (!_isInitialized) _isInitialized = true;
           _streamController.add(_player);
         }, onError: (error) {
           _player = null;
@@ -42,13 +43,15 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
         _sub = null;
       },
     );
-    _streamView = _PlayerStreamView(_streamController.stream.distinct(),
-        () => _streamController.add(_player));
+    _streamView = _PlayerStreamView(_streamController.stream.distinct(), () {
+      if (_isInitialized) _streamController.add(_player);
+    });
   }
 
   late final StreamController<PlayerData?> _streamController;
   late final _PlayerStreamView _streamView;
   StreamSubscription<PlayerData?>? _sub;
+  var _isInitialized = false;
 
   // cache player data to send when a new listener is added
   PlayerData? _player;
