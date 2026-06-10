@@ -129,7 +129,7 @@ class PlayFabClient {
   }) {
     return _post(
       "/Client/GetPlayerStatistics",
-      {if (statisticNames != null) "StatisticNames": statisticNames},
+      {"StatisticNames": ?statisticNames},
       sessionTicket: sessionTicket,
     );
   }
@@ -236,8 +236,8 @@ class PlayFabClient {
     await _post(
       "/Client/UpdateUserData",
       {
-        if (data != null) "Data": data,
-        if (keysToRemove != null) "KeysToRemove": keysToRemove,
+        "Data": ?data,
+        "KeysToRemove": ?keysToRemove,
       },
       sessionTicket: sessionTicket,
     );

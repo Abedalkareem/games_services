@@ -26,7 +26,8 @@ import 'playfab_session.dart';
 /// * Native-UI methods (`showAchievements`, `showLeaderboards`, the access
 ///   point) and Apple/Google-only methods return `null`.
 class GamesServicesPlayFab extends GamesServicesPlatform {
-  GamesServicesPlayFab({PlayFabClient? client}) : _client = client;
+  GamesServicesPlayFab({PlayFabClient? playFabClient})
+      : _client = playFabClient;
 
   /// Registered by the Flutter tool for the `windows` platform.
   static void registerWith() {

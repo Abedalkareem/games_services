@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:games_services/games_services.dart';
-import 'package:games_services/src/playfab/games_services_playfab.dart';
 import 'package:games_services/src/playfab/playfab_client.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -27,7 +26,7 @@ void main() {
       return handler(request);
     });
     final impl = GamesServicesPlayFab(
-      client: PlayFabClient(titleId: "TEST", httpClient: mock),
+      playFabClient: PlayFabClient(titleId: "TEST", httpClient: mock),
     );
     return (impl, requests);
   }
@@ -349,7 +348,7 @@ void main() {
           });
         }
         if (request.method == "PUT") {
-          puts.add((request as http.Request).bodyBytes);
+          puts.add(request.bodyBytes);
           return http.Response("", 201);
         }
         if (request.url.path.endsWith("/File/FinalizeFileUploads")) {
