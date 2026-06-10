@@ -1,3 +1,7 @@
+## 5.2.0
+
+- Add **Windows** support, backed by [PlayFab](https://learn.microsoft.com/gaming/playfab/). Call `GamesServices.initialize(playFabTitleId: ...)` before `signIn()` on Windows (no-op on other platforms). Supports auth, leaderboards (statistics), achievements (Title Data definitions + player-data progress), and saved games (entity files). See [docs/windows_playfab.md](https://github.com/Abedalkareem/games_services/blob/master/docs/windows_playfab.md).
+
 ## 5.1.0
 
 - Add optional `coverImage`, `description`, and `playedTime` parameters to `SaveGame.saveGame`. On Android these are set as the snapshot metadata (cover image required to pass Google's Play Games Services quality checklist). Ignored on iOS/macOS. (#228)

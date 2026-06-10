@@ -1,10 +1,24 @@
 import 'dart:convert';
+import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:games_services/games_services.dart';
 
-void main() => runApp(const App());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Windows is backed by PlayFab, which needs the title id before sign-in.
+  // Provide it via `--dart-define=PLAYFAB_TITLE_ID=XXXXX` or hardcode it here.
+  if (Platform.isWindows) {
+    const titleId = String.fromEnvironment("PLAYFAB_TITLE_ID");
+    if (titleId.isNotEmpty) {
+      await GamesServices.initialize(playFabTitleId: titleId);
+    }
+  }
+
+  runApp(const App());
+}
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);

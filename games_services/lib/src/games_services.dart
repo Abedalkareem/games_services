@@ -10,6 +10,27 @@ export 'package:games_services_platform_interface/models.dart';
 /// [Leaderboards] for anything related to Leaderboards, [Player] for anything related to Player,
 /// and [SaveGame] for anything related to game saves.
 class GamesServices {
+  /// Configure the backing games service.
+  ///
+  /// Only required on platforms that use a third-party backend instead of a
+  /// native OS service. On Windows the implementation is backed by
+  /// [PlayFab](https://learn.microsoft.com/gaming/playfab/), so the title's
+  /// [playFabTitleId] must be provided before calling [signIn]. [customId]
+  /// overrides the auto-generated anonymous device id and [displayName] sets the
+  /// player's name when the backend has none.
+  ///
+  /// No-op on Android, iOS and macOS.
+  static Future<void> initialize({
+    required String playFabTitleId,
+    String? customId,
+    String? displayName,
+  }) =>
+      GameAuth.initialize(
+        playFabTitleId: playFabTitleId,
+        customId: customId,
+        displayName: displayName,
+      );
+
   /// Stream of the currently authenticated player. If not null, the player
   /// is signed in & games_services functionality is available.
   static Stream<PlayerData?> get player => GameAuth.player;
