@@ -67,6 +67,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   Future<String?> showLeaderboards({
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",
+    TimeScope timeScope = TimeScope.allTime,
   }) async {
     throw UnimplementedError("not implemented.");
   }

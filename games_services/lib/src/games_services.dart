@@ -90,13 +90,18 @@ class GamesServices {
 
   /// Open the device's default leaderboards screen. If a leaderboard ID is provided,
   /// it will display the specific leaderboard, otherwise it will show the list of all leaderboards.
+  ///
+  /// The `timeScope` parameter allows you to specify the time range for the leaderboard scores, 
+  /// only supported on Android. It has no effect on iOS.
   static Future<String?> showLeaderboards({
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",
+    TimeScope timeScope = TimeScope.allTime,
   }) async {
     return await Leaderboards.showLeaderboards(
         iOSLeaderboardID: iOSLeaderboardID,
-        androidLeaderboardID: androidLeaderboardID);
+        androidLeaderboardID: androidLeaderboardID,
+        timeScope: timeScope);
   }
 
   /// Get leaderboard scores as a list. Use this to build a custom UI.

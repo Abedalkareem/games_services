@@ -7,13 +7,18 @@ import 'package:games_services_platform_interface/models.dart';
 abstract class Leaderboards {
   /// Open the device's default leaderboards screen. If a leaderboard ID is provided,
   /// it will display the specific leaderboard, otherwise it will show the list of all leaderboards.
+  ///
+  /// The `timeScope` parameter allows you to specify the time range for the leaderboard scores, 
+  /// only supported on Android. It has no effect on iOS.
   static Future<String?> showLeaderboards({
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",
+    TimeScope timeScope = TimeScope.allTime,
   }) async {
     return await GamesServicesPlatform.instance.showLeaderboards(
       iOSLeaderboardID: iOSLeaderboardID,
       androidLeaderboardID: androidLeaderboardID,
+      timeScope: timeScope,
     );
   }
 

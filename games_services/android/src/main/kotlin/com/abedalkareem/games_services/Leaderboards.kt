@@ -45,7 +45,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   //endregion
 
   //region Public Methods
-  fun showLeaderboards(activity: Activity?, leaderboardID: String, result: MethodChannel.Result) {
+  fun showLeaderboards(activity: Activity?, leaderboardID: String, span: Int, result: MethodChannel.Result) {
     val onSuccessListener: ((Intent) -> Unit) = { intent ->
       activity?.startActivityForResult(intent, 0)
       result.success(Messages.SUCCESS)
@@ -59,7 +59,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
         .addOnFailureListener(onFailureListener)
     } else {
       leaderboardsClient
-        .getLeaderboardIntent(leaderboardID)
+        .getLeaderboardIntent(leaderboardID, span)
         .addOnSuccessListener(onSuccessListener)
         .addOnFailureListener(onFailureListener)
     }

@@ -91,10 +91,12 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   Future<String?> showLeaderboards({
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",
+    TimeScope timeScope = TimeScope.allTime,
   }) async {
     return await _methodChannel.invokeMethod("showLeaderboards", {
       "leaderboardID":
-          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
+          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+      if (Device.isPlatformAndroid) "span": timeScope.value,
     });
   }
 
