@@ -143,8 +143,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   Future<String?> getAuthCode(
     String clientID, {
     bool forceRefreshToken = false,
-  }) =>
-      throw UnimplementedError("not implemented.");
+  }) => throw UnimplementedError("not implemented.");
 
   /// Show the Game Center Access Point for the current player.
   Future<String?> showAccessPoint(AccessPointLocation location) async {
@@ -187,8 +186,28 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
+  /// Open the device's default game selection screen. (Android only.)
+  ///
+  /// The `title` will be displayed at the top of the UI. If `maxResults` is
+  /// `null`, all game saves will be shown.
+  ///
+  /// If `allowNew` is `true` and the user chooses to create a new save, a
+  /// `NewSave` object will be returned. It can be modified to upload a new save
+  /// to the cloud when ready.
+  Future<String?> showSavedGames({
+    required String title,
+    bool allowNew = true,
+    bool allowDelete = true,
+    int? maxResults,
+  }) async {
+    throw UnimplementedError("not implemented.");
+  }
+
   /// Get all saved games.
-  Future<String?> getSavedGames({bool forceRefresh = false}) async {
+  Future<String?> getSavedGames({
+    bool forceRefresh = false,
+    bool ignoreImages = false,
+  }) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -196,7 +215,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// Returns identity verification data including public key URL, signature, salt, and timestamp.
   /// Only available on iOS and MacOS, returns null on other platforms.
   Future<IdentityVerificationSignature?>
-      fetchIdentityVerificationSignature() async {
+  fetchIdentityVerificationSignature() async {
     throw UnimplementedError("not implemented.");
   }
 }
