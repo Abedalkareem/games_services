@@ -68,6 +68,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",
     TimeScope timeScope = TimeScope.allTime,
+    PlayerScope playerScope = PlayerScope.global,
   }) async {
     throw UnimplementedError("not implemented.");
   }
@@ -186,7 +187,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   /// Returns identity verification data including public key URL, signature, salt, and timestamp.
   /// Only available on iOS and MacOS, returns null on other platforms.
   Future<IdentityVerificationSignature?>
-      fetchIdentityVerificationSignature() async {
+  fetchIdentityVerificationSignature() async {
     throw UnimplementedError("not implemented.");
   }
 }

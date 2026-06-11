@@ -97,11 +97,14 @@ class GamesServices {
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",
     TimeScope timeScope = TimeScope.allTime,
+    PlayerScope playerScope = PlayerScope.global,
   }) async {
     return await Leaderboards.showLeaderboards(
         iOSLeaderboardID: iOSLeaderboardID,
         androidLeaderboardID: androidLeaderboardID,
-        timeScope: timeScope);
+      timeScope: timeScope,
+      playerScope: playerScope,
+    );
   }
 
   /// Get leaderboard scores as a list. Use this to build a custom UI.

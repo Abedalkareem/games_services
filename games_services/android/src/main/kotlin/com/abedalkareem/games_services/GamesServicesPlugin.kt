@@ -135,7 +135,8 @@ class GamesServicesPlugin : FlutterPlugin,
       Method.ShowLeaderboards -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
         val span = call.argument<Int>("span") ?: 2
-        leaderboards?.showLeaderboards(activity, leaderboardID, span, result)
+        val collection = call.argument<Int>("leaderboardCollection") ?: 0
+        leaderboards?.showLeaderboards(activity, leaderboardID, span, collection, result)
       }
 
       Method.LoadLeaderboardScores -> {
