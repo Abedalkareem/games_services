@@ -1,6 +1,8 @@
 ## 5.1.0
 
 - Add optional `coverImage`, `description`, and `playedTime` parameters to `saveGame`. (#228)
+- Add `showSavedGames` method to use Google Play Games default UI.
+- Include Google Play Games metadata with returned `SavedGame`s.
 
 ## 5.0.1
 
