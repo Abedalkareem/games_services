@@ -7,8 +7,12 @@ import FlutterMacOS
 
 class Leaderboards: BaseGamesServices {
   
-  func showLeaderboardWith(identifier: String, result: @escaping FlutterResult) {
-    let viewController = GKGameCenterViewController(leaderboardID: identifier, playerScope: .global, timeScope: .allTime)
+  func showLeaderboardWith(identifier: String, span: Int, leaderboardCollection: Int, result: @escaping FlutterResult) {
+    let viewController = GKGameCenterViewController(
+      leaderboardID: identifier,
+      playerScope: GKLeaderboard.PlayerScope(rawValue: leaderboardCollection) ?? .global,
+      timeScope: GKLeaderboard.TimeScope(rawValue: span) ?? .allTime
+    )
     viewController.gameCenterDelegate = self
     self.viewController?.show(viewController)
     result(Messages.success)

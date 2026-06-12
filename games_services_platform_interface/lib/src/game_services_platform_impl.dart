@@ -28,11 +28,11 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
             .map((json) =>
                 json == null ? null : PlayerData.fromJson(jsonDecode(json)))
             .listen((player) {
-          _player = player;
-          _streamController.add(_player);
+                _player = player;
+                _streamController.add(_player);
         }, onError: (error) {
-          _player = null;
-          _streamController.add(_player);
+                _player = null;
+                _streamController.add(_player);
         });
       },
       onCancel: () {
@@ -91,10 +91,15 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   Future<String?> showLeaderboards({
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",
+    TimeScope timeScope = TimeScope.allTime,
+    PlayerScope playerScope = PlayerScope.global,
   }) async {
     return await _methodChannel.invokeMethod("showLeaderboards", {
-      "leaderboardID":
-          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
+      "leaderboardID": Device.isPlatformAndroid
+          ? androidLeaderboardID
+          : iOSLeaderboardID,
+      "span": timeScope.value,
+      "leaderboardCollection": playerScope.value,
     });
   }
 
@@ -181,11 +186,11 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     bool forceRefreshToken = false,
   }) =>
       Device.isPlatformAndroid
-          ? _methodChannel.invokeMethod("getAuthCode", {
-              "clientID": clientID,
-              "forceRefreshToken": forceRefreshToken,
-            })
-          : Future.value(null);
+      ? _methodChannel.invokeMethod("getAuthCode", {
+          "clientID": clientID,
+          "forceRefreshToken": forceRefreshToken,
+        })
+      : Future.value(null);
 
   @override
   Future<String?> showAccessPoint(AccessPointLocation location) async {
@@ -227,7 +232,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
 
   @override
   Future<IdentityVerificationSignature?>
-      fetchIdentityVerificationSignature() async {
+  fetchIdentityVerificationSignature() async {
     if (!Device.isPlatformIOS && !Device.isPlatformMacOS) {
       return null;
     }
@@ -250,7 +255,7 @@ class _PlayerStreamView extends StreamView<PlayerData?> {
   StreamSubscription<PlayerData?> listen(
       void Function(PlayerData? value)? onData,
       {Function? onError,
-      void Function()? onDone,
+    void Function()? onDone,
       bool? cancelOnError}) {
     final sub = super.listen(onData,
         onError: onError, onDone: onDone, cancelOnError: cancelOnError);
