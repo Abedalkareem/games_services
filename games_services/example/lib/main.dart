@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -164,6 +165,11 @@ class AppState extends State<App> {
                                               child: const Text(
                                                   'Load Previous Occurrence (iOS only)'),
                                             ),
+                                            if (Platform.isAndroid)
+                                              ElevatedButton(
+                                                  onPressed: _showSavedGames,
+                                                  child: const Text(
+                                                      'Show Saved Games')),
                                             ElevatedButton(
                                               onPressed: _getSavedGames,
                                               child:
@@ -301,6 +307,11 @@ class AppState extends State<App> {
 
   void _showAchievements() async {
     final result = await Achievements.showAchievements();
+    print(result);
+  }
+
+  void _showSavedGames() async {
+    final result = await SaveGame.showSavedGames(title: 'Saved Games');
     print(result);
   }
 
