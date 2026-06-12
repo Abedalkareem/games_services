@@ -1,3 +1,9 @@
+## 5.1.0
+
+- Add `timeScope` and `playerScope` parameters to `Leaderboards.showLeaderboards`.
+- Migrate to Swift Package Manager.
+- Migrate to built-in Kotlin (Bumps minimum supported SDK version to Flutter 3.44/Dart 3.12).
+
 ## 5.0.1
 
 - Return `null` for `playerID` and `teamPlayerID` when GameCenter configuration errors lead to temporary IDs. by @theLee3
