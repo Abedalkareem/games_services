@@ -6,7 +6,7 @@
 
 <img src="https://github.com/Abedalkareem/games_services/raw/master/logo.png" width="200"/>
 
-A Flutter plugin to support Game Center and Google Play Games services.  
+A Flutter plugin to support Game Center, Google Play Games, and (on Windows) PlayFab services.  
 
 ## Screenshot  
 
@@ -40,6 +40,27 @@ TTG - Through The Galaxies 🚀 casual game . [Android](https://play.google.com/
 ## Documentation
 
 Check the docs folder for documentation and how to use the plugin.  
+
+## Windows (PlayFab)
+
+Windows has no native equivalent of Game Center or Google Play Games, so on Windows the
+plugin is backed by [Microsoft PlayFab](https://learn.microsoft.com/gaming/playfab/) over
+its REST API. See [docs/windows_playfab.md](docs/windows_playfab.md) for the full setup, but
+in short:
+
+```dart
+// Call once, before signIn(), on Windows. No-op on Android/iOS/macOS.
+await GamesServices.initialize(playFabTitleId: "ABCDE");
+await GameAuth.signIn();
+```
+
+Notes:
+- Windows reuses the **iOS** identifiers you pass for leaderboards and achievements.
+- Leaderboards map to PlayFab statistics; achievements are defined in PlayFab Title Data with
+  progress stored in player data; saved games use PlayFab Entity Files.
+- Native-UI methods (`showAchievements`, `showLeaderboards`, the access point) and
+  Apple/Google-only methods (`getAuthCode`, `fetchIdentityVerificationSignature`) return
+  `null` on Windows.
 
 ## Installing  
 

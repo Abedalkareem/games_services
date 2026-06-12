@@ -9,6 +9,7 @@ class SaveGame: BaseGamesServices {
   
   func saveGame(name: String, data: String, result: @escaping FlutterResult) {
     log("[SaveGame] Please add the iCloud capability to your project and enable iCloud Documents. If you already have done that please ignore this message.")
+    log("[SaveGame] Snapshot metadata (cover image, description, played time) is not supported by Game Center and will be ignored on iOS/macOS.")
     log("[SaveGame] Start saving game")
     guard let data = data.data(using: .utf8) else {
       log("[SaveGame] failed to get data from a string \(data)")

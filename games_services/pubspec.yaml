@@ -1,6 +1,6 @@
 name: games_services
-description: A new Flutter plugin to support game center and google play games services.
-version: 5.0.1
+description: A Flutter plugin to support Game Center, Google Play Games, and (on Windows) PlayFab services.
+version: 5.2.0
 homepage: https://github.com/Abedalkareem/games_services
 repository: https://github.com/Abedalkareem/games_services
 issue_tracker: https://github.com/Abedalkareem/games_services/issues
@@ -13,15 +13,20 @@ dependencies:
   flutter:
     sdk: flutter
 
+  http: ^1.2.0
+  shared_preferences: ^2.2.0
+
   games_services_platform_interface: #^5.0.1
     path: ../games_services_platform_interface/
     #uncomment in time of development.
     # git:
     #   url: https://github.com/Abedalkareem/games_services
     #   path: games_services_platform_interface
-  
+
 dev_dependencies:
-  flutter_lints: ^6.0.0  
+  flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
 flutter:
   plugin:
     platforms:
@@ -34,3 +39,5 @@ flutter:
       macos:
         pluginClass: SwiftGamesServicesPlugin
         sharedDarwinSource: true
+      windows:
+        dartPluginClass: GamesServicesPlayFab

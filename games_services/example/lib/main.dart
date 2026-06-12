@@ -1,9 +1,24 @@
 import 'dart:convert';
+import 'dart:io' show Platform;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:games_services/games_services.dart';
 
-void main() => runApp(const App());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Windows is backed by PlayFab, which needs the title id before sign-in.
+  // Provide it via `--dart-define=PLAYFAB_TITLE_ID=XXXXX` or hardcode it here.
+  if (Platform.isWindows) {
+    const titleId = String.fromEnvironment("PLAYFAB_TITLE_ID");
+    if (titleId.isNotEmpty) {
+      await GamesServices.initialize(playFabTitleId: titleId);
+    }
+  }
+
+  runApp(const App());
+}
 
 class App extends StatefulWidget {
   const App({Key? key}) : super(key: key);
@@ -310,7 +325,17 @@ class AppState extends State<App> {
 
   void _saveGame() async {
     final data = jsonEncode(GameData(96, "sword").toJson());
-    final result = await SaveGame.saveGame(data: data, name: "slot1");
+    // A cover image is required to pass Google's Play Games Services quality
+    // checklist. Here we reuse the bundled logo as a sample cover image.
+    final coverImage =
+        (await rootBundle.load("assets/logo.png")).buffer.asUint8List();
+    final result = await SaveGame.saveGame(
+      data: data,
+      name: "slot1",
+      coverImage: coverImage,
+      description: "Level 96, sword equipped",
+      playedTime: const Duration(minutes: 42),
+    );
     print(result);
   }
 

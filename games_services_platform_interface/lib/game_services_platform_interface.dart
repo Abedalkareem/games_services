@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:games_services_platform_interface/models.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -23,6 +24,25 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
   }
+
+  /// Configure the backing games service.
+  ///
+  /// This is only required by platforms that talk to a third-party backend
+  /// instead of a native OS service. On Windows the implementation is backed by
+  /// [PlayFab](https://learn.microsoft.com/gaming/playfab/), so the title's
+  /// `playFabTitleId` must be provided before calling [signIn].
+  ///
+  /// [customId] optionally overrides the auto-generated anonymous device id used
+  /// to log the player in. [displayName] optionally sets the name shown for the
+  /// player when the backend does not already have one.
+  ///
+  /// It is a no-op on Android, iOS and macOS, where the native OS service is
+  /// used and no configuration is required.
+  Future<void> initialize({
+    required String playFabTitleId,
+    String? customId,
+    String? displayName,
+  }) async {}
 
   /// Stream of the currently authenticated player. If not null, the player
   /// is signed in & games_services functionality is available.
@@ -164,7 +184,17 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Save game with [data] and a unique [name].
   /// The [name] must be between 1 and 100 non-URL-reserved characters (a-z, A-Z, 0-9, or the symbols "-", ".", "_", or "~").
-  Future<String?> saveGame({required String data, required String name}) async {
+  ///
+  /// [coverImage], [description] and [playedTime] are optional snapshot
+  /// metadata used by Google Play Games Services on Android. They are ignored
+  /// on iOS/macOS (Game Center).
+  Future<String?> saveGame({
+    required String data,
+    required String name,
+    Uint8List? coverImage,
+    String? description,
+    Duration? playedTime,
+  }) async {
     throw UnimplementedError("not implemented.");
   }
 

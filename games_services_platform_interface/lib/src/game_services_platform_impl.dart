@@ -209,9 +209,20 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> saveGame({required String data, required String name}) async {
-    return await _methodChannel
-        .invokeMethod("saveGame", {"data": data, "name": name});
+  Future<String?> saveGame({
+    required String data,
+    required String name,
+    Uint8List? coverImage,
+    String? description,
+    Duration? playedTime,
+  }) async {
+    return await _methodChannel.invokeMethod("saveGame", {
+      "data": data,
+      "name": name,
+      "coverImage": coverImage,
+      "description": description,
+      "playedTime": playedTime?.inMilliseconds,
+    });
   }
 
   @override

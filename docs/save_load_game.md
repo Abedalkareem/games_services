@@ -41,6 +41,30 @@ final result = await SaveGame.saveGame(data: data, name: "slot1");
 
 *The `name` must be between 1 and 100 non-URL-reserved characters (a-z, A-Z, 0-9, or the symbols "-", ".", "_", or "~").*  
 
+### Saving a cover image (and other metadata)
+
+On Android (Google Play Games Services) you can attach a cover image, a
+description, and the total played time to a saved game. Providing a cover image
+is required to pass Google's [Play Games Services quality checklist](https://developer.android.com/games/pgs/quality#saved-games) (item 6.1).
+
+```dart
+// `coverImage` is the raw bytes of an image, e.g. a PNG or JPEG.
+final Uint8List coverImage =
+    (await rootBundle.load("assets/cover.png")).buffer.asUint8List();
+
+final result = await SaveGame.saveGame(
+  data: data,
+  name: "slot1",
+  coverImage: coverImage,
+  description: "Level 96, sword equipped",
+  playedTime: const Duration(minutes: 42),
+);
+```
+
+All three parameters are optional, so existing calls keep working unchanged.
+They are ignored on iOS/macOS (Game Center), which does not support snapshot
+metadata.
+
 ## Load game
 
 Load a game save by `name`.

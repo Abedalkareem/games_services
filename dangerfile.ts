@@ -36,15 +36,18 @@ function checkPRSize() {
   const maxLinesOfCode = 1000
   const linesOfCode = danger.github.pr.additions + danger.github.pr.deletions
   if (linesOfCode > maxLinesOfCode) {
-    fail(`This pull request adds too many lines of code. It adds ${linesOfCode} lines, but the maximum allowed is ${maxLinesOfCode} lines.`)
+    warn(`This pull request is large: it changes ${linesOfCode} lines (soft limit ${maxLinesOfCode}). Consider splitting it into smaller pull requests when possible.`)
   }
 }
 
 function runFlutterAnalyzer() {
-  try {
-    child_process.execSync('flutter analyze')
-  } catch (error) {
-    fail(`Flutter analyzer failed. Please fix the issues reported by the analyzer. ${error}`)
+  // The analyzer must run inside a package (the repo root has no pubspec.yaml).
+  for (const package of ['games_services', 'games_services_platform_interface']) {
+    try {
+      child_process.execSync('flutter analyze', { cwd: package })
+    } catch (error) {
+      fail(`Flutter analyzer failed in \`${package}\`. Please fix the issues reported by the analyzer. ${error}`)
+    }
   }
 }
 

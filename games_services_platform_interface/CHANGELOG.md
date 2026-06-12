@@ -1,3 +1,12 @@
+## 5.2.0
+
+- Add a no-op `initialize` method for platforms backed by a third-party service (used by the Windows/PlayFab implementation).
+- Add `Device.isPlatformWindows`.
+
+## 5.1.0
+
+- Add optional `coverImage`, `description`, and `playedTime` parameters to `saveGame`. (#228)
+
 ## 5.0.1
 
 - Return `null` for `playerID` and `teamPlayerID` when GameCenter configuration errors lead to temporary IDs. by @theLee3
