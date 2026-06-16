@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:games_services_platform_interface/models.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -144,8 +145,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
   Future<String?> getAuthCode(
     String clientID, {
     bool forceRefreshToken = false,
-  }) =>
-      throw UnimplementedError("not implemented.");
+  }) => throw UnimplementedError("not implemented.");
 
   /// Show the Game Center Access Point for the current player.
   Future<String?> showAccessPoint(AccessPointLocation location) async {
@@ -164,7 +164,17 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Save game with [data] and a unique [name].
   /// The [name] must be between 1 and 100 non-URL-reserved characters (a-z, A-Z, 0-9, or the symbols "-", ".", "_", or "~").
-  Future<String?> saveGame({required String data, required String name}) async {
+  ///
+  /// [coverImage], [description] and [playedTime] are optional snapshot
+  /// metadata used by Google Play Games Services on Android. They are ignored
+  /// on iOS/macOS (Game Center).
+  Future<String?> saveGame({
+    required String data,
+    required String name,
+    Uint8List? coverImage,
+    String? description,
+    Duration? playedTime,
+  }) async {
     throw UnimplementedError("not implemented.");
   }
 
@@ -178,8 +188,28 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
+  /// Open the device's default game selection screen. (Android only.)
+  ///
+  /// The `title` will be displayed at the top of the UI. If `maxResults` is
+  /// `null`, all game saves will be shown.
+  ///
+  /// If `allowNew` is `true` and the user chooses to create a new save, a
+  /// `NewSave` object will be returned. It can be modified to upload a new save
+  /// to the cloud when ready.
+  Future<String?> showSavedGames({
+    required String title,
+    bool allowNew = true,
+    bool allowDelete = true,
+    int? maxResults,
+  }) async {
+    throw UnimplementedError("not implemented.");
+  }
+
   /// Get all saved games.
-  Future<String?> getSavedGames({bool forceRefresh = false}) async {
+  Future<String?> getSavedGames({
+    bool forceRefresh = false,
+    bool ignoreImages = false,
+  }) async {
     throw UnimplementedError("not implemented.");
   }
 

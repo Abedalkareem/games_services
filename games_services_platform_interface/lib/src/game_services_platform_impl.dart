@@ -2,15 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
+import 'package:games_services_platform_interface/models.dart';
 
 import '../game_services_platform_interface.dart';
-import 'models/access_point_location.dart';
-import 'models/achievement.dart';
-import 'models/identity_verification_signature.dart';
-import 'models/leaderboard_scope.dart';
-import 'models/leaderboard_time_scope.dart';
-import 'models/player.dart';
-import 'models/score.dart';
 import 'util/device.dart';
 
 const MethodChannel _methodChannel = MethodChannel("games_services");
@@ -42,8 +36,10 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
         _sub = null;
       },
     );
-    _streamView = _PlayerStreamView(_streamController.stream.distinct(),
-        () => _streamController.add(_player));
+    _streamView = _PlayerStreamView(
+      _streamController.stream.distinct(),
+      () => _streamController.add(_player),
+    );
   }
 
   late final StreamController<PlayerData?> _streamController;
@@ -108,8 +104,10 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     bool forceRefresh = false,
     bool ignoreImages = false,
   }) async {
-    return await _methodChannel.invokeMethod("loadAchievements",
-        {"forceRefresh": forceRefresh, "ignoreImages": ignoreImages});
+    return await _methodChannel.invokeMethod("loadAchievements", {
+      "forceRefresh": forceRefresh,
+      "ignoreImages": ignoreImages,
+    });
   }
 
   @override
@@ -128,8 +126,9 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     bool forceRefresh = false,
   }) async {
     return await _methodChannel.invokeMethod("loadLeaderboardScores", {
-      "leaderboardID":
-          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+      "leaderboardID": Device.isPlatformAndroid
+          ? androidLeaderboardID
+          : iOSLeaderboardID,
       "playerCentered": playerCentered,
       "leaderboardCollection": scope.value,
       "span": timeScope.value,
@@ -139,11 +138,14 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<int?> getPlayerScore(
-      {String iOSLeaderboardID = "", String androidLeaderboardID = ""}) async {
+  Future<int?> getPlayerScore({
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
+  }) async {
     return await _methodChannel.invokeMethod("getPlayerScore", {
-      "leaderboardID":
-          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID
+      "leaderboardID": Device.isPlatformAndroid
+          ? androidLeaderboardID
+          : iOSLeaderboardID,
     });
   }
 
@@ -155,8 +157,9 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     required TimeScope timeScope,
   }) async {
     return await _methodChannel.invokeMethod("getPlayerScoreObject", {
-      "leaderboardID":
-          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+      "leaderboardID": Device.isPlatformAndroid
+          ? androidLeaderboardID
+          : iOSLeaderboardID,
       "leaderboardCollection": scope.value,
       "span": timeScope.value,
     });
@@ -169,8 +172,9 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     required TimeScope timeScope,
   }) async {
     return await _methodChannel.invokeMethod("loadPreviousOccurrence", {
-      "leaderboardID":
-          Device.isPlatformAndroid ? androidLeaderboardID : iOSLeaderboardID,
+      "leaderboardID": Device.isPlatformAndroid
+          ? androidLeaderboardID
+          : iOSLeaderboardID,
       "span": timeScope.value,
     });
   }
@@ -184,8 +188,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   Future<String?> getAuthCode(
     String clientID, {
     bool forceRefreshToken = false,
-  }) =>
-      Device.isPlatformAndroid
+  }) => Device.isPlatformAndroid
       ? _methodChannel.invokeMethod("getAuthCode", {
           "clientID": clientID,
           "forceRefreshToken": forceRefreshToken,
@@ -194,8 +197,9 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
 
   @override
   Future<String?> showAccessPoint(AccessPointLocation location) async {
-    return await _methodChannel.invokeMethod(
-        "showAccessPoint", {"location": location.toString().split(".").last});
+    return await _methodChannel.invokeMethod("showAccessPoint", {
+      "location": location.toString().split(".").last,
+    });
   }
 
   @override
@@ -209,9 +213,20 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> saveGame({required String data, required String name}) async {
-    return await _methodChannel
-        .invokeMethod("saveGame", {"data": data, "name": name});
+  Future<String?> saveGame({
+    required String data,
+    required String name,
+    Uint8List? coverImage,
+    String? description,
+    Duration? playedTime,
+  }) async {
+    return await _methodChannel.invokeMethod("saveGame", {
+      "data": data,
+      "name": name,
+      "coverImage": coverImage,
+      "description": description,
+      "playedTime": playedTime?.inMilliseconds,
+    });
   }
 
   @override
@@ -220,9 +235,29 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
-  Future<String?> getSavedGames({bool forceRefresh = false}) async {
-    return await _methodChannel
-        .invokeMethod("getSavedGames", {"forceRefresh": forceRefresh});
+  Future<String?> showSavedGames({
+    required String title,
+    bool allowNew = true,
+    bool allowDelete = true,
+    int? maxResults,
+  }) async {
+    return await _methodChannel.invokeMethod("showSavedGames", {
+      "title": title,
+      "allowNew": allowNew,
+      "allowDelete": allowDelete,
+      "maxResults": maxResults,
+    });
+  }
+
+  @override
+  Future<String?> getSavedGames({
+    bool forceRefresh = false,
+    bool ignoreImages = false,
+  }) async {
+    return await _methodChannel.invokeMethod("getSavedGames", {
+      "forceRefresh": forceRefresh,
+      "ignoreImages": ignoreImages,
+    });
   }
 
   @override
@@ -237,28 +272,35 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
       return null;
     }
     final result = await _methodChannel.invokeMethod<Map<Object?, Object?>?>(
-        "fetchIdentityVerificationSignature");
+      "fetchIdentityVerificationSignature",
+    );
     if (result == null) {
       return null;
     }
     return IdentityVerificationSignature.fromJson(
-        result.cast<String, dynamic>());
+      result.cast<String, dynamic>(),
+    );
   }
 }
 
 class _PlayerStreamView extends StreamView<PlayerData?> {
-  _PlayerStreamView(Stream<PlayerData?> stream, this.emit) : super(stream);
+  _PlayerStreamView(super.stream, this.emit);
 
   VoidCallback emit;
 
   @override
   StreamSubscription<PlayerData?> listen(
-      void Function(PlayerData? value)? onData,
-      {Function? onError,
+    void Function(PlayerData? value)? onData, {
+    Function? onError,
     void Function()? onDone,
-      bool? cancelOnError}) {
-    final sub = super.listen(onData,
-        onError: onError, onDone: onDone, cancelOnError: cancelOnError);
+    bool? cancelOnError,
+  }) {
+    final sub = super.listen(
+      onData,
+      onError: onError,
+      onDone: onDone,
+      cancelOnError: cancelOnError,
+    );
     emit();
     return sub;
   }

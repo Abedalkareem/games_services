@@ -1,31 +1,61 @@
 package com.abedalkareem.games_services
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.util.Log
 import com.abedalkareem.games_services.models.SavedGame
+import com.abedalkareem.games_services.util.AppImageLoader
 import com.abedalkareem.games_services.util.Messages
 import com.abedalkareem.games_services.util.PluginError
 import com.abedalkareem.games_services.util.errorCode
 import com.abedalkareem.games_services.util.errorMessage
 import com.google.android.gms.games.PlayGames
 import com.google.android.gms.games.SnapshotsClient
+import com.google.android.gms.games.snapshot.Snapshot
+import com.google.android.gms.games.snapshot.SnapshotMetadata
 import com.google.android.gms.games.snapshot.SnapshotMetadataChange
 import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.PluginRegistry
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
+class SaveGame(private var activityPluginBinding: ActivityPluginBinding) :
+  PluginRegistry.ActivityResultListener {
 
   //region Variables
   private val tag = "SaveGame"
 
+  private val imageLoader = AppImageLoader()
   private val snapshotsClient: SnapshotsClient
     get() {
       return PlayGames.getSnapshotsClient(activityPluginBinding.activity)
     }
+
+  private var result: MethodChannel.Result? = null
   //endregion
 
   //region Public Methods
-  fun getSavedGames(forceRefresh: Boolean, result: MethodChannel.Result) {
+  fun showSavedGames(activity: Activity?, title: String, allowNew: Boolean, allowDelete: Boolean, maxResults: Int, result: MethodChannel.Result) {
+    val onSuccessListener: ((Intent) -> Unit) = { intent ->
+      this.result = result
+      activityPluginBinding.addActivityResultListener(this)
+      activity?.startActivityForResult(intent, 9001)
+    }
+    val onFailureListener: ((Exception) -> Unit) = {
+      result.error(PluginError.FailedToShowSavedGames.errorCode(), it.message, null)
+    }
+    snapshotsClient.getSelectSnapshotIntent(title, allowNew, allowDelete, maxResults)
+      .addOnSuccessListener(onSuccessListener)
+      .addOnFailureListener(onFailureListener)
+  }
+
+  fun getSavedGames(activity: Activity?, forceRefresh: Boolean, ignoreImages: Boolean, result: MethodChannel.Result) {
+    activity ?: return
     Log.d(tag, "[GetSavedGames] Start loading all saved games")
     snapshotsClient.load(forceRefresh)
       .addOnSuccessListener { annotatedData ->
@@ -41,14 +71,31 @@ class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
           )
           return@addOnSuccessListener
         }
-        val items = data
-          .toList()
-          .map { SavedGame(it.uniqueName, it.lastModifiedTimestamp, it.deviceName) }
-
-        Log.d(tag, "[GetSavedGames] Loaded successfully")
-        val string = gson.toJson(items) ?: ""
-        result.success(string)
-        data.release()
+        val handler = CoroutineExceptionHandler { _, exception ->
+          result.error(
+            PluginError.FailedToShowSavedGames.errorCode(),
+            exception.localizedMessage,
+            null
+          )
+        }
+        CoroutineScope(Dispatchers.Main + handler).launch {
+          val items = data.map { item -> 
+            val coverImage = if (!ignoreImages) item.coverImageUri?.let { imageLoader.loadImageFromUri(activity, it) } else null
+            SavedGame(
+              name = item.uniqueName,
+              modificationDate = item.lastModifiedTimestamp,
+              deviceName = item.deviceName,
+              description = item.description,
+              playedTimeMillis = item.playedTime,
+              coverImage = coverImage
+            )
+          }
+          
+          Log.d(tag, "[GetSavedGames] Loaded successfully")
+          val string = gson.toJson(items) ?: ""
+          result.success(string)
+          data.release()
+        }
       }
       .addOnFailureListener {
         Log.d(tag, "[GetSavedGames] Something went wrong ${it.localizedMessage}")
@@ -61,12 +108,30 @@ class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
   }
 
   fun saveGame(
-    data: String, desc: String, name: String, result: MethodChannel.Result
+    data: String,
+    desc: String?,
+    name: String,
+    coverImage: ByteArray?,
+    playedTimeMillis: Long?,
+    result: MethodChannel.Result
   ) {
     Log.d(tag, "[SaveGame] Start saving game")
-    val metadataChange = SnapshotMetadataChange.Builder()
-      .setDescription(desc)
-      .build()
+    val metadataChangeBuilder = SnapshotMetadataChange.Builder()
+    if (desc != null) {
+      metadataChangeBuilder.setDescription(desc)
+    }
+    if (playedTimeMillis != null) {
+      metadataChangeBuilder.setPlayedTimeMillis(playedTimeMillis)
+    }
+    if (coverImage != null) {
+      val bitmap = BitmapFactory.decodeByteArray(coverImage, 0, coverImage.size)
+      if (bitmap != null) {
+        metadataChangeBuilder.setCoverImage(bitmap)
+      } else {
+        Log.d(tag, "[SaveGame] Failed to decode the cover image bytes, skipping it")
+      }
+    }
+    val metadataChange = metadataChangeBuilder.build()
     snapshotsClient.open(name, true, SnapshotsClient.RESOLUTION_POLICY_MOST_RECENTLY_MODIFIED)
       .addOnSuccessListener { annotatedData ->
         val snapshot = annotatedData.data
@@ -189,4 +254,64 @@ class SaveGame(private var activityPluginBinding: ActivityPluginBinding) {
       }
   }
   //endregion
+
+  // handle result from Platform saved game selection
+  override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
+    activityPluginBinding.removeActivityResultListener(this)
+    if (requestCode == 9001) {
+      if (resultCode == Activity.RESULT_OK && intent != null) {
+        val gson = Gson()
+        if (intent.hasExtra(SnapshotsClient.EXTRA_SNAPSHOT_NEW)) {
+          result?.success(null)
+          result = null
+        } else {
+          val data = intent.getParcelableExtra<SnapshotMetadata>(SnapshotsClient.EXTRA_SNAPSHOT_METADATA)
+          if(data == null) {
+            result?.error(
+              PluginError.FailedToLoadGame.errorCode(),
+              PluginError.FailedToLoadGame.errorMessage(),
+              null
+            )
+            result = null
+          } else {
+            val handler = CoroutineExceptionHandler { _, exception ->
+              result?.error(
+                PluginError.FailedToLoadGame.errorCode(),
+                exception.localizedMessage,
+                null
+              )
+              result = null
+            }
+
+            CoroutineScope(Dispatchers.Main + handler).launch {
+              val coverImage = data.coverImageUri?.let {
+                imageLoader.loadImageFromUri(activityPluginBinding.activity, it)
+              }
+              val savedGame = SavedGame(
+                name = data.uniqueName,
+                modificationDate = data.lastModifiedTimestamp,
+                deviceName = data.deviceName,
+                description = data.description,
+                playedTimeMillis = data.playedTime,
+                coverImage = coverImage
+              )
+              val string = gson.toJson(savedGame) ?: ""
+              result?.success(string)
+              result = null
+            }
+          }
+        }
+      } else {
+        result?.error(
+          PluginError.OperationCanceled.errorCode(),
+          PluginError.OperationCanceled.errorMessage(),
+          null
+        )
+        result = null
+      }
+      return true
+    } else {
+      return false
+    }
+  }
 }

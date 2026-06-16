@@ -191,7 +191,10 @@ class GamesServicesPlugin : FlutterPlugin,
       Method.SaveGame -> {
         val data = call.argument<String>("data") ?: ""
         val name = call.argument<String>("name") ?: ""
-        saveGame?.saveGame(data, name, name, result)
+        val description = call.argument<String>("description")
+        val coverImage = call.argument<ByteArray>("coverImage")
+        val playedTime = call.argument<Number>("playedTime")?.toLong()
+        saveGame?.saveGame(data, description, name, coverImage, playedTime, result)
       }
 
       Method.LoadGame -> {
@@ -199,9 +202,19 @@ class GamesServicesPlugin : FlutterPlugin,
         saveGame?.loadGame(name, result)
       }
 
+      Method.ShowSavedGames -> {
+        val title = call.argument<String>("title") ?: ""
+        // A default value of -1 will display all available saves
+        val maxResults = call.argument<Int>("maxResults") ?: -1
+        val allowNew = call.argument<Boolean>("allowNew") ?: true
+        val allowDelete = call.argument<Boolean>("allowDelete") ?: true
+        saveGame?.showSavedGames(activity, title, allowNew, allowDelete, maxResults, result)
+      }
+
       Method.GetSavedGames -> {
         val forceRefresh = call.argument<Boolean>("forceRefresh") ?: false
-        saveGame?.getSavedGames(forceRefresh, result)
+        val ignoreImages = call.argument<Boolean>("ignoreImages") ?: false
+        saveGame?.getSavedGames(activity, forceRefresh, ignoreImages, result)
       }
 
       Method.DeleteGame -> {

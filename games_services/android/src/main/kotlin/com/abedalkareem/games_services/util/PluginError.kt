@@ -4,8 +4,8 @@ enum class PluginError {
   FailedToSendScore, FailedToGetScore, FailedToGetPlayerProfileImage, FailedToSendAchievement,
   FailedToShowAchievements, FailedToIncrementAchievements, FailedToLoadAchievements,
   FailedToAuthenticate, FailedToGetAuthCode, NotAuthenticated, NotSupportedForThisOSVersion,
-  FailedToSaveGame, FailedToLoadGame, FailedToGetSavedGames, LeaderboardNotFound,
-  FailedToDeleteSavedGame, FailedToLoadLeaderboardScores
+  FailedToSaveGame, FailedToLoadGame, FailedToShowSavedGames, FailedToGetSavedGames, LeaderboardNotFound,
+  FailedToDeleteSavedGame, FailedToLoadLeaderboardScores, OperationCanceled
 }
 
 fun PluginError.errorCode(): String {
@@ -70,6 +70,10 @@ fun PluginError.errorCode(): String {
       return "failed_to_load_game"
     }
 
+    PluginError.FailedToShowSavedGames -> {
+      return "failed_to_show_saved_games"
+    }
+
     PluginError.FailedToGetSavedGames -> {
       return "failed_to_get_saved_games"
     }
@@ -80,6 +84,10 @@ fun PluginError.errorCode(): String {
 
     PluginError.FailedToLoadLeaderboardScores -> {
       return "failed_to_load_leaderboard_scores"
+    }
+
+    PluginError.OperationCanceled -> {
+      return "operation_canceled"
     }
   }
 }
@@ -142,6 +150,10 @@ fun PluginError.errorMessage(): String {
       return "Failed to load game"
     }
 
+    PluginError.FailedToShowSavedGames -> {
+      return "Failed to show saved games"
+    }
+
     PluginError.FailedToGetSavedGames -> {
       return "Failed to get saved games"
     }
@@ -152,6 +164,10 @@ fun PluginError.errorMessage(): String {
 
     PluginError.FailedToLoadLeaderboardScores -> {
       return "Failed to load leaderboard scores"
+    }
+
+    PluginError.OperationCanceled -> {
+      return "The operation was canceled"
     }
   }
 }

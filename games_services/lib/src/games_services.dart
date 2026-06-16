@@ -59,7 +59,9 @@ class GamesServices {
     bool ignoreImages = false,
   }) async {
     return await Achievements.loadAchievements(
-        forceRefresh: forceRefresh, ignoreImages: ignoreImages);
+      forceRefresh: forceRefresh,
+      ignoreImages: ignoreImages,
+    );
   }
 
   /// It will reset the achievements.
@@ -122,13 +124,14 @@ class GamesServices {
     required int maxResults,
   }) async {
     return await Leaderboards.loadLeaderboardScores(
-        iOSLeaderboardID: iOSLeaderboardID,
-        androidLeaderboardID: androidLeaderboardID,
-        playerCentered: playerCentered,
-        scope: scope,
-        timeScope: timeScope,
-        maxResults: maxResults,
-        forceRefresh: forceRefresh);
+      iOSLeaderboardID: iOSLeaderboardID,
+      androidLeaderboardID: androidLeaderboardID,
+      playerCentered: playerCentered,
+      scope: scope,
+      timeScope: timeScope,
+      maxResults: maxResults,
+      forceRefresh: forceRefresh,
+    );
   }
 
   /// Submit a [score] to specific leaderboard.
@@ -152,8 +155,9 @@ class GamesServices {
     String androidLeaderboardID = "",
   }) async {
     return await Player.getPlayerScore(
-        iOSLeaderboardID: iOSLeaderboardID,
-        androidLeaderboardID: androidLeaderboardID);
+      iOSLeaderboardID: iOSLeaderboardID,
+      androidLeaderboardID: androidLeaderboardID,
+    );
   }
 
   /// Get the current player's name.
@@ -184,8 +188,10 @@ class GamesServices {
 
   /// Save game with [data] and a unique [name].
   /// The [name] must be between 1 and 100 non-URL-reserved characters (a-z, A-Z, 0-9, or the symbols "-", ".", "_", or "~").
-  static Future<String?> saveGame(
-      {required String data, required String name}) async {
+  static Future<String?> saveGame({
+    required String data,
+    required String name,
+  }) async {
     return await SaveGame.saveGame(data: data, name: name);
   }
 
@@ -194,13 +200,40 @@ class GamesServices {
     return await SaveGame.loadGame(name: name);
   }
 
+  /// Open the device's default game selection screen. (Android only.)
+  ///
+  /// The `title` will be displayed at the top of the UI. If `maxResults` is
+  /// `null`, all game saves will be shown.
+  ///
+  /// If `allowNew` is `true` and the user chooses to create a new save, a
+  /// `NewSave` object will be returned. It can be modified to upload a new save
+  /// to the cloud when ready.
+  static Future<SavedGame?> showSavedGames({
+    required String title,
+    bool allowNew = true,
+    bool allowDelete = true,
+    int? maxResults,
+  }) async {
+    return await SaveGame.showSavedGames(
+      title: title,
+      allowNew: allowNew,
+      allowDelete: allowDelete,
+      maxResults: maxResults,
+    );
+  }
+
   /// Get all saved games.
   ///
   /// The `forceRefresh` argument will invalidate the cache on Android, fetching
   /// the latest results. It has no affect on iOS.
-  static Future<List<SavedGame>?> getSavedGames(
-      {bool forceRefresh = false}) async {
-    return await SaveGame.getSavedGames(forceRefresh: forceRefresh);
+  static Future<List<SavedGame>?> getSavedGames({
+    bool forceRefresh = false,
+    bool ignoreImages = false,
+  }) async {
+    return await SaveGame.getSavedGames(
+      forceRefresh: forceRefresh,
+      ignoreImages: ignoreImages,
+    );
   }
 
   /// Delete game with [name].

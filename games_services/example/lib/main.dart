@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:games_services/games_services.dart';
 
 void main() => runApp(const App());
@@ -163,6 +165,11 @@ class AppState extends State<App> {
                                               child: const Text(
                                                   'Load Previous Occurrence (iOS only)'),
                                             ),
+                                            if (Platform.isAndroid)
+                                              ElevatedButton(
+                                                  onPressed: _showSavedGames,
+                                                  child: const Text(
+                                                      'Show Saved Games')),
                                             ElevatedButton(
                                               onPressed: _getSavedGames,
                                               child:
@@ -303,6 +310,11 @@ class AppState extends State<App> {
     print(result);
   }
 
+  void _showSavedGames() async {
+    final result = await SaveGame.showSavedGames(title: 'Saved Games');
+    print(result);
+  }
+
   void _getSavedGames() async {
     final result = await SaveGame.getSavedGames();
     print(result);
@@ -310,7 +322,17 @@ class AppState extends State<App> {
 
   void _saveGame() async {
     final data = jsonEncode(GameData(96, "sword").toJson());
-    final result = await SaveGame.saveGame(data: data, name: "slot1");
+    // A cover image is required to pass Google's Play Games Services quality
+    // checklist. Here we reuse the bundled logo as a sample cover image.
+    final coverImage =
+        (await rootBundle.load("assets/logo.png")).buffer.asUint8List();
+    final result = await SaveGame.saveGame(
+      data: data,
+      name: "slot1",
+      coverImage: coverImage,
+      description: "Level 96, sword equipped",
+      playedTime: const Duration(minutes: 42),
+    );
     print(result);
   }
 

@@ -1,5 +1,9 @@
 ## 5.1.0
 
+- Add optional `coverImage`, `description`, and `playedTime` parameters to `SaveGame.saveGame`. On Android these are set as the snapshot metadata (cover image required to pass Google's Play Games Services quality checklist). Ignored on iOS/macOS. (#228)
+- Fix Android `saveGame` using the unique name as the snapshot description; the description is now only set when provided. (#228)
+- Add `showSavedGames` method to use Google Play Games default UI.
+- Include Google Play Games metadata with returned `SavedGame`s.
 - Add `timeScope` and `playerScope` parameters to `Leaderboards.showLeaderboards`.
 - Migrate to Swift Package Manager.
 - Migrate to built-in Kotlin (Bumps minimum supported SDK version to Flutter 3.44/Dart 3.12).
