@@ -7,13 +7,20 @@ import 'package:games_services_platform_interface/models.dart';
 abstract class Leaderboards {
   /// Open the device's default leaderboards screen. If a leaderboard ID is provided,
   /// it will display the specific leaderboard, otherwise it will show the list of all leaderboards.
+  ///
+  /// The `timeScope` parameter allows you to specify the time range for the leaderboard scores.
+  /// The `playerScope` parameter allows you to specify whether to show global scores or just the player's friends.
   static Future<String?> showLeaderboards({
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",
+    TimeScope timeScope = TimeScope.allTime,
+    PlayerScope playerScope = PlayerScope.global,
   }) async {
     return await GamesServicesPlatform.instance.showLeaderboards(
       iOSLeaderboardID: iOSLeaderboardID,
       androidLeaderboardID: androidLeaderboardID,
+      timeScope: timeScope,
+      playerScope: playerScope,
     );
   }
 
@@ -57,11 +64,11 @@ abstract class Leaderboards {
   }) async {
     final String? response =
         await GamesServicesPlatform.instance.getPlayerScoreObject(
-      androidLeaderboardID: androidLeaderboardID,
-      iOSLeaderboardID: iOSLeaderboardID,
-      scope: scope,
-      timeScope: timeScope,
-    );
+          androidLeaderboardID: androidLeaderboardID,
+          iOSLeaderboardID: iOSLeaderboardID,
+          scope: scope,
+          timeScope: timeScope,
+        );
 
     return LeaderboardScoreData.fromJson(json.decode(response ?? ""));
   }
@@ -78,10 +85,10 @@ abstract class Leaderboards {
   }) async {
     final String? response =
         await GamesServicesPlatform.instance.loadPreviousOccurrence(
-      androidLeaderboardID: androidLeaderboardID,
-      iOSLeaderboardID: iOSLeaderboardID,
-      timeScope: timeScope,
-    );
+          androidLeaderboardID: androidLeaderboardID,
+          iOSLeaderboardID: iOSLeaderboardID,
+          timeScope: timeScope,
+        );
 
     if (response == null) {
       return null;

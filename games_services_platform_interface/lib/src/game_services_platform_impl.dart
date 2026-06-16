@@ -19,20 +19,15 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
         // subscribe to the platform event channel when first listener is added
         _sub ??= _playerChannel
             .receiveBroadcastStream()
-            .map(
-              (json) =>
-                  json == null ? null : PlayerData.fromJson(jsonDecode(json)),
-            )
-            .listen(
-              (player) {
+            .map((json) =>
+                json == null ? null : PlayerData.fromJson(jsonDecode(json)))
+            .listen((player) {
                 _player = player;
                 _streamController.add(_player);
-              },
-              onError: (error) {
+        }, onError: (error) {
                 _player = null;
                 _streamController.add(_player);
-              },
-            );
+        });
       },
       onCancel: () {
         // cancel sub to platform event channel when last listener removed
@@ -92,11 +87,15 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   Future<String?> showLeaderboards({
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",
+    TimeScope timeScope = TimeScope.allTime,
+    PlayerScope playerScope = PlayerScope.global,
   }) async {
     return await _methodChannel.invokeMethod("showLeaderboards", {
       "leaderboardID": Device.isPlatformAndroid
           ? androidLeaderboardID
           : iOSLeaderboardID,
+      "span": timeScope.value,
+      "leaderboardCollection": playerScope.value,
     });
   }
 

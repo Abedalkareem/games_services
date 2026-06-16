@@ -40,7 +40,9 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       achievements.report(achievementID: achievementID, percentComplete: percentComplete, showsCompletionBanner: showsCompletionBanner, result: result)
     case .showLeaderboards:
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
-      leaderboards.showLeaderboardWith(identifier: leaderboardID, result: result)
+      let span = (arguments?["span"] as? Int) ?? 0
+      let leaderboardCollection = (arguments?["leaderboardCollection"] as? Int) ?? 0
+      leaderboards.showLeaderboardWith(identifier: leaderboardID, span: span, leaderboardCollection:leaderboardCollection, result: result)
     case .getPlayerScore:
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       leaderboards.getPlayerScore(leaderboardID: leaderboardID, result: result)
