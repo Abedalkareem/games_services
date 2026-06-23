@@ -84,7 +84,7 @@ abstract class SaveGame {
     if (result == null) {
       return null;
     }
-    final List jsonArray = jsonDecode(result);
+    final jsonArray = jsonDecode(result) as List;
     final savedGames = jsonArray
         .map((json) => SavedGame.fromJson(json))
         .toList();

@@ -339,7 +339,7 @@ class AppState extends State<App> {
   void _loadGame() async {
     final result = await SaveGame.loadGame(name: "slot1");
     if (result != null) {
-      final Map json = jsonDecode(result);
+      final json = jsonDecode(result) as Map;
       final gameData = GameData.fromJson(json);
       print("Player progress ${gameData.progress}");
       print("Player weapon ${gameData.weapon}");

@@ -15,14 +15,12 @@ abstract class Leaderboards {
     String androidLeaderboardID = "",
     TimeScope timeScope = TimeScope.allTime,
     PlayerScope playerScope = PlayerScope.global,
-  }) async {
-    return await GamesServicesPlatform.instance.showLeaderboards(
-      iOSLeaderboardID: iOSLeaderboardID,
-      androidLeaderboardID: androidLeaderboardID,
-      timeScope: timeScope,
-      playerScope: playerScope,
-    );
-  }
+  }) => GamesServicesPlatform.instance.showLeaderboards(
+    iOSLeaderboardID: iOSLeaderboardID,
+    androidLeaderboardID: androidLeaderboardID,
+    timeScope: timeScope,
+    playerScope: playerScope,
+  );
 
   /// Get leaderboard scores as a list. Use this to build a custom UI.
   /// To show the device's default leaderboards screen use [showLeaderboards].
@@ -50,7 +48,8 @@ abstract class Leaderboards {
     if (response != null) {
       Iterable items = json.decode(response) as List;
       return List<LeaderboardScoreData>.from(
-          items.map((model) => LeaderboardScoreData.fromJson(model)).toList());
+        items.map((model) => LeaderboardScoreData.fromJson(model)).toList(),
+      );
     }
     return null;
   }
@@ -62,13 +61,12 @@ abstract class Leaderboards {
     required PlayerScope scope,
     required TimeScope timeScope,
   }) async {
-    final String? response =
-        await GamesServicesPlatform.instance.getPlayerScoreObject(
-          androidLeaderboardID: androidLeaderboardID,
-          iOSLeaderboardID: iOSLeaderboardID,
-          scope: scope,
-          timeScope: timeScope,
-        );
+    final response = await GamesServicesPlatform.instance.getPlayerScoreObject(
+      androidLeaderboardID: androidLeaderboardID,
+      iOSLeaderboardID: iOSLeaderboardID,
+      scope: scope,
+      timeScope: timeScope,
+    );
 
     return LeaderboardScoreData.fromJson(json.decode(response ?? ""));
   }
@@ -83,8 +81,8 @@ abstract class Leaderboards {
     String androidLeaderboardID = "",
     required TimeScope timeScope,
   }) async {
-    final String? response =
-        await GamesServicesPlatform.instance.loadPreviousOccurrence(
+    final response = await GamesServicesPlatform.instance
+        .loadPreviousOccurrence(
           androidLeaderboardID: androidLeaderboardID,
           iOSLeaderboardID: iOSLeaderboardID,
           timeScope: timeScope,
@@ -102,7 +100,6 @@ abstract class Leaderboards {
   /// [androidLeaderboardID] the leaderboard ID for Google Play Games.
   /// [iOSLeaderboardID] the leaderboard ID for Game Center.
   /// [value] the score.
-  static Future<String?> submitScore({required Score score}) async {
-    return await GamesServicesPlatform.instance.submitScore(score: score);
-  }
+  static Future<String?> submitScore({required Score score}) =>
+      GamesServicesPlatform.instance.submitScore(score: score);
 }
