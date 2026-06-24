@@ -7,15 +7,20 @@ import 'package:games_services_platform_interface/models.dart';
 abstract class Leaderboards {
   /// Open the device's default leaderboards screen. If a leaderboard ID is provided,
   /// it will display the specific leaderboard, otherwise it will show the list of all leaderboards.
+  ///
+  /// The `timeScope` parameter allows you to specify the time range for the leaderboard scores.
+  /// The `playerScope` parameter allows you to specify whether to show global scores or just the player's friends.
   static Future<String?> showLeaderboards({
-    String? iOSLeaderboardID = "",
-    String? androidLeaderboardID = "",
-  }) async {
-    return await GamesServicesPlatform.instance.showLeaderboards(
-      iOSLeaderboardID: iOSLeaderboardID,
-      androidLeaderboardID: androidLeaderboardID,
-    );
-  }
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
+    TimeScope timeScope = TimeScope.allTime,
+    PlayerScope playerScope = PlayerScope.global,
+  }) => GamesServicesPlatform.instance.showLeaderboards(
+    iOSLeaderboardID: iOSLeaderboardID,
+    androidLeaderboardID: androidLeaderboardID,
+    timeScope: timeScope,
+    playerScope: playerScope,
+  );
 
   /// Get leaderboard scores as a list. Use this to build a custom UI.
   /// To show the device's default leaderboards screen use [showLeaderboards].
@@ -23,8 +28,8 @@ abstract class Leaderboards {
   /// The `forceRefresh` argument will invalidate the cache on Android, fetching
   /// the latest results. It has no affect on iOS.
   static Future<List<LeaderboardScoreData>?> loadLeaderboardScores({
-    String? iOSLeaderboardID = "",
-    String? androidLeaderboardID = "",
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
     bool playerCentered = false,
     required PlayerScope scope,
     required TimeScope timeScope,
@@ -43,20 +48,20 @@ abstract class Leaderboards {
     if (response != null) {
       Iterable items = json.decode(response) as List;
       return List<LeaderboardScoreData>.from(
-          items.map((model) => LeaderboardScoreData.fromJson(model)).toList());
+        items.map((model) => LeaderboardScoreData.fromJson(model)).toList(),
+      );
     }
     return null;
   }
 
   /// Get leaderboard score data for the current player
   static Future<LeaderboardScoreData?> getPlayerScoreObject({
-    String? iOSLeaderboardID = "",
-    String? androidLeaderboardID = "",
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
     required PlayerScope scope,
     required TimeScope timeScope,
   }) async {
-    final String? response =
-        await GamesServicesPlatform.instance.getPlayerScoreObject(
+    final response = await GamesServicesPlatform.instance.getPlayerScoreObject(
       androidLeaderboardID: androidLeaderboardID,
       iOSLeaderboardID: iOSLeaderboardID,
       scope: scope,
@@ -66,12 +71,35 @@ abstract class Leaderboards {
     return LeaderboardScoreData.fromJson(json.decode(response ?? ""));
   }
 
+  /// Load the previous occurrence of the player's score from a leaderboard.
+  /// Returns the score data that precedes the player's current best score.
+  ///
+  /// This is useful for tracking score progression over time.
+  /// Currently only supported on iOS 14.0+ and macOS 11.0+.
+  static Future<LeaderboardScoreData?> loadPreviousOccurrence({
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
+    required TimeScope timeScope,
+  }) async {
+    final response = await GamesServicesPlatform.instance
+        .loadPreviousOccurrence(
+          androidLeaderboardID: androidLeaderboardID,
+          iOSLeaderboardID: iOSLeaderboardID,
+          timeScope: timeScope,
+        );
+
+    if (response == null) {
+      return null;
+    }
+
+    return LeaderboardScoreData.fromJson(json.decode(response));
+  }
+
   /// Submit a [score] to specific leaderboard.
   /// [Score] takes three parameters:
   /// [androidLeaderboardID] the leaderboard ID for Google Play Games.
   /// [iOSLeaderboardID] the leaderboard ID for Game Center.
   /// [value] the score.
-  static Future<String?> submitScore({required Score score}) async {
-    return await GamesServicesPlatform.instance.submitScore(score: score);
-  }
+  static Future<String?> submitScore({required Score score}) =>
+      GamesServicesPlatform.instance.submitScore(score: score);
 }

@@ -6,9 +6,8 @@ import 'package:games_services_platform_interface/models.dart';
 
 abstract class Achievements {
   /// Open the device's default achievements screen.
-  static Future<String?> showAchievements() async {
-    return await GamesServicesPlatform.instance.showAchievements();
-  }
+  static Future<String?> showAchievements() =>
+      GamesServicesPlatform.instance.showAchievements();
 
   /// Get achievements as a list. Use this to build a custom UI.
   /// To show the device's default achievements screen use [showAchievements].
@@ -17,21 +16,24 @@ abstract class Achievements {
   /// the latest results. It has no affect on iOS.
   static Future<List<AchievementItemData>?> loadAchievements({
     bool forceRefresh = false,
+    bool ignoreImages = false,
   }) async {
-    final response = await GamesServicesPlatform.instance
-        .loadAchievements(forceRefresh: forceRefresh);
-    if (response != null) {
-      Iterable items = json.decode(response) as List;
+    String? result = await GamesServicesPlatform.instance.loadAchievements(
+      forceRefresh: forceRefresh,
+      ignoreImages: ignoreImages,
+    );
+    if (result != null) {
+      Iterable items = json.decode(result) as List;
       return List<AchievementItemData>.from(
-          items.map((model) => AchievementItemData.fromJson(model)).toList());
+        items.map((model) => AchievementItemData.fromJson(model)).toList(),
+      );
     }
     return null;
   }
 
   /// It will reset the achievements. Not available on Android.
-  static Future<String?> resetAchievements() async {
-    return await GamesServicesPlatform.instance.resetAchievements();
-  }
+  static Future<String?> resetAchievements() =>
+      GamesServicesPlatform.instance.resetAchievements();
 
   /// Unlock an [achievement].
   /// [Achievement] takes three parameters:
@@ -39,10 +41,8 @@ abstract class Achievements {
   /// [iOSID] the achievement ID for Game Center.
   /// [percentComplete] the completion percentage of the achievement,
   /// this parameter is optional on iOS/macOS.
-  static Future<String?> unlock({required Achievement achievement}) async {
-    return await GamesServicesPlatform.instance
-        .unlock(achievement: achievement);
-  }
+  static Future<String?> unlock({required Achievement achievement}) =>
+      GamesServicesPlatform.instance.unlock(achievement: achievement);
 
   /// Increment an [achievement].
   /// [Achievement] takes two parameters:
@@ -50,8 +50,6 @@ abstract class Achievements {
   /// [steps] If the achievement is of the incremental type
   /// you can use this method to increment the steps.
   /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
-  static Future<String?> increment({required Achievement achievement}) async {
-    return await GamesServicesPlatform.instance
-        .increment(achievement: achievement);
-  }
+  static Future<String?> increment({required Achievement achievement}) =>
+      GamesServicesPlatform.instance.increment(achievement: achievement);
 }

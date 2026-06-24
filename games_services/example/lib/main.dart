@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:games_services/games_services.dart';
 
 void main() => runApp(const App());
@@ -18,7 +20,10 @@ class AppState extends State<App> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(color: Colors.black),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
           backgroundColor: Colors.black,
@@ -48,6 +53,11 @@ class AppState extends State<App> {
                           child: player == null
                               ? ElevatedButton(
                                   onPressed: _signIn,
+                                  style: ElevatedButton.styleFrom(
+                                    minimumSize: const Size(150, 40),
+                                    backgroundColor: Colors.black,
+                                    foregroundColor: Colors.white,
+                                  ),
                                   child: const Text('Sign In'),
                                 )
                               : Column(
@@ -66,90 +76,127 @@ class AppState extends State<App> {
                                             child: Text(player.displayName[0]),
                                           ),
                                         const SizedBox(width: 16.0),
-                                        Text('playerID: ${player.playerID}\n'
-                                            'displayName: ${player.displayName}'),
+                                        Expanded(
+                                          child: Text(
+                                              'playerID: ${player.playerID}\n'
+                                              'displayName: ${player.displayName}'),
+                                        ),
                                       ],
                                     ),
                                     const SizedBox(height: 16.0),
-                                    Wrap(
-                                      spacing: 20,
-                                      runSpacing: 10,
-                                      children: <Widget>[
-                                        ElevatedButton(
-                                          onPressed: _showAchievements,
-                                          child:
-                                              const Text('Show Achievements'),
+                                    Theme(
+                                      data: ThemeData(
+                                        elevatedButtonTheme:
+                                            ElevatedButtonThemeData(
+                                          style: ElevatedButton.styleFrom(
+                                            minimumSize: const Size(150, 40),
+                                            backgroundColor: Colors.black,
+                                            foregroundColor: Colors.white,
+                                          ),
                                         ),
-                                        ElevatedButton(
-                                          onPressed: _showLeaderboards,
-                                          child:
-                                              const Text('Show Leaderboards'),
+                                      ),
+                                      child: SingleChildScrollView(
+                                        child: Wrap(
+                                          spacing: 20,
+                                          runSpacing: 10,
+                                          children: <Widget>[
+                                            ElevatedButton(
+                                              onPressed: _showAchievements,
+                                              child: const Text(
+                                                  'Show Achievements'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _showLeaderboards,
+                                              child: const Text(
+                                                  'Show Leaderboards'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _submitScore,
+                                              child: const Text('Submit Score'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _unlockAchievement,
+                                              child: const Text(
+                                                  'Unlock Achievement'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _loadAchievement,
+                                              child: const Text(
+                                                  'Load Achievement'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _resetAchievement,
+                                              child: const Text(
+                                                  'Reset Achievement'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _loadLeaderboardScores,
+                                              child: const Text(
+                                                  'Load Leaderboard Scores'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _incrementAchievement,
+                                              child: const Text(
+                                                  'Increment Achievement (Android only)'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _showAccessPoint,
+                                              child: const Text(
+                                                  'Show AccessPoint (iOS only)'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _hideAccessPoint,
+                                              child: const Text(
+                                                  'Hide AccessPoint (iOS only)'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _getPlayerScore,
+                                              child: const Text(
+                                                  'Get player score'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _getPlayerScoreObject,
+                                              child: const Text(
+                                                  'Load Player Centered Scores'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed:
+                                                  _loadPreviousOccurrence,
+                                              child: const Text(
+                                                  'Load Previous Occurrence (iOS only)'),
+                                            ),
+                                            if (Platform.isAndroid)
+                                              ElevatedButton(
+                                                  onPressed: _showSavedGames,
+                                                  child: const Text(
+                                                      'Show Saved Games')),
+                                            ElevatedButton(
+                                              onPressed: _getSavedGames,
+                                              child:
+                                                  const Text('Get saved games'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _saveGame,
+                                              child: const Text('Save game'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _loadGame,
+                                              child: const Text('Load game'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed: _deleteGame,
+                                              child: const Text(
+                                                  'Delete saved game'),
+                                            ),
+                                            ElevatedButton(
+                                              onPressed:
+                                                  _fetchIdentityVerificationSignature,
+                                              child: const Text(
+                                                  'Fetch Identity Verification (iOS and MacOS)'),
+                                            ),
+                                          ],
                                         ),
-                                        ElevatedButton(
-                                          onPressed: _submitScore,
-                                          child: const Text('Submit Score'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _unlockAchievement,
-                                          child:
-                                              const Text('Unlock Achievement'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _loadAchievement,
-                                          child: const Text('Load Achievement'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _resetAchievement,
-                                          child:
-                                              const Text('Reset Achievement'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _loadLeaderboardScores,
-                                          child: const Text(
-                                              'Load Leaderboard Scores'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _incrementAchievement,
-                                          child: const Text(
-                                              'Increment Achievement (Android only)'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _showAccessPoint,
-                                          child: const Text(
-                                              'Show AccessPoint (iOS only)'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _hideAccessPoint,
-                                          child: const Text(
-                                              'Hide AccessPoint (iOS only)'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _getPlayerScore,
-                                          child: const Text('Get player score'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _getPlayerScoreObject,
-                                          child: const Text(
-                                              'Load Player Centered Scores'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _getSavedGames,
-                                          child: const Text('Get saved games'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _saveGame,
-                                          child: const Text('Save game'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _loadGame,
-                                          child: const Text('Load game'),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: _deleteGame,
-                                          child:
-                                              const Text('Delete saved game'),
-                                        ),
-                                      ],
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -179,6 +226,24 @@ class AppState extends State<App> {
         scope: PlayerScope.global,
         timeScope: TimeScope.allTime);
     print(result);
+  }
+
+  void _loadPreviousOccurrence() async {
+    final result = await Leaderboards.loadPreviousOccurrence(
+        iOSLeaderboardID: "ios_leaderboard_id",
+        androidLeaderboardID: "android_leaderboard_id",
+        timeScope: TimeScope.allTime);
+    if (result != null) {
+      print('Previous score found:');
+      print('  Score: ${result.rawScore}');
+      print('  Rank: ${result.rank}');
+      print('  Display Score: ${result.displayScore}');
+      print(
+          '  Timestamp: ${DateTime.fromMillisecondsSinceEpoch(result.timestampMillis)}');
+      print('  Player: ${result.scoreHolder.displayName}');
+    } else {
+      print('No previous occurrence found');
+    }
   }
 
   void _showAccessPoint() async {
@@ -245,6 +310,11 @@ class AppState extends State<App> {
     print(result);
   }
 
+  void _showSavedGames() async {
+    final result = await SaveGame.showSavedGames(title: 'Saved Games');
+    print(result);
+  }
+
   void _getSavedGames() async {
     final result = await SaveGame.getSavedGames();
     print(result);
@@ -252,14 +322,24 @@ class AppState extends State<App> {
 
   void _saveGame() async {
     final data = jsonEncode(GameData(96, "sword").toJson());
-    final result = await SaveGame.saveGame(data: data, name: "slot1");
+    // A cover image is required to pass Google's Play Games Services quality
+    // checklist. Here we reuse the bundled logo as a sample cover image.
+    final coverImage =
+        (await rootBundle.load("assets/logo.png")).buffer.asUint8List();
+    final result = await SaveGame.saveGame(
+      data: data,
+      name: "slot1",
+      coverImage: coverImage,
+      description: "Level 96, sword equipped",
+      playedTime: const Duration(minutes: 42),
+    );
     print(result);
   }
 
   void _loadGame() async {
     final result = await SaveGame.loadGame(name: "slot1");
     if (result != null) {
-      final Map json = jsonDecode(result);
+      final json = jsonDecode(result) as Map;
       final gameData = GameData.fromJson(json);
       print("Player progress ${gameData.progress}");
       print("Player weapon ${gameData.weapon}");
@@ -269,6 +349,19 @@ class AppState extends State<App> {
   void _deleteGame() async {
     final result = await SaveGame.deleteGame(name: "slot1");
     print(result);
+  }
+
+  void _fetchIdentityVerificationSignature() async {
+    final result = await GameAuth.fetchIdentityVerificationSignature();
+    if (result != null) {
+      print('Identity Verification Signature:');
+      print('  Public Key URL: ${result.publicKeyURL}');
+      print('  Signature: ${result.signature}');
+      print('  Salt: ${result.salt}');
+      print('  Timestamp: ${result.timestamp}');
+    } else {
+      print('Identity verification not available (iOS and MacOS)');
+    }
   }
 }
 

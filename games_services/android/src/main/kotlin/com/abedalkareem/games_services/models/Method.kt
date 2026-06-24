@@ -3,7 +3,8 @@ package com.abedalkareem.games_services.models
 enum class Method {
   Unlock, Increment, SubmitScore, ShowLeaderboards, ShowAchievements,
   LoadAchievements, SignIn, GetAuthCode, GetPlayerHiResImage, GetPlayerScore,
-  GetPlayerScoreObject, SaveGame, LoadGame, GetSavedGames, DeleteGame, LoadLeaderboardScores
+  GetPlayerScoreObject, SaveGame, LoadGame, ShowSavedGames, GetSavedGames,
+  DeleteGame, LoadLeaderboardScores
 }
 
 fun Method.value(): String {
@@ -11,5 +12,5 @@ fun Method.value(): String {
 }
 
 fun methodsFrom(string: String): Method? {
-  return Method.values().firstOrNull { it.value() == string.lowercase() }
+  return Method.entries.firstOrNull { it.value() == string.lowercase() }
 }

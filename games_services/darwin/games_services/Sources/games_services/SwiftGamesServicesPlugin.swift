@@ -27,7 +27,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     case .signIn:
       auth.authenticateUser(result: result)
     case .loadAchievements:
-      achievements.loadAchievements(result: result)
+      let ignoreImages = (arguments?["ignoreImages"] as? Bool) ?? false
+      achievements.loadAchievements(ignoreImages: ignoreImages, result: result)
     case .showAchievements:
       achievements.showAchievements(result: result)
     case .resetAchievements:
@@ -39,7 +40,9 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       achievements.report(achievementID: achievementID, percentComplete: percentComplete, showsCompletionBanner: showsCompletionBanner, result: result)
     case .showLeaderboards:
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
-      leaderboards.showLeaderboardWith(identifier: leaderboardID, result: result)
+      let span = (arguments?["span"] as? Int) ?? 0
+      let leaderboardCollection = (arguments?["leaderboardCollection"] as? Int) ?? 0
+      leaderboards.showLeaderboardWith(identifier: leaderboardID, span: span, leaderboardCollection:leaderboardCollection, result: result)
     case .getPlayerScore:
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
       leaderboards.getPlayerScore(leaderboardID: leaderboardID, result: result)
@@ -62,6 +65,12 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
                             span: span,
                             leaderboardCollection: leaderboardCollection,
                             maxResults: maxResults,
+                            result: result)
+    case .loadPreviousOccurrence:
+      let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
+      let span = (arguments?["span"] as? Int) ?? 0
+      leaderboards.loadPreviousOccurrence(leaderboardID: leaderboardID,
+                            span: span,
                             result: result)
     case .submitScore:
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""
@@ -87,6 +96,8 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
     case .deleteGame:
       let name = (arguments?["name"] as? String) ?? ""
       saveGame.deleteGame(name: name, result: result)
+    case .fetchIdentityVerificationSignature:
+      auth.fetchIdentityVerificationSignature(result: result)
     }
   }
   

@@ -37,3 +37,66 @@ Retrieve a Google Play Games `server_auth_code` to be used by a backend, such as
 ```dart
 final authCode = await GameAuth.getAuthCode(String clientID);
 ```
+
+## Fetch Identity Verification Signature (iOS and macOS)
+
+Fetch the identity verification signature from Game Center. This can be used to verify the player's identity with your backend server.
+
+Returns an `IdentityVerificationSignature` object containing:
+
+- `publicKeyURL`: URL to the public key for verifying the signature
+- `signature`: Base64 encoded signature
+- `salt`: Base64 encoded salt
+- `timestamp`: Timestamp value
+
+Returns `null` on platforms other than macOS and iOS.
+
+```dart
+final signature = await GameAuth.fetchIdentityVerificationSignature();
+if (signature != null) {
+  print('Public Key URL: ${signature.publicKeyURL}');
+  print('Signature: ${signature.signature}');
+  print('Salt: ${signature.salt}');
+  print('Timestamp: ${signature.timestamp}');
+  
+  // Send to your backend for verification
+}
+```
+
+## Prevent auto sign-in on Android
+
+While the default and suggested behavior is to allow Play Games Services to automatically sign the user in on app launch, this can be prevented if desired. To do so, first, add `play-services-games-v2` to your `dependencies` in `android/app/build.gradle`.
+
+```gradle
+implementation "com.google.android.gms:play-services-games-v2:21.0.0" // or latest version
+```
+
+
+Next, make the following changes in `AndroidManifest.xml` to prevent the auto sign in:
+
+```xml
+<!-- Add the tools namespace via the manifest tag -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+<!-- Add the following provider tag inside the <application> tag -->
+<provider tools:node="remove" android:name="com.google.android.gms.games.provider.PlayGamesInitProvider" />
+```
+
+Then, add the following to `MainActivity.kt` to initialize the Play Games SDK:
+
+```kotlin
+import android.os.Bundle
+// imort the PlayGames SDK
+import com.google.android.gms.games.PlayGamesSdk
+import io.flutter.embedding.android.FlutterActivity
+
+class MainActivity : FlutterActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // initialize the play games SDK
+        PlayGamesSdk.initialize(this)
+    }
+}
+```

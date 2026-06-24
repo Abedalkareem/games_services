@@ -7,13 +7,19 @@ import 'package:games_services_platform_interface/game_services_platform_interfa
 abstract class Player {
   /// Helper for retrieving current player form the Player stream
   static Future<PlayerData?> get _currentPlayer async {
-    // resuses player stream to reduce code and platform channel communciation
+    // resuses player stream to reduce code and platform channel communication
     final completer = Completer<PlayerData?>();
     StreamSubscription? sub;
-    sub = GameAuth.player.listen((data) {
-      completer.complete(data);
-      sub?.cancel();
-    });
+    sub = GameAuth.player.listen(
+      (data) {
+        completer.complete(data);
+        sub?.cancel();
+      },
+      onError: (_) {
+        completer.complete(null);
+        sub?.cancel();
+      },
+    );
     return completer.future;
   }
 
@@ -23,14 +29,12 @@ abstract class Player {
   );
 
   /// Show the Game Center Access Point for the current player.
-  static Future<String?> showAccessPoint(AccessPointLocation location) async {
-    return await GamesServicesPlatform.instance.showAccessPoint(location);
-  }
+  static Future<String?> showAccessPoint(AccessPointLocation location) =>
+      GamesServicesPlatform.instance.showAccessPoint(location);
 
   /// Hide the Game Center Access Point.
-  static Future<String?> hideAccessPoint() async {
-    return await GamesServicesPlatform.instance.hideAccessPoint();
-  }
+  static Future<String?> hideAccessPoint() =>
+      GamesServicesPlatform.instance.hideAccessPoint();
 
   /// Get the current player's ID.
   /// On iOS/macOS the player ID is unique for your game but not other games.
@@ -66,19 +70,19 @@ abstract class Player {
 
   /// Get the player's hi-res profile image as a base64 encoded String.
   static Future<String?> getPlayerHiResImage() async =>
-      (await GamesServicesPlatform.instance.getPlayerHiResImage())
-          ?.replaceAll("\n", "");
+      (await GamesServicesPlatform.instance.getPlayerHiResImage())?.replaceAll(
+        "\n",
+        "",
+      );
 
   /// Get the current player's score for a specific leaderboard.
   static Future<int?> getPlayerScore({
-    String? iOSLeaderboardID = "",
-    String? androidLeaderboardID = "",
-  }) async {
-    return await GamesServicesPlatform.instance.getPlayerScore(
-      iOSLeaderboardID: iOSLeaderboardID,
-      androidLeaderboardID: androidLeaderboardID,
-    );
-  }
+    String iOSLeaderboardID = "",
+    String androidLeaderboardID = "",
+  }) => GamesServicesPlatform.instance.getPlayerScore(
+    iOSLeaderboardID: iOSLeaderboardID,
+    androidLeaderboardID: androidLeaderboardID,
+  );
 
   /// Check if the current player is underage (always false on Android).
   static Future<bool?> get isUnderage async {

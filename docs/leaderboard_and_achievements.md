@@ -16,6 +16,20 @@ Get achievements as a list. Use this to build a custom UI.
 final result = await Achievements.loadAchievements();
 ```
 
+**Optional Parameters:**
+
+- `forceRefresh` (default: `false`): Forces a refresh from the server instead of using cached data.
+- `ignoreImages` (default: `false`): When set to `true`, skips loading achievement images for better performance.
+
+**Example with parameters:**
+
+``` dart
+final result = await Achievements.loadAchievements(
+  forceRefresh: true,
+  ignoreImages: true, // Skip image loading for better performance
+);
+```
+
 ## Unlock achievement
 
 Unlock an ```Achievement```.
@@ -62,6 +76,21 @@ final result = await Leaderboards.loadLeaderboardScores(
         scope: PlayerScope.global,
         timeScope: TimeScope.allTime,
         maxResults: 10);
+```
+
+## Load previous occurrence (iOS only)
+
+Load the previous occurrence of the player's score from a leaderboard. This returns the score data that precedes the player's current best score, which is useful for tracking score progression over time.
+
+``` dart
+final previousScore = await Leaderboards.loadPreviousOccurrence(
+        iOSLeaderboardID: "ios_leaderboard_id",
+        timeScope: TimeScope.allTime);
+
+if (previousScore != null) {
+  print('Previous score: ${previousScore.rawScore}');
+  print('Achieved on: ${DateTime.fromMillisecondsSinceEpoch(previousScore.timestampMillis)}');
+}
 ```
 
 ## Submit score

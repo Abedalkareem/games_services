@@ -1,3 +1,27 @@
+## 5.1.0
+
+- Add optional `coverImage`, `description`, and `playedTime` parameters to `SaveGame.saveGame`. On Android these are set as the snapshot metadata (cover image required to pass Google's Play Games Services quality checklist). Ignored on iOS/macOS. (#228)
+- Fix Android `saveGame` using the unique name as the snapshot description; the description is now only set when provided. (#228)
+- Add `showSavedGames` method to use Google Play Games default UI.
+- Include Google Play Games metadata with returned `SavedGame`s.
+- Add `timeScope` and `playerScope` parameters to `Leaderboards.showLeaderboards`.
+- Migrate to Swift Package Manager.
+- Migrate to built-in Kotlin (Bumps minimum supported SDK version to Flutter 3.44/Dart 3.12).
+
+## 5.0.1
+
+- Return `null` for `playerID` and `teamPlayerID` when GameCenter configuration errors lead to temporary IDs. by @theLee3
+
+## 5.0.0
+
+- Return success instead of null in case of success.
+- Migrate Gamekit deprecated usage of methods.
+- Update minimum support for iOS and Android.
+- Fix the example.
+- Add loadPreviousOccurrence method for iOS to retrieve the previous occurrence of a player's score from a leaderboard.
+- Add ignoreImages to loadAchievements, offloading blocking loading images to IO threads pool.
+- Add support for GKLocalPlayer.fetchItems.
+
 ## 4.1.1
 
 - Fixes delay in some results after sign in. by @theLee3

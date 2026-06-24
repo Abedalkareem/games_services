@@ -104,31 +104,41 @@ class GamesServicesPlugin : FlutterPlugin,
       Method.SignIn -> {
         auth?.signIn(result)
       }
+
       Method.GetAuthCode -> {
         val clientID = call.argument<String>("clientID") ?: ""
         val forceRefreshToken = call.argument<Boolean>("forceRefreshToken") ?: false
         auth?.getAuthCode(clientID, forceRefreshToken, result)
       }
+
       Method.ShowAchievements -> {
         achievements?.showAchievements(activity, result)
       }
+
       Method.LoadAchievements -> {
         val forceRefresh = call.argument<Boolean>("forceRefresh") ?: false
-        achievements?.loadAchievements(activity, forceRefresh, result)
+        val ignoreImages = call.argument<Boolean>("ignoreImages") ?: false
+        achievements?.loadAchievements(activity, forceRefresh, ignoreImages, result)
       }
+
       Method.Unlock -> {
         val achievementID = call.argument<String>("achievementID") ?: ""
         achievements?.unlock(achievementID, result)
       }
+
       Method.Increment -> {
         val achievementID = call.argument<String>("achievementID") ?: ""
         val steps = call.argument<Int>("steps") ?: 1
         achievements?.increment(achievementID, steps, result)
       }
+
       Method.ShowLeaderboards -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
-        leaderboards?.showLeaderboards(activity, leaderboardID, result)
+        val span = call.argument<Int>("span") ?: 2
+        val collection = call.argument<Int>("leaderboardCollection") ?: 0
+        leaderboards?.showLeaderboards(activity, leaderboardID, span, collection, result)
       }
+
       Method.LoadLeaderboardScores -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
         val playerCentered = call.argument<Boolean>("playerCentered") ?: false
@@ -136,8 +146,18 @@ class GamesServicesPlugin : FlutterPlugin,
         val leaderboardCollection = call.argument<Int>("leaderboardCollection") ?: 0
         val maxResults = call.argument<Int>("maxResults") ?: 0
         val forceRefresh = call.argument<Boolean>("forceRefresh") ?: false
-        leaderboards?.loadLeaderboardScores(activity, leaderboardID, playerCentered, span, leaderboardCollection, maxResults, forceRefresh, result)
+        leaderboards?.loadLeaderboardScores(
+          activity,
+          leaderboardID,
+          playerCentered,
+          span,
+          leaderboardCollection,
+          maxResults,
+          forceRefresh,
+          result
+        )
       }
+
       Method.SubmitScore -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
         val scoreValue = call.argument<Any>("value") ?: 0L
@@ -145,32 +165,58 @@ class GamesServicesPlugin : FlutterPlugin,
         val token = call.argument<String>("token") ?: ""
         leaderboards?.submitScore(leaderboardID, score, token, result)
       }
+
       Method.GetPlayerScore -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
         leaderboards?.getPlayerScore(leaderboardID, result)
       }
+
       Method.GetPlayerScoreObject -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
         val span = call.argument<Int>("span") ?: 0
         val leaderboardCollection = call.argument<Int>("leaderboardCollection") ?: 0
-        leaderboards?.getPlayerScoreObject(activity, leaderboardID, span, leaderboardCollection, result)
+        leaderboards?.getPlayerScoreObject(
+          activity,
+          leaderboardID,
+          span,
+          leaderboardCollection,
+          result
+        )
       }
+
       Method.GetPlayerHiResImage -> {
         auth?.getPlayerProfileImage(result)
       }
+
       Method.SaveGame -> {
         val data = call.argument<String>("data") ?: ""
         val name = call.argument<String>("name") ?: ""
-        saveGame?.saveGame(data, name, name, result)
+        val description = call.argument<String>("description")
+        val coverImage = call.argument<ByteArray>("coverImage")
+        val playedTime = call.argument<Number>("playedTime")?.toLong()
+        saveGame?.saveGame(data, description, name, coverImage, playedTime, result)
       }
+
       Method.LoadGame -> {
         val name = call.argument<String>("name") ?: ""
         saveGame?.loadGame(name, result)
       }
+
+      Method.ShowSavedGames -> {
+        val title = call.argument<String>("title") ?: ""
+        // A default value of -1 will display all available saves
+        val maxResults = call.argument<Int>("maxResults") ?: -1
+        val allowNew = call.argument<Boolean>("allowNew") ?: true
+        val allowDelete = call.argument<Boolean>("allowDelete") ?: true
+        saveGame?.showSavedGames(activity, title, allowNew, allowDelete, maxResults, result)
+      }
+
       Method.GetSavedGames -> {
         val forceRefresh = call.argument<Boolean>("forceRefresh") ?: false
-        saveGame?.getSavedGames(forceRefresh, result)
+        val ignoreImages = call.argument<Boolean>("ignoreImages") ?: false
+        saveGame?.getSavedGames(activity, forceRefresh, ignoreImages, result)
       }
+
       Method.DeleteGame -> {
         val name = call.argument<String>("name") ?: ""
         saveGame?.deleteGame(name, result)

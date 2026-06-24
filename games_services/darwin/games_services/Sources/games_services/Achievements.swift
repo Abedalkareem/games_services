@@ -8,11 +8,10 @@ import FlutterMacOS
 class Achievements: BaseGamesServices {
   
   func showAchievements(result: @escaping FlutterResult) {
-    let viewController = GKGameCenterViewController()
+    let viewController = GKGameCenterViewController(state: .achievements)
     viewController.gameCenterDelegate = self
-    viewController.viewState = .achievements
-    self.viewController.show(viewController)
-    result(nil)
+    self.viewController?.show(viewController)
+    result(Messages.success)
   }
   
   func report(achievementID: String, percentComplete: Double, showsCompletionBanner: Bool, result: @escaping FlutterResult) {
@@ -24,11 +23,11 @@ class Achievements: BaseGamesServices {
         result(error?.flutterError(code: .failedToSendAchievement))
         return
       }
-      result(nil)
+      result(Messages.success)
     }
   }
   
-  func loadAchievements(result: @escaping FlutterResult) {
+  func loadAchievements(ignoreImages: Bool, result: @escaping FlutterResult) {
     if #available(iOS 13.0, *) {
       Task {
         do {
@@ -41,20 +40,25 @@ class Achievements: BaseGamesServices {
           
           let incompleteAchievementImageData = GKAchievementDescription.incompleteAchievementImage()
           #if os(macOS)
-          let incompleteAchievementImage = incompleteAchievementImageData.tiffRepresentation?.base64EncodedString()
+          let incompleteAchievementImage = ignoreImages ? nil : incompleteAchievementImageData.tiffRepresentation?.base64EncodedString()
           #else
-          let incompleteAchievementImage = incompleteAchievementImageData.pngData()?.base64EncodedString()
+          let incompleteAchievementImage = ignoreImages ? nil : incompleteAchievementImageData.pngData()?.base64EncodedString()
           #endif
           var items = [AchievementItemData]()
           for (description, achievement) in achievementsMap {
-            #if os(macOS)
-            let uiimage = try? await description.loadImage()
-            let imageData = uiimage?.tiffRepresentation
-            #else
-            let uiimage = try? await description.loadImage()
-            let imageData = uiimage?.pngData()
-            #endif
-            let image = imageData?.base64EncodedString()
+            let image: String?
+            if ignoreImages {
+              image = nil
+            } else {
+              #if os(macOS)
+              let uiimage = try? await description.loadImage()
+              let imageData = uiimage?.tiffRepresentation
+              #else
+              let uiimage = try? await description.loadImage()
+              let imageData = uiimage?.pngData()
+              #endif
+              image = imageData?.base64EncodedString()
+            }
             let isCompleted = achievement?.isCompleted ?? false
             let achievementDescription = isCompleted ? description.achievedDescription : description.unachievedDescription
             items.append(AchievementItemData(id: description.identifier,
@@ -86,7 +90,7 @@ class Achievements: BaseGamesServices {
       Task {
         do {
           try await GKAchievement.resetAchievements()
-          result(nil)
+          result(Messages.success)
           } catch {
           result(error.flutterError(code: .failedToResetAchievements))
         }
