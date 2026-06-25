@@ -33,8 +33,15 @@ class Auth: BaseGamesServices {
       if (isAuthenticated || self.result != nil) {
         result(Messages.alreadyAuthenticated)
       } else {
-        eventSink?(PluginError.failedToAuthenticate.flutterError())
-        result(PluginError.failedToAuthenticate.flutterError())
+        // The handler is already set and the player is still not authenticated,
+        // with no attempt in flight. GameKit will not present the sign-in UI again
+        // from the app while in this state. The usual reason is that Game Center is
+        // turned off or restricted in the device's Settings, or no account is signed
+        // in there — i.e. something the user can only resolve in Settings, not by
+        // retrying in-app. Surface a distinct error so callers can route the user to
+        // the device's Game Center settings instead of silently retrying.
+        eventSink?(PluginError.signInUnavailable.flutterError())
+        result(PluginError.signInUnavailable.flutterError())
       }
       return
     }
