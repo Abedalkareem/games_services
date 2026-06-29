@@ -3,7 +3,10 @@ import '../util/device.dart';
 class Achievement {
   String androidID;
   String iOSID;
+
+  /// Whether the platform should show its native completion banner.
   bool showsCompletionBanner;
+
   double percentComplete;
   int steps;
 

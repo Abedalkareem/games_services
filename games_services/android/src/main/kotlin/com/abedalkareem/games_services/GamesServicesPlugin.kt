@@ -123,7 +123,8 @@ class GamesServicesPlugin : FlutterPlugin,
 
       Method.Unlock -> {
         val achievementID = call.argument<String>("achievementID") ?: ""
-        achievements?.unlock(achievementID, result)
+        val showsCompletionBanner = call.argument<Boolean>("showsCompletionBanner") ?: true
+        achievements?.unlock(achievementID, showsCompletionBanner, result)
       }
 
       Method.Increment -> {

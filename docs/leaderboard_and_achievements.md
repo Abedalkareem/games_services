@@ -39,11 +39,13 @@ The ```Achievement``` takes three parameters:
 - ```iOSID``` the achievement id for Game Center.
 - ```percentComplete``` the completion percentage of the achievement, this parameter is optional on iOS/macOS.
 - ```steps``` the achievement steps for Google Play Games (as seen in the next section).
+- ```showsCompletionBanner``` whether to show the native completion banner, defaults to ```true```.
 
 ``` dart
 Achievements.unlock(achievement: Achievement(androidID: 'android_id',
                                               iOSID: 'ios_id',
-                                              percentComplete: 100));
+                                              percentComplete: 100,
+                                              showsCompletionBanner: true));
 ```  
 
 ## Increment (Android Only)

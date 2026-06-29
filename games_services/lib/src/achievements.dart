@@ -41,6 +41,8 @@ abstract class Achievements {
   /// [iOSID] the achievement ID for Game Center.
   /// [percentComplete] the completion percentage of the achievement,
   /// this parameter is optional on iOS/macOS.
+  /// [showsCompletionBanner] whether to show the native completion banner,
+  /// defaults to true.
   static Future<String?> unlock({required Achievement achievement}) =>
       GamesServicesPlatform.instance.unlock(achievement: achievement);
 

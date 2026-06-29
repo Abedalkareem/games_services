@@ -44,7 +44,12 @@ class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
       }
   }
 
-  fun unlock(achievementID: String, result: MethodChannel.Result) {
+  fun unlock(achievementID: String, showsCompletionBanner: Boolean, result: MethodChannel.Result) {
+    if (showsCompletionBanner) {
+      // `unlock` is fire-and-forget and is the Play Games call that shows the
+      // native completion banner. Keep `unlockImmediate` for the Future result.
+      achievementClient.unlock(achievementID)
+    }
     achievementClient
       .unlockImmediate(achievementID)
       .addOnSuccessListener {
