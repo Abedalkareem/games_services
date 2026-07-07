@@ -1,3 +1,7 @@
+## 5.1.1
+
+- Fix legacy Auth/Player methods returning stale data.
+
 ## 5.1.0
 
 - Add optional `coverImage`, `description`, and `playedTime` parameters to `saveGame`. (#228)
