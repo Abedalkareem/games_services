@@ -19,34 +19,52 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
         // subscribe to the platform event channel when first listener is added
         _sub ??= _playerChannel
             .receiveBroadcastStream()
-            .map((json) =>
-                json == null ? null : PlayerData.fromJson(jsonDecode(json)))
-            .listen((player) {
+            .map(
+              (json) =>
+                  json == null ? null : PlayerData.fromJson(jsonDecode(json)),
+            )
+            .listen(
+              (player) {
                 _player = player;
                 _streamController.add(_player);
-        }, onError: (error) {
+
+                // allow cached player to be used until subscription is canceled
+                _isInitialized = true;
+              },
+              onError: (error) {
                 _player = null;
                 _streamController.add(_player);
-        });
+                _isInitialized = true;
+              },
+            );
       },
       onCancel: () {
+        // prevent cached player from being used on next listen
+        _isInitialized = false;
+
         // cancel sub to platform event channel when last listener removed
         // new listeners added after this will recreate the subscription
         _sub?.cancel();
         _sub = null;
       },
     );
-    _streamView = _PlayerStreamView(
-      _streamController.stream.distinct(),
-      () => _streamController.add(_player),
-    );
+    _streamView = _PlayerStreamView(_streamController.stream.distinct(), () {
+      // use cached PlayerData if StreamSubscription already exists
+      if (_isInitialized) _streamController.add(_player);
+    });
   }
 
   late final StreamController<PlayerData?> _streamController;
   late final _PlayerStreamView _streamView;
   StreamSubscription<PlayerData?>? _sub;
 
-  // cache player data to send when a new listener is added
+  // controls rather the cached PlayerData can be used or
+  // if new data must be retrieved first, depending on if a
+  // StreamSubscription already exists
+  var _isInitialized = false;
+
+  // cache player data to send when a new listener is added while
+  // one or more listeners are already attached
   PlayerData? _player;
 
   @override
