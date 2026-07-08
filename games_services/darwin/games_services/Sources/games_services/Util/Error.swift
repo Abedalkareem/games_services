@@ -4,12 +4,27 @@ import Flutter
 #else
 import FlutterMacOS
 #endif
+import GameKit
 
 extension Error {
   func flutterError(code: PluginError) -> FlutterError {
     return FlutterError(code: code.rawValue,
                         message: self.localizedDescription,
                         details: self.localizedDescription)
+  }
+
+  func leaderboardScoresFlutterError() -> FlutterError {
+    if let gameKitError = self as? GKError {
+      switch gameKitError.code {
+      case .notAuthenticated:
+        return flutterError(code: .leaderboardScoresAuthenticationRequired)
+      case .cancelled:
+        return flutterError(code: .leaderboardScoresConsentRequired)
+      default:
+        break
+      }
+    }
+    return flutterError(code: .failedToLoadLeaderboardScores)
   }
 }
 
@@ -45,6 +60,10 @@ enum PluginError: String {
       return "Failed to reset achievements"      
     case .failedToLoadLeaderboardScores:
       return "Failed to load leaderboard scores"
+    case .leaderboardScoresAuthenticationRequired:
+      return "Leaderboard scores require authentication"
+    case .leaderboardScoresConsentRequired:
+      return "Leaderboard scores require player consent"
     case .failedToLoadPreviousOccurrence:
       return "Failed to load previous occurrence"
     case .failedToFetchIdentityVerification:
@@ -66,6 +85,8 @@ enum PluginError: String {
   case failedToLoadAchievements = "failed_to_load_achievements"
   case failedToResetAchievements = "failed_to_reset_achievements"
   case failedToLoadLeaderboardScores = "failed_to_load_leaderboard_scores"
+  case leaderboardScoresAuthenticationRequired = "leaderboard_scores_authentication_required"
+  case leaderboardScoresConsentRequired = "leaderboard_scores_consent_required"
   case failedToLoadPreviousOccurrence = "failed_to_load_previous_occurrence"
   case failedToFetchIdentityVerification = "failed_to_fetch_identity_verification"
 

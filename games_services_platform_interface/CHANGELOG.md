@@ -1,3 +1,7 @@
+## Unreleased
+
+- Document the specific leaderboard score read error codes surfaced by the platform implementations for auth and consent failures.
+
 ## 5.1.0
 
 - Add optional `coverImage`, `description`, and `playedTime` parameters to `saveGame`. (#228)

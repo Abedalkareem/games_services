@@ -90,6 +90,9 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Get leaderboard scores as json data.
   /// To show the device's default leaderboards screen use [showLeaderboards].
+  /// Auth or consent failures use the platform error codes
+  /// `leaderboard_scores_authentication_required` and
+  /// `leaderboard_scores_consent_required`.
   Future<String?> loadLeaderboardScores({
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",

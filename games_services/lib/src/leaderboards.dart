@@ -27,6 +27,10 @@ abstract class Leaderboards {
   ///
   /// The `forceRefresh` argument will invalidate the cache on Android, fetching
   /// the latest results. It has no affect on iOS.
+  ///
+  /// Auth or consent failures use the platform error codes
+  /// `leaderboard_scores_authentication_required` and
+  /// `leaderboard_scores_consent_required`.
   static Future<List<LeaderboardScoreData>?> loadLeaderboardScores({
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",

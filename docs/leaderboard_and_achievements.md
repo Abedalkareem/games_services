@@ -80,6 +80,10 @@ final result = await Leaderboards.loadLeaderboardScores(
         maxResults: 10);
 ```
 
+Auth or consent failures are surfaced as `PlatformException`s with
+`leaderboard_scores_authentication_required` or
+`leaderboard_scores_consent_required` codes.
+
 ## Load previous occurrence (iOS only)
 
 Load the previous occurrence of the player's score from a leaderboard. This returns the score data that precedes the player's current best score, which is useful for tracking score progression over time.

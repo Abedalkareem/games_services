@@ -5,7 +5,9 @@ enum class PluginError {
   FailedToShowAchievements, FailedToIncrementAchievements, FailedToLoadAchievements,
   FailedToAuthenticate, FailedToGetAuthCode, NotAuthenticated, NotSupportedForThisOSVersion,
   FailedToSaveGame, FailedToLoadGame, FailedToShowSavedGames, FailedToGetSavedGames, LeaderboardNotFound,
-  FailedToDeleteSavedGame, FailedToLoadLeaderboardScores, OperationCanceled
+  FailedToDeleteSavedGame, FailedToLoadLeaderboardScores,
+  LeaderboardScoresAuthenticationRequired, LeaderboardScoresConsentRequired,
+  OperationCanceled
 }
 
 fun PluginError.errorCode(): String {
@@ -86,6 +88,14 @@ fun PluginError.errorCode(): String {
       return "failed_to_load_leaderboard_scores"
     }
 
+    PluginError.LeaderboardScoresAuthenticationRequired -> {
+      return "leaderboard_scores_authentication_required"
+    }
+
+    PluginError.LeaderboardScoresConsentRequired -> {
+      return "leaderboard_scores_consent_required"
+    }
+
     PluginError.OperationCanceled -> {
       return "operation_canceled"
     }
@@ -164,6 +174,14 @@ fun PluginError.errorMessage(): String {
 
     PluginError.FailedToLoadLeaderboardScores -> {
       return "Failed to load leaderboard scores"
+    }
+
+    PluginError.LeaderboardScoresAuthenticationRequired -> {
+      return "Leaderboard scores require authentication"
+    }
+
+    PluginError.LeaderboardScoresConsentRequired -> {
+      return "Leaderboard scores require player consent"
     }
 
     PluginError.OperationCanceled -> {

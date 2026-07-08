@@ -2,6 +2,8 @@ package com.abedalkareem.games_services
 
 import android.app.Activity
 import android.content.Intent
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.CommonStatusCodes
 import com.abedalkareem.games_services.models.LeaderboardScoreData
 import com.abedalkareem.games_services.models.PlayerData
 import com.abedalkareem.games_services.util.AppImageLoader
@@ -22,6 +24,7 @@ import android.util.Log
 import com.abedalkareem.games_services.util.Messages
 import com.google.android.gms.games.FriendsResolutionRequiredException
 import io.flutter.plugin.common.PluginRegistry
+import java.util.Locale
 
 class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   PluginRegistry.ActivityResultListener {
@@ -41,7 +44,6 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   private var maxResults: Int? = null
   private var forceRefresh: Boolean? = null
   private var result: MethodChannel.Result? = null
-  private var errorMessage: String? = null
   //endregion
 
   //region Public Methods
@@ -145,7 +147,6 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
           this.maxResults = maxResults
           this.forceRefresh = forceRefresh
           this.result = result
-          this.errorMessage = it.localizedMessage
           val pendingIntent = it.resolution
           activityPluginBinding.addActivityResultListener(this)
           activity.startIntentSenderForResult(
@@ -159,7 +160,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
           Log.i("GamesServices", "Friends list access requested")
         } else {
           result.error(
-            PluginError.FailedToLoadLeaderboardScores.errorCode(),
+            leaderboardLoadFailureCodeFor(it),
             it.localizedMessage,
             null
           )
@@ -259,13 +260,13 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
       }
   }
 
-  //region onActivityResult for showLeaderboards Method
+  //region onActivityResult for leaderboard scores consent request
   // handle result from friends list permission request
   override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
     activityPluginBinding.removeActivityResultListener(this)
     return if (requestCode == 26703) {
       // retry loadLeaderboard if permission granted, otherwise throw the original error
-      if (resultCode == -1) {
+      if (resultCode == Activity.RESULT_OK) {
         val id = leaderboardID
         val centered = playerCentered
         val timeSpan = span
@@ -288,8 +289,8 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
         }
       } else {
         result?.error(
-          PluginError.FailedToLoadLeaderboardScores.errorCode(),
-          errorMessage,
+          PluginError.LeaderboardScoresConsentRequired.errorCode(),
+          PluginError.LeaderboardScoresConsentRequired.errorMessage(),
           null,
         )
       }
@@ -300,7 +301,6 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
       maxResults = null
       forceRefresh = null
       result = null
-      errorMessage = null
       true
     } else {
       false
@@ -308,4 +308,25 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   }
   //endregion
   //endregion
+
+  private fun leaderboardLoadFailureCodeFor(error: Exception): String {
+    return if (isAuthenticationRequired(error)) {
+      PluginError.LeaderboardScoresAuthenticationRequired.errorCode()
+    } else {
+      PluginError.FailedToLoadLeaderboardScores.errorCode()
+    }
+  }
+
+  private fun isAuthenticationRequired(error: Exception): Boolean {
+    if (error is ApiException &&
+      error.statusCode == CommonStatusCodes.SIGN_IN_REQUIRED
+    ) {
+      return true
+    }
+    val message = error.message?.lowercase(Locale.US) ?: return false
+    return message.contains("sign_in_required") ||
+      message.contains("not_authenticated") ||
+      message.contains("not authenticated") ||
+      (message.contains("sign") && message.contains("required"))
+  }
 }

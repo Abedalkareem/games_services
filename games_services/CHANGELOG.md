@@ -1,6 +1,7 @@
 ## Unreleased
 
 - Respect `Achievement.showsCompletionBanner` on Android unlocks so Play Games can show the native achievement completion banner.
+- Return specific `leaderboard_scores_authentication_required` and `leaderboard_scores_consent_required` platform error codes when leaderboard score reads fail for recoverable auth or consent reasons.
 
 ## 5.1.0
 
