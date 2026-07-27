@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:games_services/src/models/leaderboard_score_data.dart';
+import 'package:games_services_platform_interface/errors.dart';
 import 'package:games_services_platform_interface/game_services_platform_interface.dart';
 import 'package:games_services_platform_interface/models.dart';
 
@@ -27,6 +28,9 @@ abstract class Leaderboards {
   ///
   /// The `forceRefresh` argument will invalidate the cache on Android, fetching
   /// the latest results. It has no affect on iOS.
+  ///
+  /// A failed request throws a `PlatformException`. Its code is one of the
+  /// constants in [LeaderboardScoresErrorCode].
   static Future<List<LeaderboardScoreData>?> loadLeaderboardScores({
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",

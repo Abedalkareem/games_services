@@ -2,26 +2,28 @@ package com.abedalkareem.games_services
 
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
 import com.abedalkareem.games_services.models.LeaderboardScoreData
 import com.abedalkareem.games_services.models.PlayerData
 import com.abedalkareem.games_services.util.AppImageLoader
+import com.abedalkareem.games_services.util.Messages
 import com.abedalkareem.games_services.util.PluginError
 import com.abedalkareem.games_services.util.errorCode
 import com.abedalkareem.games_services.util.errorMessage
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.CommonStatusCodes
+import com.google.android.gms.games.FriendsResolutionRequiredException
 import com.google.android.gms.games.LeaderboardsClient
 import com.google.android.gms.games.PlayGames
 import com.google.android.gms.games.leaderboard.LeaderboardVariant
 import com.google.gson.Gson
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodChannel
+import io.flutter.plugin.common.PluginRegistry
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import android.util.Log
-import com.abedalkareem.games_services.util.Messages
-import com.google.android.gms.games.FriendsResolutionRequiredException
-import io.flutter.plugin.common.PluginRegistry
 
 class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   PluginRegistry.ActivityResultListener {
@@ -41,7 +43,6 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   private var maxResults: Int? = null
   private var forceRefresh: Boolean? = null
   private var result: MethodChannel.Result? = null
-  private var errorMessage: String? = null
   //endregion
 
   //region Public Methods
@@ -145,7 +146,6 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
           this.maxResults = maxResults
           this.forceRefresh = forceRefresh
           this.result = result
-          this.errorMessage = it.localizedMessage
           val pendingIntent = it.resolution
           activityPluginBinding.addActivityResultListener(this)
           activity.startIntentSenderForResult(
@@ -158,11 +158,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
           )
           Log.i("GamesServices", "Friends list access requested")
         } else {
-          result.error(
-            PluginError.FailedToLoadLeaderboardScores.errorCode(),
-            it.localizedMessage,
-            null
-          )
+          result.errorFromLeaderboardException(it)
         }
       }
   }
@@ -262,10 +258,10 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   //region onActivityResult for showLeaderboards Method
   // handle result from friends list permission request
   override fun onActivityResult(requestCode: Int, resultCode: Int, intent: Intent?): Boolean {
-    activityPluginBinding.removeActivityResultListener(this)
     return if (requestCode == 26703) {
+      activityPluginBinding.removeActivityResultListener(this)
       // retry loadLeaderboard if permission granted, otherwise throw the original error
-      if (resultCode == -1) {
+      if (resultCode == Activity.RESULT_OK) {
         val id = leaderboardID
         val centered = playerCentered
         val timeSpan = span
@@ -288,8 +284,8 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
         }
       } else {
         result?.error(
-          PluginError.FailedToLoadLeaderboardScores.errorCode(),
-          errorMessage,
+          PluginError.FriendsListAccessDenied.errorCode(),
+          PluginError.FriendsListAccessDenied.errorMessage(),
           null,
         )
       }
@@ -300,7 +296,6 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
       maxResults = null
       forceRefresh = null
       result = null
-      errorMessage = null
       true
     } else {
       false
@@ -308,4 +303,20 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   }
   //endregion
   //endregion
+
+  private fun MethodChannel.Result.errorFromLeaderboardException(exception: Exception) {
+    val pluginError = if (
+      exception is ApiException &&
+      exception.statusCode == CommonStatusCodes.SIGN_IN_REQUIRED
+    ) {
+      PluginError.NotAuthenticated
+    } else {
+      PluginError.FailedToLoadLeaderboardScores
+    }
+    error(
+      pluginError.errorCode(),
+      exception.localizedMessage ?: pluginError.errorMessage(),
+      null
+    )
+  }
 }

@@ -1,3 +1,7 @@
+## Unreleased
+
+- Expose stable error-code constants for loading leaderboard scores.
+
 ## 5.1.0
 
 - Add optional `coverImage`, `description`, and `playedTime` parameters to `saveGame`. (#228)

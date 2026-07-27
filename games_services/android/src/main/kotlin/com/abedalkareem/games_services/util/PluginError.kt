@@ -5,7 +5,7 @@ enum class PluginError {
   FailedToShowAchievements, FailedToIncrementAchievements, FailedToLoadAchievements,
   FailedToAuthenticate, FailedToGetAuthCode, NotAuthenticated, NotSupportedForThisOSVersion,
   FailedToSaveGame, FailedToLoadGame, FailedToShowSavedGames, FailedToGetSavedGames, LeaderboardNotFound,
-  FailedToDeleteSavedGame, FailedToLoadLeaderboardScores, OperationCanceled
+  FailedToDeleteSavedGame, FailedToLoadLeaderboardScores, FriendsListAccessDenied, OperationCanceled
 }
 
 fun PluginError.errorCode(): String {
@@ -86,6 +86,10 @@ fun PluginError.errorCode(): String {
       return "failed_to_load_leaderboard_scores"
     }
 
+    PluginError.FriendsListAccessDenied -> {
+      return "friends_list_access_denied"
+    }
+
     PluginError.OperationCanceled -> {
       return "operation_canceled"
     }
@@ -164,6 +168,10 @@ fun PluginError.errorMessage(): String {
 
     PluginError.FailedToLoadLeaderboardScores -> {
       return "Failed to load leaderboard scores"
+    }
+
+    PluginError.FriendsListAccessDenied -> {
+      return "Player declined friends list access"
     }
 
     PluginError.OperationCanceled -> {

@@ -160,7 +160,7 @@ class Leaderboards: BaseGamesServices {
           }
           
         } catch {
-          result(error.flutterError(code: .failedToLoadLeaderboardScores))
+          result(error.leaderboardScoresFlutterError())
         }
       }
     } else {
@@ -223,4 +223,3 @@ class Leaderboards: BaseGamesServices {
   }
   
 }
-

@@ -1,4 +1,5 @@
 
+import GameKit
 #if os(iOS) || os(tvOS)
 import Flutter
 #else
@@ -10,6 +11,20 @@ extension Error {
     return FlutterError(code: code.rawValue,
                         message: self.localizedDescription,
                         details: self.localizedDescription)
+  }
+
+  func leaderboardScoresFlutterError() -> FlutterError {
+    guard let gameKitError = self as? GKError else {
+      return flutterError(code: .failedToLoadLeaderboardScores)
+    }
+    switch gameKitError.code {
+    case .notAuthenticated:
+      return flutterError(code: .notAuthenticated)
+    case .cancelled:
+      return flutterError(code: .operationCanceled)
+    default:
+      return flutterError(code: .failedToLoadLeaderboardScores)
+    }
   }
 }
 
@@ -45,6 +60,10 @@ enum PluginError: String {
       return "Failed to reset achievements"      
     case .failedToLoadLeaderboardScores:
       return "Failed to load leaderboard scores"
+    case .notAuthenticated:
+      return "Player not authenticated, please call signIn() first"
+    case .operationCanceled:
+      return "The operation was canceled"
     case .failedToLoadPreviousOccurrence:
       return "Failed to load previous occurrence"
     case .failedToFetchIdentityVerification:
@@ -66,6 +85,8 @@ enum PluginError: String {
   case failedToLoadAchievements = "failed_to_load_achievements"
   case failedToResetAchievements = "failed_to_reset_achievements"
   case failedToLoadLeaderboardScores = "failed_to_load_leaderboard_scores"
+  case notAuthenticated = "not_authenticated"
+  case operationCanceled = "operation_canceled"
   case failedToLoadPreviousOccurrence = "failed_to_load_previous_occurrence"
   case failedToFetchIdentityVerification = "failed_to_fetch_identity_verification"
 
