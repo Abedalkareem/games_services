@@ -305,14 +305,9 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   //endregion
 
   private fun MethodChannel.Result.errorFromLeaderboardException(exception: Exception) {
-    val pluginError = if (
-      exception is ApiException &&
-      exception.statusCode == CommonStatusCodes.SIGN_IN_REQUIRED
-    ) {
-      PluginError.NotAuthenticated
-    } else {
-      PluginError.FailedToLoadLeaderboardScores
-    }
+    val pluginError = leaderboardScoresPluginError(
+      (exception as? ApiException)?.statusCode
+    )
     error(
       pluginError.errorCode(),
       exception.localizedMessage ?: pluginError.errorMessage(),
@@ -320,3 +315,10 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
     )
   }
 }
+
+internal fun leaderboardScoresPluginError(statusCode: Int?): PluginError =
+  if (statusCode == CommonStatusCodes.SIGN_IN_REQUIRED) {
+    PluginError.NotAuthenticated
+  } else {
+    PluginError.FailedToLoadLeaderboardScores
+  }
