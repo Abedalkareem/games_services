@@ -79,6 +79,33 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
   }
 
   @override
+  Future<String?> setSteps({required Achievement achievement}) async {
+    if (!Device.isPlatformAndroid) {
+      throw UnsupportedError(
+        "Setting achievement steps is only supported on Android.",
+      );
+    }
+    if (achievement.androidID.trim().isEmpty) {
+      throw ArgumentError.value(
+        achievement.androidID,
+        "achievement.androidID",
+        "The achievement ID must not be empty.",
+      );
+    }
+    if (achievement.steps <= 0) {
+      throw ArgumentError.value(
+        achievement.steps,
+        "achievement.steps",
+        "The number of steps must be greater than zero.",
+      );
+    }
+    return await _methodChannel.invokeMethod("setSteps", {
+      "achievementID": achievement.androidID,
+      "steps": achievement.steps,
+    });
+  }
+
+  @override
   Future<String?> showAchievements() async {
     return await _methodChannel.invokeMethod("showAchievements");
   }

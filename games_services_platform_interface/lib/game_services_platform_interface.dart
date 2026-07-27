@@ -39,6 +39,15 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     throw UnimplementedError("not implemented.");
   }
 
+  /// Set an incremental [achievement] to at least its configured number of
+  /// [Achievement.steps].
+  ///
+  /// This operation never reduces existing progress and is only available on
+  /// Android.
+  Future<String?> setSteps({required Achievement achievement}) async {
+    throw UnimplementedError("not implemented.");
+  }
+
   /// Unlock an [achievement].
   /// [Achievement] takes three parameters:
   /// [androidID] the achievement ID for Google Play Games.

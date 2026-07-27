@@ -1,3 +1,7 @@
+## Unreleased
+
+- Add Android support for setting an incremental achievement's absolute step progress.
+
 ## 5.1.0
 
 - Add optional `coverImage`, `description`, and `playedTime` parameters to `SaveGame.saveGame`. On Android these are set as the snapshot metadata (cover image required to pass Google's Play Games Services quality checklist). Ignored on iOS/macOS. (#228)

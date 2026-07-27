@@ -77,6 +77,14 @@ class GamesServices {
   static Future<String?> increment({required Achievement achievement}) =>
       Achievements.increment(achievement: achievement);
 
+  /// Set an incremental [achievement] to at least its configured number of
+  /// [Achievement.steps].
+  ///
+  /// Existing progress is never reduced. The step count must be greater than
+  /// zero. This operation is only available on Android.
+  static Future<String?> setSteps({required Achievement achievement}) =>
+      Achievements.setSteps(achievement: achievement);
+
   /// Open the device's default leaderboards screen. If a leaderboard ID is provided,
 
   /// it will display the specific leaderboard, otherwise it will show the list of all leaderboards.

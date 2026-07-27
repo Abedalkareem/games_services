@@ -1,3 +1,7 @@
+## Unreleased
+
+- Add the Android-only `setSteps` achievement operation.
+
 ## 5.1.0
 
 - Add optional `coverImage`, `description`, and `playedTime` parameters to `saveGame`. (#228)
