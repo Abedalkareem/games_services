@@ -1,4 +1,4 @@
-## 5.2.0
+## 5.3.0
 
 - Add Android support for setting an incremental achievement's absolute step progress via `Achievements.setSteps`. (#245)
 - Add a distinct `sign_in_unavailable` error code on iOS/macOS when the sign-in UI won't present. (#237)
