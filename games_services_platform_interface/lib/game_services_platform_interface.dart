@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:games_services_platform_interface/errors.dart';
 import 'package:games_services_platform_interface/models.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -90,6 +91,9 @@ abstract class GamesServicesPlatform extends PlatformInterface {
 
   /// Get leaderboard scores as json data.
   /// To show the device's default leaderboards screen use [showLeaderboards].
+  ///
+  /// A failed request throws a `PlatformException`. Its code is one of the
+  /// constants in [LeaderboardScoresErrorCode].
   Future<String?> loadLeaderboardScores({
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",

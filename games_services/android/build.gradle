@@ -55,4 +55,5 @@ kotlin {
 dependencies {
     implementation 'com.google.code.gson:gson:2.14.0'
     implementation "com.google.android.gms:play-services-games-v2:21.0.0"
+    testImplementation 'junit:junit:4.13.2'
 }

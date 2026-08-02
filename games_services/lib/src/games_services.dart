@@ -100,6 +100,9 @@ class GamesServices {
   ///
   /// The `forceRefresh` argument will invalidate the cache on Android, fetching
   /// the latest results. It has no affect on iOS.
+  ///
+  /// A failed request throws a `PlatformException`. Its code is one of the
+  /// constants in [LeaderboardScoresErrorCode].
   static Future<List<LeaderboardScoreData>?> loadLeaderboardScores({
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",

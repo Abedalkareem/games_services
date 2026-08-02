@@ -1,3 +1,7 @@
+## Unreleased
+
+- Return stable, actionable error codes when loading leaderboard scores.
+
 ## 5.1.0
 
 - Add optional `coverImage`, `description`, and `playedTime` parameters to `SaveGame.saveGame`. On Android these are set as the snapshot metadata (cover image required to pass Google's Play Games Services quality checklist). Ignored on iOS/macOS. (#228)

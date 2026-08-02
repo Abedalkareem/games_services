@@ -78,6 +78,14 @@ final result = await Leaderboards.loadLeaderboardScores(
         maxResults: 10);
 ```
 
+Loading scores throws a `PlatformException` when the native service cannot
+complete the request. Compare `error.code` with
+`LeaderboardScoresErrorCode.notAuthenticated`,
+`LeaderboardScoresErrorCode.friendsListAccessDenied` (Android),
+`LeaderboardScoresErrorCode.operationCanceled` (GameKit), or
+`LeaderboardScoresErrorCode.failedToLoad` instead of matching localized error
+messages.
+
 ## Load previous occurrence (iOS only)
 
 Load the previous occurrence of the player's score from a leaderboard. This returns the score data that precedes the player's current best score, which is useful for tracking score progression over time.
