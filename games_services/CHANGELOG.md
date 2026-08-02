@@ -1,7 +1,9 @@
-## Unreleased
+## 5.2.0
 
-- Add Android support for setting an incremental achievement's absolute step progress.
-- Fix legacy Auth/Player methods returning stale data.
+- Add Android support for setting an incremental achievement's absolute step progress via `Achievements.setSteps`. (#245)
+- Add a distinct `sign_in_unavailable` error code on iOS/macOS when the sign-in UI won't present. (#237)
+- Migrate `showAchievements` and `showLeaderboards` to `GKAccessPoint.trigger` on supported iOS/macOS versions (fixes the non-functional `GKGameCenterViewController` on iOS/macOS 26+). (#243)
+- Fix legacy Auth/Player methods returning stale cached `PlayerData`. (#242)
 
 ## 5.1.0
 
