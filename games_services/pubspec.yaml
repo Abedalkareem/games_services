@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  games_services_platform_interface: #^5.1.0
+  games_services_platform_interface: #^5.1.1
     path: ../games_services_platform_interface/
     #uncomment in time of development.
     # git:

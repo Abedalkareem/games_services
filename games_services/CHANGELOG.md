@@ -1,6 +1,7 @@
 ## Unreleased
 
 - Add Android support for setting an incremental achievement's absolute step progress.
+- Fix legacy Auth/Player methods returning stale data.
 
 ## 5.1.0
 
