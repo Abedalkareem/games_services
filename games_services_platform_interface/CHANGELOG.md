@@ -1,7 +1,7 @@
-## Unreleased
+## 5.2.0
 
-- Add the Android-only `setSteps` achievement operation.
-- Fix legacy Auth/Player methods returning stale data.
+- Add the Android-only `setSteps` achievement operation. (#245)
+- Fix legacy Auth/Player methods returning stale cached `PlayerData`. (#242)
 
 ## 5.1.0
 
