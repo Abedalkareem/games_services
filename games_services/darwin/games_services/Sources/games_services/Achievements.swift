@@ -8,9 +8,13 @@ import FlutterMacOS
 class Achievements: BaseGamesServices {
   
   func showAchievements(result: @escaping FlutterResult) {
-    let viewController = GKGameCenterViewController(state: .achievements)
-    viewController.gameCenterDelegate = self
-    self.viewController?.show(viewController)
+    if #available(iOS 18.0, macOS 15.0, *) {
+      GKAccessPoint.shared.trigger(state: .achievements, handler: {})
+    } else {
+      let viewController = GKGameCenterViewController(state: .achievements)
+      viewController.gameCenterDelegate = self
+      self.viewController?.show(viewController)
+    }
     result(Messages.success)
   }
   

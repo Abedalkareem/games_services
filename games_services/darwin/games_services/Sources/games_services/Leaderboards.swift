@@ -8,13 +8,28 @@ import FlutterMacOS
 class Leaderboards: BaseGamesServices {
   
   func showLeaderboardWith(identifier: String, span: Int, leaderboardCollection: Int, result: @escaping FlutterResult) {
-    let viewController = GKGameCenterViewController(
-      leaderboardID: identifier,
-      playerScope: GKLeaderboard.PlayerScope(rawValue: leaderboardCollection) ?? .global,
-      timeScope: GKLeaderboard.TimeScope(rawValue: span) ?? .allTime
-    )
-    viewController.gameCenterDelegate = self
-    self.viewController?.show(viewController)
+    let playerScope = GKLeaderboard.PlayerScope(rawValue: leaderboardCollection) ?? .global
+    let timeScope = GKLeaderboard.TimeScope(rawValue: span) ?? .allTime
+    if #available(iOS 18.0, macOS 15.0, *) {
+      if (identifier.isEmpty) {
+        GKAccessPoint.shared.trigger(state: .leaderboards, handler: {})
+      } else {
+        GKAccessPoint.shared.trigger(
+          leaderboardID: identifier,
+          playerScope: playerScope,
+          timeScope: timeScope,
+          handler: {}
+        )
+      }
+    } else {
+      let viewController = GKGameCenterViewController(
+        leaderboardID: identifier,
+        playerScope: playerScope,
+        timeScope: timeScope
+      )
+      viewController.gameCenterDelegate = self
+      self.viewController?.show(viewController)
+    }
     result(Messages.success)
   }
   
