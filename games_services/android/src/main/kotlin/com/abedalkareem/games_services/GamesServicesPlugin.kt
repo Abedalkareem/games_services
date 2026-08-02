@@ -132,6 +132,12 @@ class GamesServicesPlugin : FlutterPlugin,
         achievements?.increment(achievementID, steps, result)
       }
 
+      Method.SetSteps -> {
+        val achievementID = call.argument<String>("achievementID") ?: ""
+        val steps = call.argument<Int>("steps") ?: 0
+        achievements?.setSteps(achievementID, steps, result)
+      }
+
       Method.ShowLeaderboards -> {
         val leaderboardID = call.argument<String>("leaderboardID") ?: ""
         val span = call.argument<Int>("span") ?: 2

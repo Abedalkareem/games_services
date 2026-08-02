@@ -52,4 +52,12 @@ abstract class Achievements {
   /// * only for Android (see https://developers.google.com/games/services/android/achievements#unlocking_achievements).
   static Future<String?> increment({required Achievement achievement}) =>
       GamesServicesPlatform.instance.increment(achievement: achievement);
+
+  /// Set an incremental [achievement] to at least its configured number of
+  /// [Achievement.steps].
+  ///
+  /// Existing progress is never reduced. The step count must be greater than
+  /// zero. This operation is only available on Android.
+  static Future<String?> setSteps({required Achievement achievement}) =>
+      GamesServicesPlatform.instance.setSteps(achievement: achievement);
 }
