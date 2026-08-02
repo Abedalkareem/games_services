@@ -25,6 +25,8 @@ enum PluginError: String {
       return "Failed to send the achievement"
     case .failedToAuthenticate:
       return "Failed to authenticate"
+    case .signInUnavailable:
+      return "Sign-in is unavailable. Game Center will not present the sign-in UI from the app, typically because it is turned off or restricted in the device's Settings, or no account is signed in. The user must sign in from the device's Game Center settings."
     case .failedToGetPlayerProfileImage:
       return "Failed to get player profile image"
     case .notSupportedForThisOSVersion:
@@ -56,6 +58,7 @@ enum PluginError: String {
   case failedToGetScore = "failed_to_get_score"
   case failedToSendAchievement = "failed_to_send_achievement"
   case failedToAuthenticate = "failed_to_authenticate"
+  case signInUnavailable = "sign_in_unavailable"
   case failedToGetPlayerProfileImage = "failed_to_get_player_profile_image"
   case failedToSaveGame = "failed_to_save_game"
   case failedToLoadGame = "failed_to_load_game"

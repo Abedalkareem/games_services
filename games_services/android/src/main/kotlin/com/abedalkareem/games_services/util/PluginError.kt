@@ -2,7 +2,8 @@ package com.abedalkareem.games_services.util
 
 enum class PluginError {
   FailedToSendScore, FailedToGetScore, FailedToGetPlayerProfileImage, FailedToSendAchievement,
-  FailedToShowAchievements, FailedToIncrementAchievements, FailedToLoadAchievements,
+  FailedToShowAchievements, FailedToIncrementAchievements, FailedToSetAchievementSteps,
+  FailedToLoadAchievements,
   FailedToAuthenticate, FailedToGetAuthCode, NotAuthenticated, NotSupportedForThisOSVersion,
   FailedToSaveGame, FailedToLoadGame, FailedToShowSavedGames, FailedToGetSavedGames, LeaderboardNotFound,
   FailedToDeleteSavedGame, FailedToLoadLeaderboardScores, OperationCanceled
@@ -28,6 +29,10 @@ fun PluginError.errorCode(): String {
 
     PluginError.FailedToIncrementAchievements -> {
       return "failed_to_increment_achievements"
+    }
+
+    PluginError.FailedToSetAchievementSteps -> {
+      return "failed_to_set_achievement_steps"
     }
 
     PluginError.FailedToLoadAchievements -> {
@@ -112,6 +117,10 @@ fun PluginError.errorMessage(): String {
 
     PluginError.FailedToIncrementAchievements -> {
       return "Failed to increment achievements"
+    }
+
+    PluginError.FailedToSetAchievementSteps -> {
+      return "Failed to set achievement steps"
     }
 
     PluginError.FailedToLoadAchievements -> {

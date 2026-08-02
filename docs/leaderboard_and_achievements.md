@@ -55,6 +55,19 @@ final result = await Achievements.increment(achievement: Achievement(androidID: 
 print(result);
 ```
 
+## Set steps (Android only)
+
+Set an incremental achievement to at least an absolute number of completed
+steps. Existing progress is never reduced, and the step count must be greater
+than zero.
+
+```dart
+final result = await Achievements.setSteps(
+  achievement: Achievement(androidID: 'android_id', steps: 50),
+);
+print(result);
+```
+
 ## Show leaderboards
 
 Display the device's default leaderboards screen. If a leaderboard ID is provided, it will display the specific leaderboard, otherwise it will show the list of all leaderboards.

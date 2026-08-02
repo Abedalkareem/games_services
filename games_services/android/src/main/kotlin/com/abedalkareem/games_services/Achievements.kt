@@ -74,6 +74,21 @@ class Achievements(private var activityPluginBinding: ActivityPluginBinding) {
       }
   }
 
+  fun setSteps(achievementID: String, steps: Int, result: MethodChannel.Result) {
+    achievementClient
+      .setStepsImmediate(achievementID, steps)
+      .addOnSuccessListener {
+        result.success(Messages.SUCCESS)
+      }
+      .addOnFailureListener {
+        result.error(
+          PluginError.FailedToSetAchievementSteps.errorCode(),
+          it.localizedMessage,
+          null
+        )
+      }
+  }
+
   fun loadAchievements(activity: Activity?, forceRefresh: Boolean, ignoreImages: Boolean, result: MethodChannel.Result) {
     activity ?: return
     achievementClient

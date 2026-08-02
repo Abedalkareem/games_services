@@ -1,7 +1,7 @@
 name: games_services_platform_interface
 description: A common platform interface for the games_services plugin.
 homepage: https://github.com/Abedalkareem/games_services
-version: 5.1.1
+version: 5.1.0
 
 environment:
   sdk: ^3.12.0
@@ -14,3 +14,5 @@ dependencies:
 
 dev_dependencies:
   flutter_lints: ^6.0.0
+  flutter_test:
+    sdk: flutter
