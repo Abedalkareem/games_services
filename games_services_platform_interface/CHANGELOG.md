@@ -1,3 +1,7 @@
+## Unreleased
+
+- Add `ignoreImages` to `loadLeaderboardScores`. (#246)
+
 ## 5.3.0
 
 - Add the Android-only `setSteps` achievement operation. (#245)

@@ -1,3 +1,7 @@
+## Unreleased
+
+- Add `ignoreImages` to `Leaderboards.loadLeaderboardScores` to skip loading each entry's player image. (#246)
+
 ## 5.3.0
 
 - Add Android support for setting an incremental achievement's absolute step progress via `Achievements.setSteps`. (#245)

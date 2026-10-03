@@ -107,6 +107,7 @@ abstract class GamesServicesPlatform extends PlatformInterface {
     required TimeScope timeScope,
     required int maxResults,
     bool forceRefresh = false,
+    bool ignoreImages = false,
   }) async {
     throw UnimplementedError("not implemented.");
   }

@@ -122,7 +122,7 @@ class Leaderboards: BaseGamesServices {
     }
   }
   
-  func loadLeaderboardScores(leaderboardID: String, playerCentered: Bool, span: Int, leaderboardCollection: Int, maxResults: Int, result: @escaping FlutterResult) {
+  func loadLeaderboardScores(leaderboardID: String, playerCentered: Bool, span: Int, leaderboardCollection: Int, maxResults: Int, ignoreImages: Bool, result: @escaping FlutterResult) {
     if #available(iOS 14.0, *) {
       Task {
         do {
@@ -149,12 +149,17 @@ class Leaderboards: BaseGamesServices {
                                                                  range: NSRange(location: startLocation, length: maxResults))
           var items = [LeaderboardScoreData]()
           for item in scores {
+            let scoreHolderIconImage: String?
+            if ignoreImages {
+              scoreHolderIconImage = nil
+            } else {
 #if os(macOS)
-            let imageData = try? await item.player.loadPhoto(for: .normal).tiffRepresentation
+              let imageData = try? await item.player.loadPhoto(for: .normal).tiffRepresentation
 #else
-            let imageData = try? await item.player.loadPhoto(for: .normal).pngData()
+              let imageData = try? await item.player.loadPhoto(for: .normal).pngData()
 #endif
-            let scoreHolderIconImage = imageData?.base64EncodedString()
+              scoreHolderIconImage = imageData?.base64EncodedString()
+            }
             items.append(LeaderboardScoreData(rank: item.rank,
                                               displayScore: item.formattedScore,
                                               rawScore: item.score,
