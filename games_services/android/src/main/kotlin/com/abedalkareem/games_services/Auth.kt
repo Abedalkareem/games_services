@@ -105,6 +105,11 @@ class Auth(private var activityPluginBinding: ActivityPluginBinding) :
         PluginError.FailedToAuthenticate.errorCode(),
         it.message ?: ""
       )
+    }.addOnCanceledListener {
+      finishPendingOperationWithError(
+        PluginError.FailedToAuthenticate.errorCode(),
+        "Sign-in was canceled"
+      )
     }
   }
 
