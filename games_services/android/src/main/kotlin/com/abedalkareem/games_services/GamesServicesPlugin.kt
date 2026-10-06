@@ -152,6 +152,7 @@ class GamesServicesPlugin : FlutterPlugin,
         val leaderboardCollection = call.argument<Int>("leaderboardCollection") ?: 0
         val maxResults = call.argument<Int>("maxResults") ?: 0
         val forceRefresh = call.argument<Boolean>("forceRefresh") ?: false
+        val ignoreImages = call.argument<Boolean>("ignoreImages") ?: false
         leaderboards?.loadLeaderboardScores(
           activity,
           leaderboardID,
@@ -160,6 +161,7 @@ class GamesServicesPlugin : FlutterPlugin,
           leaderboardCollection,
           maxResults,
           forceRefresh,
+          ignoreImages,
           result
         )
       }

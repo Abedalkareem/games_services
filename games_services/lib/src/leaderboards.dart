@@ -27,6 +27,11 @@ abstract class Leaderboards {
   ///
   /// The `forceRefresh` argument will invalidate the cache on Android, fetching
   /// the latest results. It has no affect on iOS.
+  ///
+  /// The `ignoreImages` argument skips loading each entry's player image, so
+  /// `scoreHolder.iconImage` is null. The images are loaded one entry at a
+  /// time before the call returns, so skipping them makes larger pages much
+  /// faster.
   static Future<List<LeaderboardScoreData>?> loadLeaderboardScores({
     String iOSLeaderboardID = "",
     String androidLeaderboardID = "",
@@ -34,6 +39,7 @@ abstract class Leaderboards {
     required PlayerScope scope,
     required TimeScope timeScope,
     bool forceRefresh = false,
+    bool ignoreImages = false,
     required int maxResults,
   }) async {
     final response = await GamesServicesPlatform.instance.loadLeaderboardScores(
@@ -43,6 +49,7 @@ abstract class Leaderboards {
       scope: scope,
       timeScope: timeScope,
       forceRefresh: forceRefresh,
+      ignoreImages: ignoreImages,
       maxResults: maxResults,
     );
     if (response != null) {

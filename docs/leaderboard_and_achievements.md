@@ -91,6 +91,23 @@ final result = await Leaderboards.loadLeaderboardScores(
         maxResults: 10);
 ```
 
+**Optional Parameters:**
+
+- `forceRefresh` (default: `false`): Forces a refresh from the server instead of using cached data (Android only).
+- `ignoreImages` (default: `false`): When set to `true`, skips loading each entry's player image, so `scoreHolder.iconImage` is `null`. The images are loaded one entry at a time before the call returns, so skipping them makes larger pages much faster. Useful when your UI draws its own avatars.
+
+**Example with parameters:**
+
+``` dart
+final result = await Leaderboards.loadLeaderboardScores(
+        iOSLeaderboardID: "ios_leaderboard_id",
+        androidLeaderboardID: "android_leaderboard_id",
+        scope: PlayerScope.global,
+        timeScope: TimeScope.allTime,
+        maxResults: 25,
+        ignoreImages: true); // Skip image loading for better performance
+```
+
 ## Load previous occurrence (iOS only)
 
 Load the previous occurrence of the player's score from a leaderboard. This returns the score data that precedes the player's current best score, which is useful for tracking score progression over time.

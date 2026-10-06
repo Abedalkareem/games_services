@@ -169,6 +169,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
     String androidLeaderboardID = "",
     bool playerCentered = false,
     bool forceRefresh = false,
+    bool ignoreImages = false,
   }) async {
     return await _methodChannel.invokeMethod("loadLeaderboardScores", {
       "leaderboardID": Device.isPlatformAndroid
@@ -179,6 +180,7 @@ class MethodChannelGamesServices extends GamesServicesPlatform {
       "span": timeScope.value,
       "maxResults": maxResults,
       "forceRefresh": forceRefresh,
+      "ignoreImages": ignoreImages,
     });
   }
 

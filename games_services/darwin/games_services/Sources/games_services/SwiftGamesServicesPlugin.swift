@@ -60,11 +60,13 @@ public class SwiftGamesServicesPlugin: NSObject, FlutterPlugin {
       let span = (arguments?["span"] as? Int) ?? 0
       let leaderboardCollection = (arguments?["leaderboardCollection"] as? Int) ?? 0
       let maxResults = (arguments?["maxResults"] as? Int) ?? 10
+      let ignoreImages = (arguments?["ignoreImages"] as? Bool) ?? false
       leaderboards.loadLeaderboardScores(leaderboardID: leaderboardID,
                             playerCentered: playerCentered,
                             span: span,
                             leaderboardCollection: leaderboardCollection,
                             maxResults: maxResults,
+                            ignoreImages: ignoreImages,
                             result: result)
     case .loadPreviousOccurrence:
       let leaderboardID = (arguments?["leaderboardID"] as? String) ?? ""

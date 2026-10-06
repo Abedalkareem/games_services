@@ -40,6 +40,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
   private var leaderboardCollection: Int? = null
   private var maxResults: Int? = null
   private var forceRefresh: Boolean? = null
+  private var ignoreImages: Boolean? = null
   private var result: MethodChannel.Result? = null
   private var errorMessage: String? = null
   //endregion
@@ -73,6 +74,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
     leaderboardCollection: Int,
     maxResults: Int,
     forceRefresh: Boolean,
+    ignoreImages: Boolean,
     result: MethodChannel.Result
   ) {
     activity ?: return
@@ -113,7 +115,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
           val scores = mutableListOf<LeaderboardScoreData>()
           for (item in data.scores) {
             val scoreHolderIconImage =
-              item.scoreHolderIconImageUri.let { imageLoader.loadImageFromUri(activity, it) }
+              if (!ignoreImages) item.scoreHolderIconImageUri.let { imageLoader.loadImageFromUri(activity, it) } else null
             scores.add(
               LeaderboardScoreData(
                 item.rank,
@@ -144,6 +146,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
           this.leaderboardCollection = leaderboardCollection
           this.maxResults = maxResults
           this.forceRefresh = forceRefresh
+          this.ignoreImages = ignoreImages
           this.result = result
           this.errorMessage = it.localizedMessage
           val pendingIntent = it.resolution
@@ -272,9 +275,10 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
         val collection = leaderboardCollection
         val max = maxResults
         val refresh = forceRefresh
+        val noImages = ignoreImages
         val res = result
 
-        if (id != null && centered != null && timeSpan != null && collection != null && max != null && refresh != null && res != null) {
+        if (id != null && centered != null && timeSpan != null && collection != null && max != null && refresh != null && noImages != null && res != null) {
           loadLeaderboardScores(
             activityPluginBinding.activity,
             id,
@@ -283,6 +287,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
             collection,
             max,
             refresh,
+            noImages,
             res
           )
         }
@@ -299,6 +304,7 @@ class Leaderboards(private var activityPluginBinding: ActivityPluginBinding) :
       leaderboardCollection = null
       maxResults = null
       forceRefresh = null
+      ignoreImages = null
       result = null
       errorMessage = null
       true
