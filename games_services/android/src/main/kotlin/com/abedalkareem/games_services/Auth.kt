@@ -118,6 +118,10 @@ class Auth(private var activityPluginBinding: ActivityPluginBinding) :
 
   fun getPlayerProfileImage(result: MethodChannel.Result) {
     playersClient.currentPlayer.addOnSuccessListener { player ->
+      if (player == null) {
+        result.error(PluginError.FailedToGetPlayerProfileImage.errorCode(), "Player is null", null)
+        return@addOnSuccessListener
+      }
       val handler = CoroutineExceptionHandler { _, exception ->
         result.error(
           PluginError.FailedToGetPlayerProfileImage.errorCode(),
@@ -143,6 +147,11 @@ class Auth(private var activityPluginBinding: ActivityPluginBinding) :
               isAuthenticatedTask.result.isAuthenticated
       if (isAuthenticated) {
         playersClient.currentPlayer.addOnSuccessListener { player ->
+          // player can be null due to project configuration issues
+          if (player == null) {
+            events?.error(PluginError.FailedToAuthenticate.errorCode(), "Player is null. Please ensure that your project is configured correctly.", null)
+            return@addOnSuccessListener
+          }
           var playerData = PlayerData(
             player.displayName,
             player.playerId,
